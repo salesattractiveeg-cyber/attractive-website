@@ -249,12 +249,18 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-bold text-on-surface">كتالوج الكابلات والمنتجات الجاهزة</h2>
-                        <p class="text-xs text-on-surface-variant">أضف كابلات جديدة أو عدّل الأسعار، الخصومات، الترتيب، الشارات والصور</p>
+                        <p class="text-xs text-on-surface-variant">أضف المنتجات وعدّل بياناتها، واختر حتى 7 منتجات لعرضها في قسم المنتجات المميزة بالرئيسية</p>
                     </div>
-                    <button onclick="openProductModal()" class="bg-primary text-white py-2.5 px-4 rounded-xl text-xs font-bold hover:bg-primary-dark transition flex items-center gap-1.5 shadow">
-                        <span class="material-symbols-outlined text-base">add</span>
-                        <span>إضافة كابل أو منتج جديد</span>
-                    </button>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="openBulkProductsModal()" class="bg-white text-primary border border-primary/25 py-2.5 px-4 rounded-xl text-xs font-bold hover:bg-primary/5 transition flex items-center gap-1.5 shadow-sm">
+                            <span class="material-symbols-outlined text-base">upload_file</span>
+                            <span>إضافة مجموعة من Excel</span>
+                        </button>
+                        <button onclick="openProductModal()" class="bg-primary text-white py-2.5 px-4 rounded-xl text-xs font-bold hover:bg-primary-dark transition flex items-center gap-1.5 shadow">
+                            <span class="material-symbols-outlined text-base">add</span>
+                            <span>إضافة كابل أو منتج جديد</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Products Table -->
@@ -269,6 +275,7 @@
                                 <th class="py-3 px-2 text-start">الشارة</th>
                                 <th class="py-3 px-2 text-start">التوفر</th>
                                 <th class="py-3 px-2 text-start">الظهور بالمتجر</th>
+                                <th class="py-3 px-2 text-start">الظهور بالرئيسية (حتى 7)</th>
                                 <th class="py-3 px-2 text-start">الداتا شيت</th>
                                 <th class="py-3 px-2 text-center">إجراءات</th>
                             </tr>
@@ -371,7 +378,6 @@
                     <div id="commercialBrandsAdminList" class="space-y-2"></div>
                     <button type="button" onclick="saveCommercialBrands()" class="bg-primary text-white py-2.5 px-5 rounded-xl font-bold hover:bg-primary-dark transition inline-flex items-center gap-1.5 shadow-sm"><span class="material-symbols-outlined text-base">save</span>حفظ العلامات التجارية</button>
                 </div>
-
 
                 <!-- Site Colors -->
                 <div class="bg-surface p-5 rounded-2xl border border-outline-variant space-y-4 max-w-xl text-xs">
@@ -2441,7 +2447,7 @@
                 <textarea id="prodDescInput" required rows="3" placeholder="مواصفات النحاس، نوع العزل، والاستخدام الموصى به" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs"></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 pt-1">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div class="flex items-center gap-2 p-2 bg-surface rounded-lg border border-outline-variant">
                     <input id="prodStockInput" type="checkbox" checked class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"/>
                     <label for="prodStockInput" class="font-bold text-on-surface cursor-pointer text-[11px]">متوفر بالمخزون (In Stock)</label>
@@ -2449,6 +2455,10 @@
                 <div class="flex items-center gap-2 p-2 bg-surface rounded-lg border border-outline-variant">
                     <input id="prodHiddenInput" type="checkbox" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"/>
                     <label for="prodHiddenInput" class="font-bold text-red-600 cursor-pointer text-[11px]">إخفاء المنتج من المتجر (Hidden)</label>
+                </div>
+                <div class="flex items-center gap-2 p-2 bg-surface rounded-lg border border-outline-variant">
+                    <input id="prodFeaturedInput" type="checkbox" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"/>
+                    <label for="prodFeaturedInput" class="font-bold text-on-surface cursor-pointer text-[11px]">عرض في المنتجات المميزة بالرئيسية</label>
                 </div>
             </div>
 
@@ -2463,6 +2473,69 @@
     </div>
 </div>
 
+
+<!-- ================= MODAL: BULK PRODUCT ADD ================= -->
+<div id="bulkProductsModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden justify-center items-center z-[2100] modal-overlay">
+    <div class="bg-surface-container-lowest rounded-2xl w-[96%] max-w-6xl p-5 md:p-7 relative modal-content shadow-2xl border border-outline-variant max-h-[92vh] overflow-y-auto">
+        <button type="button" onclick="closeBulkProductsModal()" class="absolute ltr:right-4 rtl:left-4 top-4 text-gray-400 hover:text-gray-700 w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition" aria-label="إغلاق">&#10005;</button>
+        <div class="pe-10 mb-5">
+            <span class="inline-flex items-center gap-1 text-[10px] font-black text-primary bg-rose-50 px-2.5 py-1 rounded-full mb-2"><span class="material-symbols-outlined text-sm">inventory_2</span>إضافة المنتجات</span>
+            <h3 class="text-xl md:text-2xl font-black text-on-surface">إضافة مجموعة منتجات وصورها</h3>
+            <p class="text-xs text-on-surface-variant mt-1">نزّل القالب، املأ بيانات المنتجات وأسماء الصور، ثم اختر الشيت والصور لمعاينتها قبل الحفظ.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
+            <div class="bg-surface rounded-2xl border border-outline-variant p-4 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <div><h4 class="font-black text-sm">١. قالب المنتجات</h4><p class="text-[10px] text-on-surface-variant mt-1">اختار التصنيف من القائمة المنسدلة. ولإضافة تصنيف جديد استخدم ورقته في القالب.</p></div>
+                    <button type="button" onclick="downloadBulkProductsTemplate()" class="shrink-0 bg-white border border-outline-variant px-3 py-2 rounded-xl text-[11px] font-bold hover:border-primary hover:text-primary"><span class="material-symbols-outlined text-sm align-middle">download</span> تنزيل القالب</button>
+                </div>
+                <div class="text-[10px] leading-5 text-on-surface-variant">أهم الأعمدة: اسم المنتج، السعر، التصنيف، واسم الصورة. اكتب عدة صور في الخانة نفسها وافصل بينها بفاصلة منقوطة <bdi dir="ltr">;</bdi>. أول صورة هي الغلاف.</div>
+            </div>
+            <div class="bg-surface rounded-2xl border border-outline-variant p-4 space-y-3">
+                <h4 class="font-black text-sm">٢. ملف Excel</h4>
+                <label class="w-full bg-white border border-dashed border-outline-variant hover:border-primary px-3 py-3 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-2"><span class="material-symbols-outlined text-primary">table_view</span><span id="bulkSheetLabel" class="truncate">اختيار ملف Excel (.xlsx)</span><input id="bulkProductsSheetInput" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="hidden" onchange="handleBulkProductsSheet(this.files[0])"/></label>
+                <div class="text-[10px] text-on-surface-variant">ورقة «المنتجات» هي الأولى. أضف التصنيفات الجديدة في ورقة «إضافة تصنيفات» عند الحاجة. الحد الأقصى ٥ ميجابايت و٢٥٠ منتجًا.</div>
+            </div>
+            <div class="bg-surface rounded-2xl border border-outline-variant p-4 space-y-3">
+                <h4 class="font-black text-sm">٣. صور المنتجات</h4>
+                <label class="w-full bg-white border border-dashed border-outline-variant hover:border-primary px-3 py-3 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-2"><span class="material-symbols-outlined text-primary">add_photo_alternate</span><span id="bulkImagesLabel" class="truncate">اختيار صور المنتجات</span><input id="bulkProductsImagesInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="hidden" onchange="handleBulkProductsImages(this.files)"/></label>
+                <div class="text-[10px] text-on-surface-variant">اكتب أسماء الملفات كما هي في عمود الصور. تُرفع الصور المستخدمة فقط، حتى ٦٠ صورة في الدفعة.</div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white border border-outline-variant rounded-xl px-4 py-3 mb-4">
+            <div><h4 class="font-bold text-xs">لو المنتج موجود بنفس الاسم</h4><p class="text-[10px] text-on-surface-variant">اختار نعمل إيه مع المنتجات المتكررة.</p></div>
+            <div class="flex flex-wrap gap-3 text-xs">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer"><input type="radio" name="bulkDuplicatePolicy" value="skip" checked onchange="renderBulkProductsPreview()"/>تخطيه</label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer"><input type="radio" name="bulkDuplicatePolicy" value="update" onchange="renderBulkProductsPreview()"/>تحديث بياناته وصوره</label>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button type="button" onclick="previewBulkProducts()" class="bg-primary text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow hover:bg-primary-dark"><span class="material-symbols-outlined text-sm align-middle">preview</span> معاينة الشيت</button>
+            <button type="button" onclick="saveBulkProductsDraft()" class="bg-white border border-outline-variant px-4 py-2.5 rounded-xl text-xs font-bold hover:border-primary" id="bulkSaveDraftBtn" disabled>حفظ كمسودة</button>
+            <button type="button" onclick="loadBulkProductsDraft()" class="bg-white border border-outline-variant px-4 py-2.5 rounded-xl text-xs font-bold hover:border-primary hidden" id="bulkLoadDraftBtn">استعادة المسودة</button>
+            <span id="bulkProductsProgress" class="self-center text-xs font-bold text-on-surface-variant"></span>
+        </div>
+        <div id="bulkProductsMessage" class="hidden rounded-xl p-3 mb-3 text-xs font-bold" role="status" aria-live="polite"></div>
+
+        <section id="bulkProductsPreview" class="hidden border border-outline-variant rounded-2xl overflow-hidden">
+            <div id="bulkProductsNewCategories" class="hidden bg-rose-50 border-b border-rose-100 p-3 text-xs font-bold text-primary" role="status" aria-live="polite"></div>
+            <div id="bulkProductsSummary" class="bg-surface p-3 text-xs font-bold"></div>
+            <div class="overflow-x-auto max-h-[46vh]">
+                <table class="w-full min-w-[920px] text-xs text-start">
+                    <thead class="sticky top-0 bg-white shadow-sm"><tr class="text-on-surface-variant"><th class="p-2">الصف</th><th class="p-2 min-w-52">اسم المنتج *</th><th class="p-2">السعر *</th><th class="p-2">التصنيف *</th><th class="p-2 min-w-48">أسماء الصور *</th><th class="p-2">معاينة</th><th class="p-2 min-w-56">تعديل التفاصيل والحالة</th></tr></thead>
+                    <tbody id="bulkProductsPreviewBody" class="divide-y divide-outline-variant"></tbody>
+                </table>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-surface border-t border-outline-variant">
+                <p class="text-[10px] text-on-surface-variant">الحفظ يضيف المنتجات الصالحة دفعة واحدة، ولن تُحفظ إذا وُجدت أخطاء في الصفوف غير المكررة.</p>
+                <button id="bulkSaveProductsBtn" type="button" onclick="saveBulkProducts()" class="bg-primary text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow disabled:opacity-40 disabled:cursor-not-allowed" disabled>حفظ المنتجات</button>
+            </div>
+        </section>
+    </div>
+</div>
 
 <!-- ================= MODAL: ADD GOVERNORATE ================= -->
 <div id="addGovModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden justify-center items-center z-[2000] modal-overlay">
@@ -2862,7 +2935,9 @@
         document.write('<script src="../admin-local-config.js"><' + '/script>');
     }
 </script>
+<script src="vendor/xlsx.full.min.js"></script>
 <script src="procable-data.js"></script>
+<script src="admin-bulk-products.js"></script>
 
 <script>
     // --- 1. Security & Auth Check (#26) ---
@@ -2936,9 +3011,38 @@
     }
 
     // --- 3. Product Management & Image Control ---
+    function getFeaturedProductIds(products = ProCable.getProducts()) {
+        const visible = products.filter(p => p.hidden !== true);
+        const hasFeaturedSettings = visible.some(p => typeof p.featured === 'boolean');
+        const featured = hasFeaturedSettings ? visible.filter(p => p.featured === true) : visible.slice(0, 7);
+        return new Set(featured.slice(0, 7).map(p => String(p.id)));
+    }
+
+    function toggleProductFeatured(id, enabled) {
+        const products = ProCable.getProducts();
+        const visible = products.filter(p => p.hidden !== true);
+        const selectedIds = getFeaturedProductIds(products);
+        // Older catalogs without this field keep their current first-seven homepage selection.
+        if (!visible.some(p => typeof p.featured === 'boolean')) {
+            products.forEach(product => { product.featured = selectedIds.has(String(product.id)); });
+        }
+        const product = products.find(p => String(p.id) === String(id));
+        if (!product) return;
+        if (enabled && !selectedIds.has(String(id)) && selectedIds.size >= 7) {
+            ProCable.showToast('يمكن اختيار 7 منتجات كحد أقصى. أزل اختيار منتج أولاً.', 'info');
+            renderAdminProducts();
+            return;
+        }
+        product.featured = Boolean(enabled);
+        ProCable.saveProducts(products);
+        renderAdminProducts();
+        ProCable.showToast(enabled ? 'تمت إضافة المنتج إلى المنتجات المميزة بالرئيسية' : 'تمت إزالة المنتج من المنتجات المميزة بالرئيسية', 'success');
+    }
+
     function renderAdminProducts() {
         const tbody = document.getElementById('adminProductsTableBody');
         const products = ProCable.getProducts();
+        const featuredProductIds = getFeaturedProductIds(products);
 
         tbody.innerHTML = products.map(p => {
             const safeProductId = Number.isSafeInteger(Number(p.id)) && Number(p.id) > 0 ? Number(p.id) : 0;
@@ -3008,6 +3112,9 @@
                     <td class="py-3 px-2">${badgeTxt}</td>
                     <td class="py-3 px-2">${stockBadge}</td>
                     <td class="py-3 px-2">${visibilityBadge}</td>
+                    <td class="py-3 px-2 text-center">
+                        <input type="checkbox" ${featuredProductIds.has(String(p.id)) ? 'checked' : ''} ${isHidden ? 'disabled' : ''} onchange="toggleProductFeatured(${safeProductId}, this.checked)" aria-label="عرض ${ProCable.sanitize(p.nameAr)} في المنتجات المميزة بالرئيسية" title="إظهار أو إخفاء المنتج في قسم المنتجات المميزة بالرئيسية" class="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4 cursor-pointer disabled:opacity-40"/>
+                    </td>
                     <td class="py-3 px-2">${datasheetBadge}</td>
                     <td class="py-3 px-2 text-center space-x-1 space-x-reverse whitespace-nowrap">
                         <button onclick="openProductModal(${p.id})" title="تعديل المنتج والداتا شيت" class="p-1.5 rounded-lg bg-surface border border-outline-variant hover:bg-primary hover:text-white transition">
@@ -3545,6 +3652,8 @@
 
         // Populate Categories dynamically
         const catSelect = document.getElementById('prodCategoryInput');
+        const currentProducts = ProCable.getProducts();
+        const featuredProductIds = getFeaturedProductIds(currentProducts);
         const categories = ProCable.getCategories().filter(c => c.id !== 'all');
         if (catSelect) {
             catSelect.innerHTML = categories.map(c => `
@@ -3553,7 +3662,7 @@
         }
 
         if (id !== null && id !== undefined && id !== '') {
-            const p = ProCable.getProducts().find(i => i.id == id);
+            const p = currentProducts.find(i => i.id == id);
             if (p) {
                 if (title) title.innerText = 'تعديل بيانات المنتج / الكابل';
                 document.getElementById('prodEditId').value = p.id;
@@ -3568,6 +3677,7 @@
                 document.getElementById('prodDescInput').value = p.descAr || '';
                 document.getElementById('prodStockInput').checked = p.inStock !== false;
                 document.getElementById('prodHiddenInput').checked = p.hidden === true;
+                document.getElementById('prodFeaturedInput').checked = featuredProductIds.has(String(p.id));
                 document.getElementById('prodDatasheetUrlInput').value = p.datasheet || '';
                 document.getElementById('prodDatasheetTypeInput').value = p.datasheetType || 'pdf';
                 updateModalDatasheetPreview(p.datasheet || '', p.datasheetType || 'pdf');
@@ -3612,6 +3722,7 @@
             document.getElementById('prodIconInput').value = 'xlr-m';
             document.getElementById('prodStockInput').checked = true;
             document.getElementById('prodHiddenInput').checked = false;
+            document.getElementById('prodFeaturedInput').checked = false;
             document.getElementById('prodSortOrderInput').value = ProCable.getProducts().length + 1;
             document.getElementById('prodDatasheetUrlInput').value = '';
             document.getElementById('prodDatasheetTypeInput').value = 'pdf';
@@ -4135,6 +4246,12 @@
     }
 
     function saveBrandingSettings() {
+        const hasInvalidBrand = _commercialBrandsDraft.some(brand => !String(brand.name || '').trim() || !ProCable._safeMediaUrl(String(brand.logo || '')));
+        const brandImageSize = _commercialBrandsDraft.reduce((total, brand) => total + String(brand.logo || '').length, 0);
+        if (hasInvalidBrand || brandImageSize > 1800000) {
+            ProCable.showToast(hasInvalidBrand ? 'أكمل اسم ورابط شعار كل علامة أو احذف العنصر الناقص قبل الحفظ.' : 'حجم الشعارات المرفوعة كبير. استخدم روابط مباشرة أو صوراً أصغر قبل الحفظ.', 'error');
+            return;
+        }
         let s = ProCable.getSettings();
         s.siteName = document.getElementById('brandSiteNameInput').value.trim() || 'Attractive';
         s.brandTitleAr = document.getElementById('brandTitleArInput').value.trim();
@@ -4142,6 +4259,7 @@
         s.logoImage = document.getElementById('brandLogoUrlInput').value.trim() || 'logo.png';
         const enteredColor = document.getElementById('siteColorText').value.trim();
         s.primaryColor = /^#[\da-f]{6}$/i.test(enteredColor) ? enteredColor : '#C8102E';
+        s.commercialBrands = _commercialBrandsDraft.map(brand => ({ ...brand }));
 
         // Save Background Settings
         s.siteBackgrounds = [..._siteBgs];
@@ -4467,6 +4585,7 @@
             const descEl = document.getElementById('prodDescInput');
             const stockEl = document.getElementById('prodStockInput');
             const hiddenEl = document.getElementById('prodHiddenInput');
+            const featuredEl = document.getElementById('prodFeaturedInput');
             const dsUrlEl = document.getElementById('prodDatasheetUrlInput');
             const dsTypeEl = document.getElementById('prodDatasheetTypeInput');
 
@@ -4494,6 +4613,7 @@
             const desc = descEl ? descEl.value.trim() : '';
             const inStock = stockEl ? stockEl.checked : true;
             const hidden = hiddenEl ? hiddenEl.checked : false;
+            const featured = featuredEl ? featuredEl.checked : false;
             const datasheet = dsUrlEl ? dsUrlEl.value.trim() : '';
             const datasheetType = dsTypeEl ? dsTypeEl.value : 'pdf';
 
@@ -4530,6 +4650,14 @@
             const heroPosterUrl = _currentProdHeroBg.posterUrl || '';
 
             let products = ProCable.getProducts();
+            const selectedFeaturedIds = getFeaturedProductIds(products);
+            if (!products.filter(product => product.hidden !== true).some(product => typeof product.featured === 'boolean')) {
+                products.forEach(product => { product.featured = selectedFeaturedIds.has(String(product.id)); });
+            }
+            if (featured && !selectedFeaturedIds.has(String(id || '')) && selectedFeaturedIds.size >= 7) {
+                ProCable.showToast('يمكن اختيار 7 منتجات كحد أقصى. أزل اختيار منتج من جدول المنتجات أولاً.', 'info');
+                return;
+            }
 
             if (id) {
                 // Editing existing product
@@ -4556,6 +4684,7 @@
                     p.descEn = p.descEn || desc;
                     p.inStock = inStock;
                     p.hidden = hidden;
+                    p.featured = featured;
                     p.datasheet = datasheet;
                     p.datasheetType = datasheetType;
                 } else {
@@ -4582,6 +4711,7 @@
                         originalPrice: origPrice,
                         inStock: inStock,
                         hidden: hidden,
+                        featured: featured,
                         datasheet: datasheet,
                         datasheetType: datasheetType
                     });
@@ -4611,6 +4741,7 @@
                     originalPrice: origPrice,
                     inStock: inStock,
                     hidden: hidden,
+                    featured: featured,
                     datasheet: datasheet,
                     datasheetType: datasheetType
                 });

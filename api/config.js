@@ -1,5 +1,5 @@
 // GET /api/config -> public, non-secret runtime settings for the browser.
-// GOOGLE_CLIENT_ID is a public identifier (it is visible in every "Sign in with Google" page), so exposing it is fine.
+// OAuth client/app IDs are public identifiers; private provider secrets are never returned here.
 import { readStoreRaw } from './_store.js';
 
 export default function handler(req, res) {
@@ -10,6 +10,7 @@ export default function handler(req, res) {
         const fromStore = data && data.settings && typeof data.settings.googleClientId === 'string' ? data.settings.googleClientId.trim() : '';
         const fromEnv = String(process.env.GOOGLE_CLIENT_ID || '').trim();
         const valid = (id) => /^[A-Za-z0-9_-]+\.apps\.googleusercontent\.com$/.test(id);
-        return res.status(200).json({ googleClientId: valid(fromStore) ? fromStore : (valid(fromEnv) ? fromEnv : '') });
+        const facebookAppId = String(process.env.FACEBOOK_APP_ID || '').trim();
+        return res.status(200).json({ googleClientId: valid(fromStore) ? fromStore : (valid(fromEnv) ? fromEnv : ''), facebookAppId: /^\d{5,24}$/.test(facebookAppId) ? facebookAppId : '' });
     });
 }

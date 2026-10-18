@@ -2027,6 +2027,9 @@ const ProCable = {
             bad_google_token: ar ? 'تعذر التحقق من حساب Google، حاول مرة أخرى' : 'Could not verify your Google account, please try again',
             google_conflict: ar ? 'هذا البريد مرتبط بحساب Google آخر' : 'This e-mail is linked to a different Google account',
             google_not_configured: ar ? 'الدخول عبر Google غير مفعّل حالياً' : 'Google sign-in is not enabled right now',
+            bad_facebook_token: ar ? 'تعذر التحقق من حساب Facebook، حاول مرة أخرى' : 'Could not verify your Facebook account, please try again',
+            facebook_email_conflict: ar ? 'هذا البريد له حساب بالفعل. سجّل الدخول بالبريد وكلمة المرور أولاً.' : 'An account already uses this e-mail. Sign in with your e-mail and password first.',
+            facebook_not_configured: ar ? 'الدخول عبر Facebook غير مفعّل حالياً' : 'Facebook sign-in is not enabled right now',
             network: ar ? 'تعذر الاتصال بالسيرفر، حاول مرة أخرى' : 'Could not reach the server, please try again'
         };
         return m[code] || m.network;
@@ -4620,7 +4623,7 @@ const ProCable = {
             err.classList.remove('hidden');
         }
     },
-    async handleGoogleCredential(resp) {    async handleGoogleCredential(resp) {
+    async handleGoogleCredential(resp) {
         const err = document.getElementById('authErrorMsg');
         const errTxt = document.getElementById('authErrorMsgText') || err;
         let r;

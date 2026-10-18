@@ -259,20 +259,43 @@
     footer { background-color:var(--surface-frost) !important; border-color:var(--line-soft) !important; }
     nav.apple-nav { background: transparent !important; border: 0 !important; padding: 10px 16px; transition: background .3s ease; }
     nav.apple-nav.scrolled { background: transparent !important; box-shadow: none !important; }
-    nav.apple-nav > div:first-child { width: min(1200px, calc(100% - 16px)); height: 64px; padding-inline: 22px; border: 1px solid rgba(255,255,255,.58); border-radius: 22px; background: rgba(255,255,255,.34); color: #1d1d1f; box-shadow: 0 12px 38px rgba(25,25,35,.07), inset 0 1px rgba(255,255,255,.7); backdrop-filter: blur(24px) saturate(165%); -webkit-backdrop-filter: blur(24px) saturate(165%); transition: background .3s ease, box-shadow .3s ease, border-color .3s ease; }
+    .nav-quick-search { position: relative; z-index: 70; display: block; flex: 0 0 42px; width: 42px; height: 40px; margin-inline: 2px; overflow: visible; }
+    .glass-nav-content > div:last-child .nav-quick-search { order: 5; margin-inline: 3px; }
+    html[dir="rtl"] .nav-quick-search form { left: 0; right: auto; direction: rtl; }
+    html[dir="ltr"] .nav-quick-search form { left: auto; right: 0; direction: ltr; }
+    .nav-quick-search form { position: absolute; top: 0; left: auto; right: 0; display: flex; align-items: center; gap: 2px; width: 42px; height: 40px; padding: 2px; overflow: hidden; border: 1px solid transparent; border-radius: 999px; background: transparent; box-sizing: border-box; transition: width .58s cubic-bezier(.22,1,.36,1), background .28s ease, border-color .28s ease, box-shadow .32s ease; }
+    .nav-quick-search.is-open form { width: 220px; border-color: rgba(200,16,46,.2); background: rgba(255,255,255,.9); box-shadow: 0 8px 24px rgba(32,24,28,.12), 0 0 0 3px rgba(200,16,46,.06), inset 0 1px rgba(255,255,255,.95); }
+    .nav-quick-search button { flex: 0 0 34px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: rgba(29,29,31,.84); transition: transform .42s cubic-bezier(.22,1,.36,1), color .25s ease, background .25s ease; }
+    .nav-quick-search button:hover { background: rgba(200,16,46,.08); color: var(--brand-action); }
+    .nav-quick-search.is-open .nav-search-toggle { color: var(--brand-action); transform: scale(1.06); }
+    .nav-quick-search input { flex: 0 1 0; width: 0; min-width: 0; padding: 7px 1px; opacity: 0; border: 0 !important; outline: 0; background: transparent; color: #1d1d1f; font-size: 12px; transition: flex-basis .5s cubic-bezier(.22,1,.36,1), opacity .2s ease .12s; }
+    .nav-quick-search.is-open input { flex: 1 1 auto; width: auto; opacity: 1; }
+    .nav-quick-search input::placeholder { color: #888; }
+    .nav-quick-search .nav-search-submit { flex-basis: 0; width: 0; opacity: 0; overflow: hidden; transition: flex-basis .38s ease, opacity .2s ease; }
+    .nav-quick-search.is-open .nav-search-submit { flex-basis: 30px; width: 30px; opacity: 1; }
+    .mobile-nav-search { display: none; }
+    @media (min-width: 768px) and (max-width: 1100px) { nav.apple-nav .glass-nav-content { margin-inline-start: 16px; gap: 10px; } nav.apple-nav #desktopNavLinks { gap: 12px; } .nav-quick-search.is-open form { width: 190px; } }
+    @media (max-width: 900px) { .mobile-nav-search { display: block; max-height: 0; overflow: hidden; opacity: 0; padding-inline: 14px; transition: max-height .4s cubic-bezier(.22,1,.36,1), opacity .25s ease, padding .3s ease; } .mobile-nav-search.is-open { max-height: 64px; opacity: 1; padding-block: 7px 12px; } .mobile-nav-search form { display:flex; align-items:center; gap:8px; padding:7px 10px; border:1px solid rgba(30,30,40,.12); border-radius:999px; background:rgba(255,255,255,.68); box-shadow:0 5px 18px rgba(20,20,30,.07); backdrop-filter:blur(18px); } .mobile-nav-search input { flex:1; min-width:0; padding:5px; outline:0; background:transparent; font-size:13px; } }
+    @media (prefers-reduced-motion: reduce) { .nav-quick-search, .nav-quick-search * { transition-duration: .01ms !important; } }
+    nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 64px; padding-inline: 22px; border: 1px solid rgba(255,255,255,.58); border-radius: 22px; background: rgba(255,255,255,.34); color: #1d1d1f; box-shadow: 0 12px 38px rgba(25,25,35,.07), inset 0 1px rgba(255,255,255,.7); backdrop-filter: blur(24px) saturate(165%); -webkit-backdrop-filter: blur(24px) saturate(165%); transition: background .3s ease, box-shadow .3s ease, border-color .3s ease; }
     nav.apple-nav.scrolled > div:first-child { background: rgba(255,255,255,.48); box-shadow: 0 14px 42px rgba(25,25,35,.1), inset 0 1px rgba(255,255,255,.8); border-color: rgba(255,255,255,.68); }
     nav.apple-nav > div:first-child > a, nav.apple-nav #desktopNavLinks > li > a { color: rgba(29,29,31,.84) !important; }
     @media (min-width: 768px) {
         nav.apple-nav > div:first-child { justify-content: flex-start; }
         nav.apple-nav .glass-nav-content { flex: 1 1 auto; min-width: 0; justify-content: space-between; margin-inline-start: 48px; }
         nav.apple-nav > div:first-child, nav.apple-nav #desktopNavLinks, nav.apple-nav #desktopNavLinks > li > a { direction: inherit; }
-        nav.apple-nav #desktopNavLinks + div { direction: ltr; }
+        nav.apple-nav .glass-nav-content > div:last-child { direction: ltr; }
+        html[dir="ltr"] nav.apple-nav .glass-nav-content > div:last-child { direction: rtl; }
         nav.apple-nav #desktopAuthArea { order: 1; }
-        nav.apple-nav > div:first-child > div > div:last-child > button[onclick*="showOrderTrackingModal"] { order: 2; }
+        nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"] { order: 2; }
         nav.apple-nav .lang-toggle-btn { order: 3; }
-        nav.apple-nav > div:first-child > div > div:last-child > button[onclick*="scrollToCart"], nav.apple-nav > div:first-child > div > div:last-child > a[href*="#cartSection"] { order: 4; }
+        nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="scrollToCart"], nav.apple-nav .glass-nav-content > div:last-child > a[href*="#cartSection"] { order: 4; }
     }
     nav.apple-nav #desktopNavLinks > li > a:hover, nav.apple-nav #desktopNavLinks > li > a.text-primary { color: #ff4964 !important; }
+    nav.apple-nav #desktopNavLinks > li > a { position: relative; transition: color .25s ease, transform .3s cubic-bezier(.22,1,.36,1); }
+    nav.apple-nav #desktopNavLinks > li > a::after { content: ''; position: absolute; inset-inline-start: 50%; inset-block-end: -7px; width: 0; height: 2px; border-radius: 2px; background: var(--brand-action); transform: translateX(-50%); transition: width .3s cubic-bezier(.22,1,.36,1); }
+    nav.apple-nav #desktopNavLinks > li > a:hover { transform: translateY(-1px); }
+    nav.apple-nav #desktopNavLinks > li > a:hover::after { width: 16px; }
     nav.apple-nav > div:first-child > div > button { color: rgba(29,29,31,.88) !important; border-color: rgba(30,30,40,.1) !important; background: rgba(255,255,255,.28) !important; }
     nav.apple-nav > div:first-child > div > button:hover { background: rgba(255,255,255,.55) !important; }
     nav.apple-nav > div:first-child > div > div > button { color: #1d1d1f !important; background: rgba(255,255,255,.32) !important; border-color: rgba(30,30,40,.1) !important; }
@@ -280,7 +303,29 @@
     .site-language-float { position: absolute !important; left: auto; right: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; direction: inherit; padding: 7px 12px; border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.52); color: #24242a; box-shadow: 0 5px 16px rgba(20,20,30,.1); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); font-size: 12px; font-weight: 700; }
     :dir(rtl) .site-language-float { left: 20px; right: auto; }
     .site-language-float:hover { background: rgba(255,255,255,.78); }
-    @media (max-width: 767px) { nav.apple-nav { padding: 8px 10px; } nav.apple-nav > div:first-child { width: 100%; height: 58px; padding-inline: 14px; border-radius: 19px; } .site-language-float { top: auto; bottom: 12px; right: 12px; transform: none; } :dir(rtl) .site-language-float { left: 12px; right: auto; } }
+    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } .site-language-float { top: auto; bottom: 12px; right: 12px; transform: none; } :dir(rtl) .site-language-float { left: 12px; right: auto; } }
+    nav.apple-nav { width: 100%; box-sizing: border-box; }
+    nav.apple-nav > div:first-child { width: 100%; max-width: none !important; box-sizing: border-box; }
+    nav.apple-nav .mobile-nav-controls { display: none; }
+    @media (min-width: 901px) {
+        nav.apple-nav .glass-nav-content { margin-inline-start: clamp(22px, 3vw, 52px); gap: clamp(12px, 1.5vw, 28px); }
+        nav.apple-nav #desktopNavLinks { gap: clamp(12px, 1.4vw, 24px); }
+        nav.apple-nav .nav-quick-search.is-open form { width: clamp(190px, 16vw, 240px); }
+    }
+    @media (max-width: 900px) {
+        nav.apple-nav .glass-nav-content { display: none !important; }
+        nav.apple-nav .mobile-nav-controls { display: flex !important; flex: 0 0 auto; gap: clamp(4px, 1.2vw, 10px); }
+        nav.apple-nav > div:first-child { padding-inline: clamp(10px, 2.5vw, 20px); gap: 8px; }
+        nav.apple-nav > div:first-child > a { flex: 0 1 auto; min-width: 0; }
+        nav.apple-nav > div:first-child > a img { max-width: clamp(128px, 24vw, 190px); height: auto; }
+        nav.apple-nav .mobile-nav-controls > * { flex: 0 0 auto; }
+    }
+    @media (max-width: 480px) {
+        nav.apple-nav > div:first-child { padding-inline: 9px; }
+        nav.apple-nav > div:first-child > a img { max-width: min(34vw, 145px); }
+        nav.apple-nav .mobile-nav-controls { gap: 2px; }
+        nav.apple-nav .mobile-nav-controls button, nav.apple-nav .mobile-nav-controls a { padding-inline: 7px; }
+    }
 </style>
 <nav class="sticky top-0 z-50 apple-nav">
     <div class="max-w-[1200px] mx-auto px-5 h-12 flex justify-between items-center">
@@ -388,11 +433,18 @@
                     <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
                     <span id="navCartBadge" class="absolute -top-0.5 -right-0.5 bg-primary text-white text-[0.6rem] font-bold w-4.5 h-4.5 min-w-[18px] min-h-[18px] rounded-full flex items-center justify-center border-2 border-surface hidden">٠</span>
                 </button>
+                <div class="nav-quick-search" id="navQuickSearch">
+                    <form onsubmit="submitNavSearch(event)" role="search">
+                        <button type="button" class="nav-search-toggle" onclick="toggleNavSearch()" aria-label="فتح البحث" aria-expanded="false" title="بحث"><span class="material-symbols-outlined">search</span></button>
+                        <input id="navSearchInput" type="search" data-ar-placeholder="ابحث في المنتجات" data-en-placeholder="Search products" placeholder="ابحث في المنتجات" aria-label="ابحث في المنتجات" autocomplete="off">
+                        <button type="submit" class="nav-search-submit" aria-label="تنفيذ البحث" title="بحث"><span class="material-symbols-outlined text-lg">arrow_forward</span></button>
+                    </form>
+                </div>
             </div>
         </div>
 
         <!-- Mobile Controls -->
-        <div class="flex items-center gap-2 md:hidden">
+        <div class="flex items-center gap-2 md:hidden mobile-nav-controls">
             <button onclick="ProCable.showOrderTrackingModal()" class="p-2 text-primary rounded-full hover:bg-black/5 transition" title="تتبع الطلب">
                 <span class="material-symbols-outlined text-xl">track_changes</span>
             </button>
@@ -401,10 +453,19 @@
                 <span class="material-symbols-outlined text-xl">shopping_bag</span>
                 <span id="mobileCartBadge" class="absolute -top-0.5 -right-0.5 bg-primary text-white text-[0.6rem] font-bold min-w-[16px] min-h-[16px] rounded-full flex items-center justify-center border-2 border-surface hidden">٠</span>
             </button>
+            <button onclick="toggleMobileNavSearch()" class="p-2 text-on-surface rounded-full hover:bg-black/5 transition" aria-label="فتح البحث" title="بحث"><span class="material-symbols-outlined text-xl">search</span></button>
             <button onclick="document.getElementById('mobileDrawer').classList.toggle('hidden')" class="p-2 text-on-surface rounded-full hover:bg-black/5 transition">
                 <span class="material-symbols-outlined text-xl">menu</span>
             </button>
         </div>
+    </div>
+
+    <div class="mobile-nav-search" id="mobileNavSearch">
+        <form onsubmit="submitNavSearch(event)" role="search">
+            <span class="material-symbols-outlined text-gray-500">search</span>
+            <input id="mobileNavSearchInput" type="search" data-ar-placeholder="ابحث في المنتجات" data-en-placeholder="Search products" placeholder="ابحث في المنتجات" aria-label="ابحث في المنتجات" autocomplete="off">
+            <button type="submit" class="text-primary p-1" aria-label="تنفيذ البحث"><span class="material-symbols-outlined">arrow_forward</span></button>
+        </form>
     </div>
 
     <!-- Mobile Drawer -->
@@ -493,6 +554,32 @@
             </ul>
     </div>
 </nav>
+<script>
+    function toggleNavSearch(force) {
+        const box = document.getElementById('navQuickSearch');
+        const input = document.getElementById('navSearchInput');
+        if (!box) return;
+        const open = typeof force === 'boolean' ? force : !box.classList.contains('is-open');
+        box.classList.toggle('is-open', open);
+        box.querySelector('.nav-search-toggle')?.setAttribute('aria-expanded', String(open));
+        if (open) window.setTimeout(() => input?.focus(), 180);
+        else if (input) input.value = '';
+    }
+    function submitNavSearch(event) {
+        event.preventDefault();
+        const query = event.currentTarget.querySelector('input[type="search"]')?.value.trim();
+        if (query) window.location.href = `store.html?search=${encodeURIComponent(query)}`;
+    }
+    function toggleMobileNavSearch() {
+        const panel = document.getElementById('mobileNavSearch');
+        if (!panel) return;
+        const open = !panel.classList.contains('is-open');
+        panel.classList.toggle('is-open', open);
+        if (open) window.setTimeout(() => document.getElementById('mobileNavSearchInput')?.focus(), 180);
+    }
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') { toggleNavSearch(false); document.getElementById('mobileNavSearch')?.classList.remove('is-open'); } });
+    document.addEventListener('click', event => { if (!document.getElementById('navQuickSearch')?.contains(event.target)) toggleNavSearch(false); if (!event.target.closest('#mobileNavSearch, [onclick="toggleMobileNavSearch()"]')) document.getElementById('mobileNavSearch')?.classList.remove('is-open'); });
+</script>
 <script>(function(){const nav=document.querySelector('nav.apple-nav');if(!nav)return;const btn=nav.querySelector('.lang-toggle-btn');if(!btn)return;nav.querySelectorAll('.lang-toggle-btn').forEach(x=>x.remove());btn.className='site-language-float lang-toggle-btn';btn.title='تبديل اللغة';const move=()=>{const footer=document.querySelector('footer');if(footer)footer.appendChild(btn)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move()})();</script>
 
 <!-- ================= MAIN STORE CONTAINER ================= -->
@@ -2038,6 +2125,12 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
+        const navSearchQuery = urlParams.get('search') || '';
+        if (navSearchQuery) {
+            searchQuery = navSearchQuery.trim().toLowerCase();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = navSearchQuery;
+        }
         if (urlParams.get('cat')) {
             activeCategory = urlParams.get('cat');
         } else if (window.location.hash === '#sale' || urlParams.get('sale') === 'true') {
@@ -2045,6 +2138,10 @@
         }
         renderCategoryTabs();
         renderStore();
+        const requestedProductId = Number(urlParams.get('product'));
+        if (Number.isSafeInteger(requestedProductId) && requestedProductId > 0) {
+            window.setTimeout(() => showProductDetails(requestedProductId), 0);
+        }
         renderCartView();
         populateShippingSelect();
         initStoreAppleExperience();
@@ -2075,19 +2172,7 @@
                 <p class="text-xs text-on-surface-variant" data-ar="سجل دخولك أو أنشئ حساباً للاستمتاع بالمزايا والخصومات" data-en="Sign in or register to unlock exclusive member perks">سجل دخولك أو أنشئ حساباً للاستمتاع بالمزايا والخصومات</p>
             </div>
         </div>
-
-        <div class="flex border-b border-outline-variant mb-5">
-            <button id="tabAuthSignIn" onclick="ProCable.switchAuthTab('signin')" class="flex-1 pb-3 text-center font-bold text-xs sm:text-sm text-primary border-b-2 border-primary transition flex items-center justify-center gap-1.5">
-                <span class="material-symbols-outlined text-base">login</span>
-                <span data-ar="تسجيل الدخول" data-en="Sign In">تسجيل الدخول</span>
-            </button>
-            <button id="tabAuthSignUp" onclick="ProCable.switchAuthTab('signup')" class="flex-1 pb-3 text-center font-bold text-xs sm:text-sm text-on-surface-variant border-b-2 border-transparent transition flex items-center justify-center gap-1.5">
-                <span class="material-symbols-outlined text-base">person_add</span>
-                <span data-ar="إنشاء حساب جديد" data-en="Create Account">إنشاء حساب جديد</span>
-            </button>
-        </div>
-
-        <div id="authErrorMsg" class="hidden mb-4 p-3 bg-red-50 text-error text-xs rounded-xl font-bold border border-red-200 flex items-center gap-2">
+<div id="authErrorMsg" class="hidden mb-4 p-3 bg-red-50 text-error text-xs rounded-xl font-bold border border-red-200 flex items-center gap-2">
             <span class="material-symbols-outlined text-base shrink-0">error</span>
             <span id="authErrorMsgText"></span>
         </div>
