@@ -1,6 +1,6 @@
 // Vercel serverless function: shared storage for user accounts + VIP email subscribers.  Place at api/accounts.js
 //
-// Public actions (no secret):  register, login, google, logout, me, subscribe
+// Public actions (no secret):  register, login, google, facebook, logout, me, subscribe
 // Admin actions (Bearer token from /api/admin-login):  GET (list everything), POST {action:'adminReplace'}
 //
 // Data is stored AES-256-GCM encrypted (see _vault.js) so even a leaked blob URL exposes nothing.
@@ -143,7 +143,7 @@ async function verifyPassword(pw, stored) {
 }
 
 function publicAccount(a) {
-    const { passwordHash, sessions, createdAtMs, googleSub, passwordEncoded, ...rest } = a;
+    const { passwordHash, sessions, createdAtMs, googleSub, facebookSub, passwordEncoded, ...rest } = a;
     return rest;
 }
 
@@ -345,6 +345,64 @@ export default async function handler(req, res) {
             });
             if (result.disabled) return res.status(403).json({ success: false, code: 'disabled' });
             if (result.conflict) return res.status(409).json({ success: false, code: 'google_conflict' });
+            return res.status(200).json({ success: true, account: publicAccount(result.acc), token: result.token, isNew: result.isNew });
+        }
+
+        if (action === 'facebook') {
+            const rl = rateLimit(req, 'facebook', 20, 15 * 60 * 1000);
+            if (rl.limited) return tooMany(res, rl);
+            const appId = String(process.env.FACEBOOK_APP_ID || '').trim();
+            const appSecret = String(process.env.FACEBOOK_APP_SECRET || '').trim();
+            if (!/^\d{5,24}$/.test(appId) || !appSecret) return res.status(501).json({ success: false, code: 'facebook_not_configured' });
+            const accessToken = String(b.accessToken || '');
+            if (!accessToken || accessToken.length > 4096) return res.status(401).json({ success: false, code: 'bad_facebook_token' });
+            const graphVersion = /^v\d+\.\d+$/.test(process.env.FACEBOOK_GRAPH_VERSION || '') ? process.env.FACEBOOK_GRAPH_VERSION : 'v26.0';
+            let profile;
+            try {
+                const appToken = `${appId}|${appSecret}`;
+                const debugUrl = new URL(`https://graph.facebook.com/${graphVersion}/debug_token`);
+                debugUrl.search = new URLSearchParams({ input_token: accessToken, access_token: appToken }).toString();
+                const debugResponse = await fetch(debugUrl);
+                if (!debugResponse.ok) throw new Error('invalid token');
+                const debug = await debugResponse.json();
+                const tokenInfo = debug && debug.data;
+                if (!tokenInfo || tokenInfo.is_valid !== true || String(tokenInfo.app_id) !== appId || !tokenInfo.user_id) throw new Error('invalid token');
+                const meUrl = new URL(`https://graph.facebook.com/${graphVersion}/me`);
+                meUrl.search = new URLSearchParams({ fields: 'id,name,email', access_token: accessToken }).toString();
+                const meResponse = await fetch(meUrl);
+                if (!meResponse.ok) throw new Error('profile unavailable');
+                const me = await meResponse.json();
+                if (!me || String(me.id) !== String(tokenInfo.user_id) || !EMAIL_RE.test(String(me.email || ''))) throw new Error('verified email required');
+                profile = { id: String(me.id), email: String(me.email).toLowerCase(), name: clean(me.name) };
+            } catch (e) {
+                return res.status(401).json({ success: false, code: 'bad_facebook_token' });
+            }
+            const s = await getSettings();
+            const result = await update(async (data) => {
+                let acc = data.accounts.find(a => a.facebookSub === profile.id);
+                const emailAccount = data.accounts.find(a => (a.email || '').toLowerCase() === profile.email);
+                if (!acc && emailAccount) return { result: { conflict: true } };
+                let isNew = false;
+                if (acc && acc.active === false) return { result: { disabled: true } };
+                if (!acc) {
+                    isNew = true;
+                    acc = {
+                        id: 'acc-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex'),
+                        email: profile.email, facebookSub: profile.id, emailVerified: true,
+                        name: profile.name || profile.email.split('@')[0], phone: '',
+                        registeredAt: new Date().toISOString(), createdAtMs: Date.now(), active: true, perksActive: true,
+                        customCoupon: s.userSignupCustomCouponDefault || 'WELCOME5',
+                        freeShipping: s.userSignupFreeShippingDefault !== false,
+                        discountPercent: parseInt(s.userSignupDiscountPercentDefault) || 5,
+                        customPerks: Array.isArray(s.userSignupCustomPerksDefault) ? s.userSignupCustomPerksDefault.slice() : ['ضمان ذهبي ممتد لمدة سنتين مجاناً', 'أولوية في جدول التوريد والمعاينة الفنية', 'خصم إضافي على عقود الصيانة الدورية'],
+                        notes: 'حساب مسجل عبر Facebook'
+                    };
+                    data.accounts.push(acc);
+                }
+                return { result: { acc, token: newSession(acc), isNew } };
+            });
+            if (result.disabled) return res.status(403).json({ success: false, code: 'disabled' });
+            if (result.conflict) return res.status(409).json({ success: false, code: 'facebook_email_conflict' });
             return res.status(200).json({ success: true, account: publicAccount(result.acc), token: result.token, isNew: result.isNew });
         }
 

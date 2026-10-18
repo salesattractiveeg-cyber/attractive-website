@@ -6,6 +6,7 @@
 //                     so changing the admin password later never orphans your data.
 //   ADMIN_SECRET      (legacy, optional) old name; still accepted as a fallback for ADMIN_API_SECRET.
 //   GOOGLE_CLIENT_ID  (optional) enables "Sign in with Google" (public id, no secret needed).
+//   FACEBOOK_APP_ID + FACEBOOK_APP_SECRET (optional) enable server-verified Facebook sign-in.
 import crypto from 'crypto';
 
 export function getSecret() {

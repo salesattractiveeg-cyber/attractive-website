@@ -50,7 +50,8 @@ export default async function handler(req, res) {
   if (!looksLike(type, body)) return res.status(415).json({ error: 'File content does not match its type' });
 
   const raw = String(req.query.filename || 'preview');
-  const filename = 'builder-preview/' + Date.now() + '-' + raw.replace(/[^\w.\-]+/g, '_').slice(0, 80);
+  const folder = String(req.query.folder || '') === 'product-images' ? 'product-images' : 'builder-preview';
+  const filename = folder + '/' + Date.now() + '-' + raw.replace(/[^\w.\-]+/g, '_').slice(0, 80);
 
   try {
     const blob = await put(filename, body, { access: 'public', contentType: type, addRandomSuffix: true });
