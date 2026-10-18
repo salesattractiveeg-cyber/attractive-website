@@ -2198,7 +2198,7 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="block font-bold text-on-surface mb-1">التصنيف *</label>
-                    <select id="prodCategoryInput" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs">
+                    <select id="prodCategoryInput" onchange="refreshProductBrandOptions()" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs">
                         <option value="studio">استوديو وتسجيل</option>
                         <option value="instrument">آلات وجيتار</option>
                         <option value="live">مسارح ومكبرات صوت</option>
@@ -2209,6 +2209,14 @@
                     <label class="block font-bold text-on-surface mb-1">ترتيب الظهور في المتجر (Sort Order):</label>
                     <input id="prodSortOrderInput" type="number" min="1" value="1" placeholder="1" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs font-bold"/>
                 </div>
+            </div>
+
+            <div>
+                <label class="block font-bold text-on-surface mb-1">البراند التابع له المنتج</label>
+                <select id="prodBrandInput" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs">
+                    <option value="">بدون براند</option>
+                </select>
+                <p class="mt-1 text-[10px] text-on-surface-variant">البراندات المعروضة هنا مرتبطة بالتصنيف المختار من إدارة التصنيفات.</p>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -3641,7 +3649,17 @@
         ProCable.showToast('تم إزالة ملف الداتا شيت من المنتج', 'info');
     }
 
-    function openProductModal(id = null) {
+    function refreshProductBrandOptions(selectedBrandId = '') {
+        const categoryId = document.getElementById('prodCategoryInput')?.value;
+        const select = document.getElementById('prodBrandInput');
+        if (!select) return;
+        const category = ProCable.getCategories().find(item => String(item.id) === String(categoryId));
+        const brands = Array.isArray(category?.brands) ? category.brands : [];
+        select.innerHTML = `<option value="">بدون براند</option>` + brands.map(brand => `<option value="${ProCable.sanitize(String(brand.id))}">${ProCable.sanitize(brand.nameAr || brand.name || brand.id)}${brand.enabled === false ? ' (مخفي)' : ''}</option>`).join('');
+        select.value = brands.some(brand => String(brand.id) === String(selectedBrandId)) ? String(selectedBrandId) : '';
+    }
+
+    function openProductModal(id = null, presetCategoryId = '', presetBrandId = '') {
         const modal = document.getElementById('productModal');
         const title = document.getElementById('productModalTitle');
         if (!modal) return;
@@ -3660,6 +3678,8 @@
                 <option value="${c.id}">${ProCable.sanitize(c.nameAr)} (${ProCable.sanitize(c.nameEn)})</option>
             `).join('');
         }
+        if (presetCategoryId && catSelect) catSelect.value = presetCategoryId;
+        refreshProductBrandOptions(presetBrandId);
 
         if (id !== null && id !== undefined && id !== '') {
             const p = currentProducts.find(i => i.id == id);
@@ -3670,6 +3690,7 @@
                 document.getElementById('prodPriceInput').value = p.price || '';
                 document.getElementById('prodOriginalPriceInput').value = p.originalPrice || '';
                 if (catSelect) catSelect.value = p.category || (categories[0] ? categories[0].id : 'studio');
+                refreshProductBrandOptions(p.brandId || '');
                 document.getElementById('prodSortOrderInput').value = p.sortOrder || 1;
                 document.getElementById('prodBadgeInput').value = p.badge || '';
                 document.getElementById('prodTagInput').value = p.tag || '';
@@ -3714,6 +3735,7 @@
             if (title) title.innerText = 'إضافة كابل أو منتج جديد';
             document.getElementById('prodEditId').value = '';
             document.getElementById('prodNameInput').value = '';
+            refreshProductBrandOptions(presetBrandId);
             document.getElementById('prodPriceInput').value = '';
             document.getElementById('prodOriginalPriceInput').value = '';
             document.getElementById('prodDescInput').value = '';
@@ -3754,6 +3776,142 @@
     }
 
     // --- 3.1 Categories Management ---
+    function categoryBrandKey(categoryId) {
+        return 'cat-brand-' + String(categoryId || '').replace(/[^a-zA-Z0-9_-]/g, '-');
+    }
+
+    function renderCategoryBrandManagement(category, products) {
+        if (category.id === 'all') return '';
+        const catId = ProCable.sanitize(String(category.id));
+        const formId = categoryBrandKey(category.id);
+        const brands = Array.isArray(category.brands) ? category.brands : [];
+        const categoryProducts = products.filter(product => String(product.category) === String(category.id));
+        const brandCards = brands.map(brand => {
+            const brandId = ProCable.sanitize(String(brand.id));
+            const items = categoryProducts.filter(product => String(product.brandId || '') === String(brand.id));
+            const logo = brand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(brand.logo))}" alt="${ProCable.sanitize(brand.name || brand.nameAr)}" class="w-10 h-10 object-contain rounded-lg bg-white border border-outline-variant p-1"/>` : `<span class="material-symbols-outlined text-primary">sell</span>`;
+            return `<div class="rounded-xl border border-outline-variant bg-white p-3">
+                <div class="flex items-center gap-2">
+                    ${logo}
+                    <div class="min-w-0 flex-1"><strong class="block truncate">${ProCable.sanitize(brand.nameAr || brand.name || brand.id)}</strong><span class="text-[10px] text-gray-500">${items.length} منتج · ${brand.enabled === false ? 'مخفي' : 'ظاهر'}</span></div>
+                    <button type="button" data-category="${catId}" data-brand="${brandId}" onclick="editCategoryBrand(this)" class="p-1.5 rounded-lg border border-outline-variant hover:bg-primary hover:text-white" title="تعديل البراند">✎</button>
+                    <button type="button" data-category="${catId}" data-brand="${brandId}" onclick="toggleCategoryBrand(this)" class="p-1.5 rounded-lg border border-outline-variant hover:bg-amber-500 hover:text-white" title="إظهار أو إخفاء">${brand.enabled === false ? 'إظهار' : 'إخفاء'}</button>
+                    <button type="button" data-category="${catId}" data-brand="${brandId}" onclick="deleteCategoryBrand(this)" class="p-1.5 rounded-lg border border-red-200 text-red-700 hover:bg-red-600 hover:text-white" title="حذف البراند">حذف</button>
+                    <button type="button" data-category="${catId}" data-brand="${brandId}" onclick="addProductToCategoryBrand(this)" class="px-2.5 py-1.5 rounded-lg bg-primary text-white font-bold">إضافة منتج</button>
+                </div>
+                <div class="mt-2 space-y-1">${items.length ? items.map(product => `<div class="flex items-center gap-2 rounded-lg bg-surface-container-low px-2 py-1.5 text-[11px]"><span class="flex-1 truncate font-semibold">${ProCable.sanitize(product.nameAr || product.nameEn || '')}</span><span class="text-gray-500">${product.datasheet ? '📄 داتا شيت' : 'بدون داتا شيت'} · ${product.hidden === true ? 'مخفي' : 'ظاهر'}</span><button type="button" onclick="openProductModal(${Number(product.id)})" class="text-primary font-bold">تعديل</button><button type="button" onclick="toggleProductVisibility(${Number(product.id)})" class="text-gray-600">${product.hidden === true ? 'إظهار' : 'إخفاء'}</button></div>`).join('') : '<p class="text-[11px] text-gray-400 py-1">لا توجد منتجات مرتبطة بهذا البراند بعد.</p>'}</div>
+            </div>`;
+        }).join('');
+        const unassigned = categoryProducts.filter(product => !product.brandId || !brands.some(brand => String(brand.id) === String(product.brandId)));
+        return `<details class="mt-3 border-t border-outline-variant pt-3" data-category-brands="${catId}">
+            <summary class="cursor-pointer flex items-center justify-between font-bold text-xs"><span>براندات التصنيف ومنتجاتها</span><span class="text-gray-500">${brands.length} براند · ${categoryProducts.length} منتج</span></summary>
+            <div class="mt-3 space-y-3">
+                <form id="${formId}" data-category-brand-form="${catId}" onsubmit="addCategoryBrand(event, this)" class="grid grid-cols-1 md:grid-cols-2 gap-2 rounded-xl bg-surface-container-low p-3">
+                    <input type="hidden" name="brandId" value=""/>
+                    <input name="nameAr" required maxlength="80" placeholder="اسم البراند بالعربي" class="p-2 border border-outline-variant rounded-lg"/>
+                    <input name="name" required maxlength="80" placeholder="Brand name" dir="ltr" class="p-2 border border-outline-variant rounded-lg"/>
+                    <input name="logo" placeholder="رابط الشعار" dir="ltr" class="p-2 border border-outline-variant rounded-lg md:col-span-2"/>
+                    <label class="text-[11px] flex items-center gap-2"><span>أو ارفع شعاراً:</span><input type="file" accept="image/*" onchange="handleCategoryBrandUpload(this)" class="max-w-full"/></label>
+                    <div class="flex items-center gap-2"><img data-brand-preview alt="معاينة الشعار" class="hidden w-9 h-9 object-contain bg-white rounded border p-1"/><button type="submit" class="px-3 py-2 rounded-lg bg-primary text-white font-bold" data-brand-submit>إضافة براند لهذا التصنيف</button><button type="button" onclick="resetCategoryBrandForm(this)" class="px-3 py-2 rounded-lg border border-outline-variant">مسح الحقول</button></div>
+                </form>
+                ${brandCards || '<p class="text-xs text-gray-500">لا توجد براندات مرتبطة بالتصنيف بعد. أضفها من الحقول أعلاه.</p>'}
+                ${unassigned.length ? `<div class="rounded-xl border border-dashed border-amber-400 p-3"><strong class="text-xs">منتجات غير مرتبطة ببراند</strong><div class="mt-2 space-y-1">${unassigned.map(product => `<div class="flex items-center gap-2 text-[11px]"><span class="flex-1 truncate">${ProCable.sanitize(product.nameAr || product.nameEn || '')}</span><button type="button" onclick="openProductModal(${Number(product.id)})" class="text-primary font-bold">اختيار البراند / تعديل</button></div>`).join('')}</div></div>` : ''}
+            </div>
+        </details>`;
+    }
+
+    async function handleCategoryBrandUpload(input) {
+        const file = input?.files?.[0];
+        const form = input?.closest('form');
+        if (!file || !form) return;
+        if (file.size > 4.4 * 1024 * 1024) { ProCable.showToast('حجم شعار البراند يجب ألا يتجاوز 4.4 ميجابايت', 'error'); input.value = ''; return; }
+        ProCable.showToast('جاري رفع شعار البراند...', 'info');
+        try {
+            const media = await ProCable.uploadPreviewMedia(file);
+            const logo = form.elements.namedItem('logo');
+            const preview = form.querySelector('[data-brand-preview]');
+            if (logo) logo.value = media.url;
+            if (preview) { preview.src = media.url; preview.classList.remove('hidden'); }
+            ProCable.showToast('تم رفع شعار البراند', 'success');
+        } catch (error) {
+            ProCable.showToast(error?.message === 'TOO_BIG_FOR_INLINE' ? 'تعذر رفع الصورة الآن؛ استخدم صورة أصغر أو ضع رابطاً مباشراً' : 'فشل رفع شعار البراند', 'error');
+        } finally { input.value = ''; }
+    }
+
+    function resetCategoryBrandForm(button) {
+        const form = button.closest('form');
+        if (!form) return;
+        form.reset();
+        form.elements.namedItem('brandId').value = '';
+        form.querySelector('[data-brand-submit]').textContent = 'إضافة براند لهذا التصنيف';
+        const preview = form.querySelector('[data-brand-preview]');
+        if (preview) { preview.removeAttribute('src'); preview.classList.add('hidden'); }
+    }
+
+    function editCategoryBrand(button) {
+        const category = ProCable.getCategories().find(item => String(item.id) === String(button.dataset.category));
+        const brand = category?.brands?.find(item => String(item.id) === String(button.dataset.brand));
+        const form = document.getElementById(categoryBrandKey(button.dataset.category));
+        if (!category || !brand || !form) return;
+        form.elements.namedItem('brandId').value = brand.id;
+        form.elements.namedItem('nameAr').value = brand.nameAr || brand.name || '';
+        form.elements.namedItem('name').value = brand.name || '';
+        form.elements.namedItem('logo').value = brand.logo || '';
+        form.querySelector('[data-brand-submit]').textContent = 'حفظ تعديلات البراند';
+        const preview = form.querySelector('[data-brand-preview]');
+        if (brand.logo && preview) { preview.src = ProCable._safeMediaUrl(brand.logo); preview.classList.remove('hidden'); }
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function addCategoryBrand(event, form) {
+        event.preventDefault();
+        const categories = ProCable.getCategories();
+        const category = categories.find(item => String(item.id) === String(form.dataset.category));
+        if (!category) return;
+        const name = form.elements.namedItem('name').value.trim();
+        const nameAr = form.elements.namedItem('nameAr').value.trim();
+        const brandIdInput = form.elements.namedItem('brandId').value.trim();
+        const id = brandIdInput || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || ('brand-' + Date.now());
+        category.brands = Array.isArray(category.brands) ? category.brands : [];
+        const duplicate = category.brands.some(brand => String(brand.id) === id && String(brand.id) !== brandIdInput);
+        if (duplicate) { ProCable.showToast('هذا البراند موجود بالفعل داخل التصنيف', 'error'); return; }
+        const current = category.brands.find(brand => String(brand.id) === brandIdInput);
+        const record = { ...(current || {}), id, name, nameAr, logo: form.elements.namedItem('logo').value.trim(), enabled: current?.enabled !== false };
+        if (current) Object.assign(current, record); else category.brands.push(record);
+        ProCable.saveCategories(categories);
+        resetCategoryBrandForm(form.querySelector('[data-brand-submit]'));
+        renderAdminCategories();
+        ProCable.showToast(current ? 'تم تعديل البراند وربطه بالتصنيف' : 'تمت إضافة البراند للتصنيف', 'success');
+    }
+
+    function toggleCategoryBrand(button) {
+        const categories = ProCable.getCategories();
+        const category = categories.find(item => String(item.id) === String(button.dataset.category));
+        const brand = category?.brands?.find(item => String(item.id) === String(button.dataset.brand));
+        if (!brand) return;
+        brand.enabled = brand.enabled === false;
+        ProCable.saveCategories(categories);
+        renderAdminCategories();
+    }
+
+    function deleteCategoryBrand(button) {
+        const categories = ProCable.getCategories();
+        const category = categories.find(item => String(item.id) === String(button.dataset.category));
+        const brand = category?.brands?.find(item => String(item.id) === String(button.dataset.brand));
+        if (!brand || !confirm(`حذف ${brand.nameAr || brand.name} من هذا التصنيف؟ ستبقى المنتجات موجودة بدون براند.`)) return;
+        category.brands = category.brands.filter(item => String(item.id) !== String(brand.id));
+        const products = ProCable.getProducts();
+        products.forEach(product => { if (String(product.category) === String(category.id) && String(product.brandId || '') === String(brand.id)) product.brandId = ''; });
+        ProCable.saveProducts(products);
+        ProCable.saveCategories(categories);
+        renderAdminCategories();
+        renderAdminProducts();
+    }
+
+    function addProductToCategoryBrand(button) {
+        openProductModal(null, button.dataset.category, button.dataset.brand);
+    }
+
     function renderAdminCategories() {
         const list = document.getElementById('adminCategoriesList');
         const categories = ProCable.getCategories();
@@ -3773,7 +3931,8 @@
                 : `<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-gray-500 flex-shrink-0 cursor-pointer" data-id="${ProCable.sanitize(String(c.id))}" onclick="openEditCategoryModal(this.dataset.id)"><span class="material-symbols-outlined text-lg">${ProCable.sanitize(String(c.icon || 'category'))}</span></div>`;
 
             return `
-                <div class="bg-surface p-4 rounded-xl border border-outline-variant flex items-center justify-between gap-3 shadow-sm ${isHidden ? 'opacity-70 bg-gray-50' : ''}">
+                <div class="bg-surface p-4 rounded-xl border border-outline-variant shadow-sm ${isHidden ? 'opacity-70 bg-gray-50' : ''}">
+                  <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         ${catVisual}
                         <div class="min-w-0">
@@ -3803,6 +3962,8 @@
                             </button>
                         `}
                     </div>
+                  </div>
+                  ${renderCategoryBrandManagement(c, products)}
                 </div>
             `;
         }).join('');
@@ -4606,6 +4767,8 @@
 
             const origPrice = (origPriceEl && origPriceEl.value.trim()) ? parseFloat(origPriceEl.value) : null;
             const category = catEl ? catEl.value : 'studio';
+            const brandEl = document.getElementById('prodBrandInput');
+            const brandId = brandEl ? brandEl.value : '';
             const sortOrder = sortOrderEl ? (parseInt(sortOrderEl.value) || 99) : 99;
             const badge = badgeEl ? badgeEl.value : '';
             const tag = tagEl ? tagEl.value.trim() : '';
@@ -4668,6 +4831,7 @@
                     p.price = price;
                     p.originalPrice = origPrice;
                     p.category = category;
+                    p.brandId = brandId;
                     p.sortOrder = sortOrder;
                     p.badge = badge;
                     p.tag = tag;
@@ -4695,6 +4859,7 @@
                         descAr: desc,
                         descEn: desc,
                         category: category,
+                        brandId: brandId,
                         sortOrder: sortOrder,
                         badge: badge,
                         tag: tag,
@@ -4725,6 +4890,7 @@
                     descAr: desc,
                     descEn: desc,
                     category: category,
+                    brandId: brandId,
                     sortOrder: sortOrder,
                     badge: badge,
                     tag: tag,

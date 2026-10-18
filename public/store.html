@@ -654,6 +654,8 @@
         </div>
     </div>
 
+    <div id="storeBrandFilters" class="hidden mb-7 -mt-4 flex flex-wrap items-center gap-2 apple-reveal" aria-label="تصفية حسب البراند"></div>
+
     <!-- Sale Hub Active Header Banner -->
     <div id="saleHubBanner" class="hidden mb-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-red-600 via-red-700 to-black text-white shadow-xl relative overflow-hidden border border-red-500/30">
         <div class="relative z-10 space-y-2 text-start">
@@ -1005,6 +1007,7 @@
 
 <script>
     let activeCategory = 'all';
+    let activeBrand = 'all';
     let searchQuery = '';
     let sortMode = 'default';
     let appliedDiscountVal = 0;
@@ -1053,10 +1056,43 @@
         });
         
         container.innerHTML = html;
+        renderBrandFilters();
+    }
+
+    function renderBrandFilters() {
+        const container = document.getElementById('storeBrandFilters');
+        if (!container) return;
+        const isAr = ProCable.getLang() === 'ar';
+        const category = ProCable.getCategories().find(c => String(c.id) === String(activeCategory));
+        const brands = (category && Array.isArray(category.brands) ? category.brands : []).filter(brand => brand && brand.hidden !== true && brand.enabled !== false);
+        if (!category || activeCategory === 'all' || activeCategory === 'sale' || brands.length === 0) {
+            container.classList.add('hidden');
+            container.innerHTML = '';
+            activeBrand = 'all';
+            return;
+        }
+        container.classList.remove('hidden');
+        const buttonClass = selected => `inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-bold transition ${selected ? 'border-primary bg-primary text-white shadow-sm' : 'border-outline-variant bg-white text-on-surface hover:border-primary hover:text-primary'}`;
+        let html = `<span class="text-xs font-bold text-on-surface-variant me-1">${isAr ? 'البراند:' : 'Brand:'}</span>`;
+        html += `<button type="button" onclick="setBrand('all')" class="${buttonClass(activeBrand === 'all')}">${isAr ? 'كل البراندات' : 'All brands'}</button>`;
+        brands.forEach(brand => {
+            const id = String(brand.id || '');
+            const name = isAr ? (brand.nameAr || brand.nameEn || '') : (brand.nameEn || brand.nameAr || '');
+            const logo = brand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(brand.logo))}" alt="" class="h-5 w-5 rounded-full bg-white object-contain">` : '';
+            html += `<button type="button" onclick="setBrand(this.dataset.brand)" data-brand="${ProCable.sanitize(id)}" class="${buttonClass(String(activeBrand) === id)}">${logo}<span>${ProCable.sanitize(name)}</span></button>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function setBrand(brandId) {
+        activeBrand = String(brandId || 'all');
+        renderBrandFilters();
+        renderStore();
     }
 
     function setCategory(cat) {
         activeCategory = cat;
+        activeBrand = 'all';
         renderCategoryTabs();
         renderStore();
     }
@@ -1113,6 +1149,9 @@
         } else if (activeCategory !== 'all') {
             products = products.filter(p => p.category === activeCategory);
         }
+        if (activeBrand !== 'all') {
+            products = products.filter(p => String(p.brandId || '') === String(activeBrand));
+        }
 
         // 2. Filter Search (Instant from 1 char)
         if (searchQuery) {
@@ -1166,6 +1205,8 @@
             const iconSvg = PRO_SVGS[p.icon] || PRO_SVGS['xlr-m'];
             const prodName = isAr ? p.nameAr : (p.nameEn || p.nameAr);
             const prodDesc = isAr ? p.descAr : (p.descEn || p.descAr);
+            const productCategory = ProCable.getCategories().find(c => String(c.id) === String(p.category));
+            const productBrand = (productCategory?.brands || []).find(brand => String(brand.id) === String(p.brandId) && brand.hidden !== true && brand.enabled !== false);
             const imgs = (Array.isArray(p.images) && p.images.length > 0) ? p.images : (p.image ? [p.image] : []);
             const imgCount = imgs.length;
             const hasVideo = !!(p.video && p.video.trim());
@@ -1221,6 +1262,7 @@
                         <div class="flex justify-between items-center mb-3">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">${ProCable.sanitize(p.tag || 'Audio')}</span>
+                                ${productBrand ? `<span class="text-[10px] bg-white border border-outline-variant text-on-surface font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">${productBrand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(productBrand.logo))}" alt="" class="h-4 w-4 object-contain">` : ''}${ProCable.sanitize(isAr ? (productBrand.nameAr || productBrand.nameEn) : (productBrand.nameEn || productBrand.nameAr))}</span>` : ''}
                                 ${badgeHtml}
                             </div>
                             <div class="text-end">

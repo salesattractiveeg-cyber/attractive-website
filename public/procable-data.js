@@ -24,11 +24,31 @@ const PRO_SVGS = {
 // --- 2. Categories Default List (Light Current Systems) ---
 const DEFAULT_CATEGORIES = [
     { id: 'all', nameAr: 'الكل', nameEn: 'All', icon: 'apps', hidden: false },
-    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false },
-    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false },
-    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false },
-    { id: 'nurse-call', nameAr: 'الاستدعاء والإنتركم', nameEn: 'Nurse Call & Intercom', icon: 'call', hidden: false },
-    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false }
+    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false, brands: [
+        { id: 'hikvision', name: 'Hikvision', nameAr: 'هيك فيجن', logo: 'brands/hikvision.svg', enabled: true },
+        { id: 'unv', name: 'UNV', nameAr: 'UNV', logo: 'brands/unv.png', enabled: true },
+        { id: 'dahua', name: 'Dahua', nameAr: 'داهوا', logo: 'brands/dahua.svg', enabled: true },
+        { id: 'hanwha', name: 'Hanwha Vision', nameAr: 'هانوا', logo: 'brands/hanwha-vision.svg', enabled: true },
+        { id: 'wisenet', name: 'Wisenet', nameAr: 'Wisenet', logo: 'brands/wisenet.png', enabled: true }
+    ] },
+    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false, brands: [
+        { id: 'honeywell', name: 'Honeywell', nameAr: 'هانيويل', logo: 'brands/honeywell.svg', enabled: true },
+        { id: 'bosch', name: 'Bosch', nameAr: 'بوش', logo: 'brands/bosch.svg', enabled: true },
+        { id: 'eaton', name: 'Eaton', nameAr: 'إيتون', logo: 'brands/eaton.svg', enabled: true },
+        { id: 'apollo', name: 'Apollo', nameAr: 'أبولو', logo: 'brands/apollo.png', enabled: true },
+        { id: 'simplex', name: 'Simplex', nameAr: 'سيمبلكس', logo: 'brands/simplex.jpg', enabled: true }
+    ] },
+    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false, brands: [
+        { id: 'dsppa', name: 'DSPPA', nameAr: 'DSPPA', logo: 'brands/dsppa.png', enabled: true },
+        { id: 'honeywell', name: 'Honeywell', nameAr: 'هانيويل', logo: 'brands/honeywell.svg', enabled: true }
+    ] },
+    { id: 'nurse-call', nameAr: 'الاستدعاء والإنتركم', nameEn: 'Nurse Call & Intercom', icon: 'call', hidden: false, brands: [] },
+    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false, brands: [
+        { id: 'dlink', name: 'D-Link', nameAr: 'دي لينك', logo: 'brands/d-link.svg', enabled: true },
+        { id: 'panduit', name: 'Panduit', nameAr: 'بانداويت', logo: 'brands/panduit.svg', enabled: true },
+        { id: 'legrand', name: 'Legrand', nameAr: 'ليجراند', logo: 'brands/legrand.svg', enabled: true },
+        { id: 'hst', name: 'HST', nameAr: 'HST', logo: 'brands/hst.png', enabled: true }
+    ] }
 ];
 
 // --- 3. Default Products with Sorting, Discounts & Badges ---
@@ -829,8 +849,9 @@ const ProCable = {
             image: '', 
             images: [], 
             video: '',
-            icon: 'cable'
-        }, c));
+            icon: 'cable',
+            brands: (DEFAULT_CATEGORIES.find(defaultCategory => defaultCategory.id === c.id)?.brands || []).map(brand => ({ ...brand }))
+        }, c, { brands: Array.isArray(c.brands) ? c.brands : (DEFAULT_CATEGORIES.find(defaultCategory => defaultCategory.id === c.id)?.brands || []).map(brand => ({ ...brand })) }));
     },
     saveCategories(list) {
         localStorage.setItem('attractive_categories', JSON.stringify(list));
