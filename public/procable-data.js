@@ -4368,6 +4368,7 @@ const ProCable = {
                 .auth-orbit-one{width:390px;height:390px;right:-150px;top:16%}.auth-orbit-two{width:280px;height:280px;left:-120px;bottom:-10%;border-color:rgba(200,16,46,.28)}
                 .auth-close{position:absolute;z-index:5;top:12px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.88);color:#555;cursor:pointer}
                 .auth-social-button{width:100%;min-height:44px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #d9d9df;border-radius:10px;background:#f7f7f8;color:#25252a;font-family:inherit;font-size:12px;font-weight:700;transition:background .2s,transform .2s;cursor:pointer}
+                .auth-social-button.hidden{display:none!important}
                 .auth-social-button:hover{background:#eeeef1;transform:translateY(-1px)}
                 .auth-google-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px} .auth-google-mark svg{display:block;width:20px;height:20px}
                 .auth-password-strength{margin-top:8px}.auth-password-strength-track{height:6px;overflow:hidden;border-radius:999px;background:#e8e8ed;direction:ltr}.auth-password-strength-fill{height:100%;width:0;border-radius:inherit;transition:width .25s ease,background-color .25s ease}
