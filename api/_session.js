@@ -11,7 +11,10 @@ const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 // `account` is for server-side use only (it includes the password hash): never send it back to a browser.
 export async function verifySession(id, token) {
     if (!id || !token || typeof id !== 'string' || typeof token !== 'string' || token.length > 200) return null;
-    const cur = await readJson(pathFor('accounts', 'accounts.json')).catch(() => null);
+    // A storage read error is not proof that the session is invalid. Let the API
+    // return a retryable server error instead of turning transient Blob staleness
+    // into a false logout.
+    const cur = await readJson(pathFor('accounts', 'accounts.json'));
     const list = cur && cur.data && Array.isArray(cur.data.accounts) ? cur.data.accounts : [];
     const acc = list.find(a => a && a.id === id);
     if (!acc || acc.active === false) return null;

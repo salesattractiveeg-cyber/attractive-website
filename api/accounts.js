@@ -409,7 +409,16 @@ export default async function handler(req, res) {
         if (action === 'me') {
             const rl = rateLimit(req, 'me', 120, 15 * 60 * 1000);
             if (rl.limited) return tooMany(res, rl);
-            const data = await loadReadOnly();
+            const stored = await readJson(dataPath());
+            // A missing account blob is not evidence that a just-issued session is
+            // invalid: Blob can briefly lag after the login write. Keep the client
+            // session and let it retry instead of returning a false 401.
+            if (!stored) return res.status(503).json({ success: false, code: 'account_storage_unavailable' });
+            const data = normalize(stored.data);
+            if (!data.legacyMigrated) {
+                const legacy = await tryLegacy();
+                if (legacy) await mergeLegacy(data, legacy);
+            }
             const acc = data.accounts.find(a => a.id === b.id);
             const h = sha(b.token || '');
             if (!acc || acc.active === false || !activeSessions(acc).some(s => s.h === h)) {

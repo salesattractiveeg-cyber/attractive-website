@@ -27,18 +27,43 @@ function decrypt(text) {
     return JSON.parse(Buffer.concat([d.update(Buffer.from(j.ct, 'base64')), d.final()]).toString('utf8'));
 }
 
+function isBlobNotFound(error) {
+    return error && (error.name === 'BlobNotFoundError' || error.status === 404 || error.statusCode === 404);
+}
+
 // -> { data, etag } | null (not found)
 export async function readJson(path) {
-    const info = await head(path).catch(() => null);
-    if (!info) return null;
-    for (let i = 0; i < 3; i++) {
-        const r = await fetch(info.url + (info.url.includes('?') ? '&' : '?') + 't=' + Date.now() + i, { cache: 'no-store' });
+    const delays = [150, 300, 600, 1000];
+    let sawStaleCopy = false;
+    for (let i = 0; i <= delays.length; i++) {
+        // Re-read the current Blob metadata each time: an overwrite can become visible
+        // between retries, and a single stale `head()` result must not win the whole read.
+        let info;
+        try { info = await head(path); }
+        catch (error) {
+            if (isBlobNotFound(error)) return null;
+            throw error;
+        }
+        if (!info) return null;
+        const r = await fetch(info.url + (info.url.includes('?') ? '&' : '?') + 't=' + Date.now() + '-' + i + '-' + crypto.randomBytes(4).toString('hex'), {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache' }
+        });
         if (!r.ok) throw new Error('vault read failed: ' + r.status);
         const re = r.headers.get('etag');
-        // CDN may serve an older copy for up to ~60s; make sure the body matches the ETag we'll use for ifMatch.
-        if (re && info.etag && re.replace(/^W\//, '') !== info.etag && i < 2) { await new Promise(s => setTimeout(s, 250)); continue; }
+        // Never return a body known to be older than the ETag. In particular, a stale
+        // account blob must not make /me incorrectly revoke a customer's fresh session.
+        if (info.etag && (!re || re.replace(/^W\//, '') !== info.etag)) {
+            sawStaleCopy = true;
+            if (i < delays.length) {
+                await new Promise(resolve => setTimeout(resolve, delays[i]));
+                continue;
+            }
+            break;
+        }
         return { data: decrypt(await r.text()), etag: info.etag };
     }
+    if (sawStaleCopy) throw new Error('vault read returned a stale Blob version');
     return null;
 }
 

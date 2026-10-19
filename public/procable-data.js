@@ -2083,6 +2083,19 @@ const ProCable = {
             const id = JSON.parse(localStorage.getItem('attractive_logged_in_user') || 'null');
             if (!token || !id) return;
             const r = await this._publicApi({ action: 'me', id, token });
+            // Blob/CDN reads can briefly lag immediately after login. Retry transient
+            // server failures; only clear the local session after an authoritative 401.
+            if (r.status === 401 || r.status >= 500) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const retry = await this._publicApi({ action: 'me', id, token });
+                if (retry.status === 401 || retry.status >= 500) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    const lastRetry = await this._publicApi({ action: 'me', id, token });
+                    Object.assign(r, lastRetry);
+                } else {
+                    Object.assign(r, retry);
+                }
+            }
             if (r.status === 401) {
                 localStorage.removeItem('attractive_logged_in_user');
                 localStorage.removeItem('attractive_session_token');
