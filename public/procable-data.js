@@ -3630,7 +3630,7 @@ const ProCable = {
                     <a href="store.html" class="hover:text-primary transition font-medium">${isAr ? 'المتجر' : 'Store'}</a>
                     <a href="builder.html" class="hover:text-primary transition font-medium">${isAr ? 'التفصيل الخاص' : 'Custom Build'}</a>
                     <button onclick="ProCable.showAboutModal()" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'عن الشركة' : 'About Us'}</button>
-                    <button onclick="ProCable.showPolicyModal('privacy')" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</button>
+                    <a href="privacy-policy.html" class="hover:text-primary transition font-medium">${isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</a>
                     <button onclick="ProCable.showPolicyModal('return')" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'الاستبدال والضمان' : 'Warranty & Returns'}</button>
                 `;
             }
