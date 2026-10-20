@@ -460,8 +460,8 @@ const DEFAULT_NAV_ITEMS = [
                 id: 'col-services', headingAr: 'الخدمات الهندسية', headingEn: 'Engineering Services',
                 items: [
                     { id: 'mm-svc-builder',  labelAr: 'مهندس التوصيلات والكابلات', labelEn: 'Link Configurator',   url: 'builder.html',                 showImage: false, showPrice: false },
-                    { id: 'mm-svc-repair',   labelAr: 'مركز التركيبات والصيانة',   labelEn: 'Install & Maintenance', url: 'index.html#repairSection',   showImage: false, showPrice: false },
-                    { id: 'mm-svc-consult',  labelAr: 'طلب مقايسة فنية ومعاينة',    labelEn: 'Technical Survey & BOQ', url: 'index.html#contactSection', showImage: false, showPrice: false }
+                    { id: 'mm-svc-repair',   labelAr: 'الدعم الفني والصيانة',       labelEn: 'Technical Support & Maintenance', url: 'index.html#repairSection', showImage: false, showPrice: false },
+                    { id: 'mm-svc-consult',  labelAr: 'استفسار عن تجهيزات مشروعك',   labelEn: 'Ask about project equipment', url: 'index.html#contactSection', showImage: false, showPrice: false }
                 ]
             }
         ]
@@ -475,8 +475,8 @@ const DEFAULT_NAV_ITEMS = [
 const DEFAULT_SETTINGS = {
     // Branding & Identity
     siteName: "Attractive",
-    brandTitleAr: "Attractive - أنظمة التيار الخفيف والأمن والمراقبة المتكاملة",
-    brandTitleEn: "Attractive - Integrated Light Current & Security Systems",
+    brandTitleAr: "Attractive - توريد أنظمة ومعدات التيار الخفيف",
+    brandTitleEn: "Attractive - Light Current Systems & Equipment Supply",
     logoImage: "logo.png",
     primaryColor: "#C8102E", // Editable Site Theme Color!
     commercialBrands: [
@@ -508,8 +508,8 @@ const DEFAULT_SETTINGS = {
 
     // Footer Rights & Copyright (100% Admin Editable)
     copyrightYear: "2026",
-    copyrightTextAr: "جميع الحقوق محفوظة لـ Attractive لأنظمة التيار الخفيف وحلول الأمن والسلامة.",
-    copyrightTextEn: "All rights reserved to Attractive Light Current & Security Solutions.",
+    copyrightTextAr: "جميع الحقوق محفوظة لـ Attractive لتوريد أنظمة ومعدات التيار الخفيف.",
+    copyrightTextEn: "All rights reserved to Attractive Light Current Systems & Equipment Supply.",
 
     // Policies: Privacy & Data Protection (100% Admin Editable)
     privacyPolicyTitleAr: "سياسة الخصوصية وسرية البيانات",
@@ -540,15 +540,15 @@ const DEFAULT_SETTINGS = {
 4. Delivery Inspection: You are welcomed to physically inspect equipment and certifications upon courier handover.`,
 
     // About Us (Story, Craftsmanship, Photos & Badges - 100% Admin Editable)
-    aboutTitleAr: "عن Attractive — رواد هندسة أنظمة التيار الخفيف والأمن المتكامل",
-    aboutTitleEn: "About Attractive — Leaders in Light Current & Smart Security",
-    aboutStoryAr: `انطلقت Attractive برؤية هندسية متقدمة لتوفير أرقى حلول أنظمة التيار الخفيف (Light Current) في مصر والشرق الأوسط. نحن متخصصون في توريد، تركيب، وبرمجة شبكات كاميرات المراقبة الذكية (CCTV)، أنظمة إنذار الحريق المعنونة، السوند سيستم والإذاعة الداخلية، أنظمة استدعاء الممرضات والإنتركم المرئي، والبنية التحتية لكابلات الشبكات والألياف الضوئية.
-نعتمد أعلى معايير الجودة العالمية ومطابقة الكود المصري والدفاع المدني لتأمين المنشآت الطبية والتعليمية والشركات والمصانع والمنازل بأعلى كفاءة وأطول فترات ضمان مع صيانة دورية متكاملة.`,
-    aboutStoryEn: `Attractive was established with an engineering vision to deliver premier Light Current & Security Systems across Egypt. We specialize in supply, installation, and integration of CCTV surveillance, intelligent fire alarm systems, public address & background sound, nurse call & smart video intercom, and structured network cabling.
-We adhere to the highest international standards and safety codes to protect healthcare, commercial, industrial, and residential projects with extended warranties and round-the-clock technical support.`,
+    aboutTitleAr: "عن Attractive — توريد أنظمة ومعدات التيار الخفيف",
+    aboutTitleEn: "About Attractive — Light Current Systems & Equipment Supply",
+    aboutStoryAr: `تتخصص Attractive في توريد أجهزة وأنظمة التيار الخفيف ومستلزمات البنية التحتية للمشروعات والمنشآت. يشمل نطاق التوريد أنظمة المراقبة، إنذار الحريق، الصوت والإذاعة، الشبكات، الإنتركم والاستدعاء الطبي، إلى جانب الكابلات ومستلزمات الربط.
+نساعد عملاءنا في اختيار المواصفات المناسبة وتجهيز قوائم الكميات، مع إتاحة خدمات التركيب والبرمجة والصيانة والدعم الفني حسب نطاق المشروع واحتياجه.`,
+    aboutStoryEn: `Attractive supplies Light Current systems, equipment, and infrastructure components for projects and facilities. Our range includes surveillance, fire alarm, public address and sound, networking, intercom and nurse call systems, as well as cabling and connectivity products.
+We support customers with product selection and bill of quantities preparation. Installation, programming, maintenance, and technical support are available according to each project's scope and requirements.`,
     aboutImage: "", // Custom uploaded or linked image for About section
-    aboutBadgeAr: "حلول هندسية معتمدة بأعلى المعايير العالمية",
-    aboutBadgeEn: "Certified Engineering Solutions, Global Standards",
+    aboutBadgeAr: "تجهيزات متنوعة لمشروعات التيار الخفيف",
+    aboutBadgeEn: "Equipment for Light Current Projects",
 
     // Sale & Discount Hub (Toggleable ON/OFF + Fully Editable)
     saleActive: true,
@@ -569,15 +569,15 @@ We adhere to the highest international standards and safety codes to protect hea
     couponBubbleBg: "#1D1D1F",
 
     // Hero Section Texts & Live Card Image (Editable)
-    heroBadgeAr: "Attractive — الريادة في حلول وتوريدات أنظمة التيار الخفيف",
-    heroBadgeEn: "Attractive — Premier Light Current & Security Solutions",
-    heroHeadingAr: "أنظمة التيار الخفيف المتكاملة.<br/><span style='color: var(--primary-color, #C8102E);'>أمان متطور، صوت نقي، وإنذار فوري.</span>",
-    heroHeadingEn: "Integrated Light Current Systems.<br/><span style='color: var(--primary-color, #C8102E);'>Advanced Security, Pure Sound, Instant Alarm.</span>",
-    heroDescAr: "نقدم حلولاً هندسية متكاملة: كاميرات مراقبة ذكية 4K، أنظمة إنذار الحريق المعنونة، شبكات الإذاعة والصوتيات للمباني، وأنظمة الاستدعاء الطبي والإنتركم، مع بنية تحتية فائقة الاعتمادية من كابلات الشبكات والفايبر المعتمدة.",
-    heroDescEn: "End-to-end engineering solutions: 4K AI CCTV surveillance, certified fire alarm systems, commercial public address, nurse call & smart intercom, backed by premium structured cabling.",
+    heroBadgeAr: "Attractive — توريد أنظمة ومعدات التيار الخفيف",
+    heroBadgeEn: "Attractive — Light Current Systems & Equipment Supply",
+    heroHeadingAr: "توريد أنظمة التيار الخفيف.<br/><span style='color: var(--primary-color, #C8102E);'>تجهيزات موثوقة لكل مشروع.</span>",
+    heroHeadingEn: "Light Current Systems Supply.<br/><span style='color: var(--primary-color, #C8102E);'>Reliable equipment for every project.</span>",
+    heroDescAr: "نوفر أجهزة ومستلزمات أنظمة المراقبة، إنذار الحريق، الصوت والإذاعة، الشبكات، الإنتركم والاستدعاء الطبي، وكابلات البنية التحتية. ويساعدك فريقنا في اختيار المواصفات وتجهيز الكميات المناسبة، مع خدمات التركيب والتشغيل عند الطلب.",
+    heroDescEn: "We supply equipment for surveillance, fire alarm, public address and sound, networking, intercom, nurse call, and structured cabling. Our team helps select specifications and quantities, with installation and commissioning available on request.",
     heroLiveImage: "", // Custom uploaded or linked live image for hero visual card
-    heroLiveBadgeTextAr: "توريد وتركيب وعقود صيانة معتمدة لجميع المحافظات",
-    heroLiveBadgeTextEn: "Supply, installation & certified maintenance nationwide",
+    heroLiveBadgeTextAr: "توريد وشحن أنظمة ومعدات التيار الخفيف لجميع المحافظات",
+    heroLiveBadgeTextEn: "Light Current systems & equipment supplied nationwide",
 
     // Top Promotion Announcement Bar
     promoActive: true,
@@ -592,18 +592,18 @@ We adhere to the highest international standards and safety codes to protect hea
 
     // Maintenance / Installation Service
     repairActive: true,
-    repairTitleAr: "مركز الصيانة والتركيبات وعقود الدعم الفني",
-    repairTitleEn: "Installation, Maintenance & Technical Support Center",
-    repairDescAr: "نوفر خدمات تركيب دقيقة، فحص وبرمجة أجهزة NVR/DVR، لوحات إنذار الحريق، شبكات الصوتيات، وكاميرات المراقبة بأحدث أجهزة قياس الكابلات وتسترات الفايبر مع توفير قطع غيار أصلية وعقود صيانة دورية.",
-    repairDescEn: "Precision installation, programming for NVRs, fire alarm panels, commercial PA, and CCTV. Comprehensive cable certification, genuine parts, and annual maintenance contracts.",
+    repairTitleAr: "الدعم الفني وخدمات ما بعد التوريد",
+    repairTitleEn: "Technical Support & After-Sales Services",
+    repairDescAr: "نساعدك في اختيار وتجهيز أجهزة أنظمة التيار الخفيف ومستلزماتها، ونوفر الدعم الفني وخدمات البرمجة والصيانة. وتُتاح أعمال التركيب والتشغيل وفق نطاق المشروع والاحتياج.",
+    repairDescEn: "We help select and supply Light Current equipment and related components, with technical support, programming, and maintenance. Installation and commissioning are available according to project scope and needs.",
     repairPricingNoteAr: "تبدأ تكلفة المعاينة الفنية والصيانة من 150 ج.م حسب نوع المنظومة وموقع المشروع.",
     repairPricingNoteEn: "Technical surveys & maintenance start from 150 EGP depending on system type and location.",
 
     // Two Paths Section Texts (Editable)
     path1TitleAr: "كتالوج الأجهزة والأنظمة المعتمدة",
     path1TitleEn: "Certified Systems & Products Store",
-    path1DescAr: "تصفح أحدث كاميرات المراقبة، أجهزة التسجيل NVR، حساسات ولوحات إنذار الحريق، سماعات ومكبرات الصوت، ووحدات الاستدعاء الجاهزة للتوريد والشحن الفوري لجميع المحافظات.",
-    path1DescEn: "Browse our certified CCTV cameras, NVRs, fire alarm detectors & panels, PA amplifiers, and nurse call stations ready for immediate delivery.",
+    path1DescAr: "تصفح أجهزة ومستلزمات المراقبة، إنذار الحريق، الصوت والإذاعة، الشبكات، الإنتركم والاستدعاء الطبي، مع إمكانية التوريد والشحن لجميع المحافظات.",
+    path1DescEn: "Browse equipment for surveillance, fire alarm, public address, networking, intercom, and nurse call, available for nationwide supply and delivery.",
 
     path2TitleAr: "استوديو تفصيل كابلات الصوت الاحترافية",
     path2TitleEn: "Custom Pro Audio Cable Studio",
@@ -630,10 +630,10 @@ We adhere to the highest international standards and safety codes to protect hea
     workshopAddressEn: "Cairo, Egypt",
     workingHoursAr: "يومياً من 9 صباحاً حتى 10 مساءً",
     workingHoursEn: "Daily from 9:00 AM to 10:00 PM",
-    contactHeadingAr: "هل لديك مشروع أو تحتاج مقايسة فنية متكاملة (BOQ)؟",
-    contactHeadingEn: "Have a Project or Need a Full Engineering BOQ?",
-    contactDescAr: "فريق المهندسين والفنيين في Attractive جاهز لمعاينة الموقع وتصميم مقايسات أنظمة التيار الخفيف (مراقبة، حريق، صوتيات، شبكات، إنتركم) للمباني الإدارية، المصانع، والمستشفيات.",
-    contactDescEn: "Our engineering team provides on-site surveys and turnkey BOQ designs for CCTV, fire alarms, PA systems, structured cabling, and nurse call for commercial and healthcare projects.",
+    contactHeadingAr: "تحتاج تجهيزات لمشروع تيار خفيف؟",
+    contactHeadingEn: "Sourcing equipment for a Light Current project?",
+    contactDescAr: "شاركنا نوع المشروع والأنظمة المطلوبة، وسنساعدك في تحديد المواصفات والكميات المناسبة وتوريد أجهزة المراقبة، إنذار الحريق، الصوت، الشبكات والإنتركم. وتتوفر خدمات التركيب والتشغيل والدعم الفني عند الحاجة.",
+    contactDescEn: "Tell us about your project and required systems. We can help specify quantities and supply surveillance, fire alarm, audio, networking, and intercom equipment. Installation, commissioning, and technical support are available when needed.",
 
     // Security
     
@@ -3187,8 +3187,8 @@ const ProCable = {
                         </div>
                         <div class="p-3 bg-surface rounded-2xl border border-outline-variant text-center">
                             <span class="material-symbols-outlined text-primary text-2xl mb-1">engineering</span>
-                            <h4 class="font-bold text-xs text-on-surface mb-0.5">${isAr ? 'تركيب ودعم فني' : 'Expert Installation'}</h4>
-                            <p class="text-[10px] text-gray-500">${isAr ? 'فريق هندسي متخصص في أنظمة التيار الخفيف' : 'Specialized light current engineering team'}</p>
+                            <h4 class="font-bold text-xs text-on-surface mb-0.5">${isAr ? 'تجهيزات ودعم فني' : 'Equipment & Technical Support'}</h4>
+                            <p class="text-[10px] text-gray-500">${isAr ? 'مساعدة في اختيار تجهيزات التيار الخفيف' : 'Help selecting light current equipment'}</p>
                         </div>
                         <div class="p-3 bg-surface rounded-2xl border border-outline-variant text-center">
                             <span class="material-symbols-outlined text-primary text-2xl mb-1">verified</span>
@@ -3724,7 +3724,7 @@ const ProCable = {
                                             <span class="material-symbols-outlined text-base">build</span>
                                         </div>
                                         <div>
-                                            <span class="block text-on-surface">${isAr ? 'مركز التركيبات والصيانة' : 'Installation & Maintenance'}</span>
+                                            <span class="block text-on-surface">${isAr ? 'الدعم الفني والصيانة' : 'Technical Support & Maintenance'}</span>
                                             <span class="block text-[10px] font-normal text-gray-400">${isAr ? 'برمجة وصيانة وفحص الأنظمة' : 'Inspection & maintenance'}</span>
                                         </div>
                                     </a>
