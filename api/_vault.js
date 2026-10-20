@@ -28,7 +28,14 @@ function decrypt(text) {
 }
 
 function isBlobNotFound(error) {
-    return error && (error.name === 'BlobNotFoundError' || error.status === 404 || error.statusCode === 404);
+    if (!error) return false;
+    // @vercel/blob versions do not consistently expose the same name/status
+    // properties for a missing blob. Its error message remains identifiable.
+    const message = String(error.message || error);
+    return error.name === 'BlobNotFoundError'
+        || error.status === 404
+        || error.statusCode === 404
+        || /BlobNotFoundError|requested blob does not exist/i.test(message);
 }
 
 // -> { data, etag } | null (not found)
