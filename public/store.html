@@ -161,6 +161,85 @@
         .apple-reveal-delay-3 { transition-delay: 180ms; }
         .apple-reveal-delay-4 { transition-delay: 240ms; }
         .apple-reveal-delay-5 { transition-delay: 300ms; }
+        .apple-reveal-delay-6 { transition-delay: 360ms; }
+
+        /* Store products use the same layered 3D carousel as the homepage. */
+        #storeGrid.store-product-carousel {
+            position: relative;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            isolation: isolate;
+            perspective: 1400px;
+            touch-action: pan-y pinch-zoom;
+            overscroll-behavior-x: contain;
+            user-select: none;
+            -webkit-user-select: none;
+            outline: none;
+        }
+        #storeGrid.store-product-carousel > .apple-card {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: min(360px, 34vw);
+            min-width: 290px;
+            margin: 0;
+            transform: translate3d(calc(-50% + var(--store-card-x, 0px) + var(--store-drag, 0px)), 0, 0) scale(var(--store-card-scale, 1)) rotateY(var(--store-card-rotate, 0deg));
+            transform-origin: center center;
+            opacity: var(--store-card-opacity, 1);
+            filter: blur(var(--store-card-blur, 0px));
+            z-index: var(--store-card-z, 1);
+            visibility: visible;
+            transition: transform .62s cubic-bezier(.2,.75,.25,1), opacity .45s ease, filter .45s ease, visibility .45s;
+            will-change: transform, opacity, filter;
+            backface-visibility: hidden;
+        }
+        #storeGrid.store-product-carousel.is-dragging > .apple-card { transition: none; }
+        #storeGrid.store-product-carousel > .apple-card:hover {
+            transform: translate3d(calc(-50% + var(--store-card-x, 0px) + var(--store-drag, 0px)), 0, 0) scale(var(--store-card-scale, 1)) rotateY(var(--store-card-rotate, 0deg)) !important;
+        }
+        #storeGrid.store-product-carousel > .apple-card:hover .store-card-visual img,
+        #storeGrid.store-product-carousel > .apple-card:hover .store-card-visual video { transform: none !important; }
+        #storeGrid.store-product-carousel > .apple-card.is-store-active { cursor: default; }
+        .store-carousel-controls {
+            width: min(420px, calc(100% - 28px));
+            min-height: 56px;
+            margin: -30px auto 56px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,.82);
+            border-radius: 999px;
+            background: rgba(255,255,255,.78);
+            box-shadow: 0 12px 36px rgba(35,30,35,.14), inset 0 1px rgba(255,255,255,.95);
+            backdrop-filter: blur(18px) saturate(145%);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+        }
+        .store-carousel-controls[hidden] { display: none; }
+        .store-carousel-controls button { width: 38px; height: 38px; flex: 0 0 38px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #47434a; transition: background .2s ease, color .2s ease, transform .3s ease; }
+        .store-carousel-controls button:hover { background: rgba(200,16,46,.09); color: #c8102e; transform: scale(1.06); }
+        .store-carousel-current { min-width: 0; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; text-align: center; overflow: hidden; }
+        .store-carousel-current strong, .store-carousel-current span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .store-carousel-current strong { font-size: 12px; font-weight: 800; color: #262329; }
+        .store-carousel-current span { font-size: 10px; font-weight: 700; color: #c8102e; }
+
+        @media (max-width: 680px) {
+            #storeGrid.store-product-carousel { perspective: 1100px; }
+            #storeGrid.store-product-carousel > .apple-card { width: min(82vw, 360px); min-width: 0; padding: 18px; border-radius: 22px; transition-duration: .56s, .42s, .42s, .42s; }
+            #storeGrid.store-product-carousel .store-card-visual { min-height: 160px; }
+            #storeGrid.store-product-carousel h3 { font-size: 14px; }
+            #storeGrid.store-product-carousel p { font-size: 11px; }
+            .store-carousel-controls { margin-top: -20px; margin-bottom: 44px; }
+        }
+        @media (hover: none) {
+            #storeGrid.store-product-carousel > .apple-card:hover { box-shadow: 0 1px 2px rgba(0,0,0,.02), 0 4px 16px rgba(0,0,0,.03); }
+        }
+        @media (hover: none) {
+            #storeGrid > .apple-card:hover { transform: none; }
+            #storeGrid > .apple-card:hover .store-card-visual img,
+            #storeGrid > .apple-card:hover .store-card-visual video { transform: none; }
+        }
 
         /* === Cart Badge Pulse === */
         @keyframes pulse-badge { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
@@ -288,7 +367,6 @@
         html[dir="ltr"] nav.apple-nav .glass-nav-content > div:last-child { direction: rtl; }
         nav.apple-nav #desktopAuthArea { order: 1; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"] { order: 2; }
-        nav.apple-nav .lang-toggle-btn { order: 3; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="scrollToCart"], nav.apple-nav .glass-nav-content > div:last-child > a[href*="#cartSection"] { order: 4; }
     }
     nav.apple-nav #desktopNavLinks > li > a:hover, nav.apple-nav #desktopNavLinks > li > a.text-primary { color: #ff4964 !important; }
@@ -299,11 +377,7 @@
     nav.apple-nav > div:first-child > div > button { color: rgba(29,29,31,.88) !important; border-color: rgba(30,30,40,.1) !important; background: rgba(255,255,255,.28) !important; }
     nav.apple-nav > div:first-child > div > button:hover { background: rgba(255,255,255,.55) !important; }
     nav.apple-nav > div:first-child > div > div > button { color: #1d1d1f !important; background: rgba(255,255,255,.32) !important; border-color: rgba(30,30,40,.1) !important; }
-    footer { position: relative; }
-    .site-language-float { position: absolute !important; left: auto; right: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; direction: inherit; padding: 7px 12px; border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.52); color: #24242a; box-shadow: 0 5px 16px rgba(20,20,30,.1); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); font-size: 12px; font-weight: 700; }
-    :dir(rtl) .site-language-float { left: 20px; right: auto; }
-    .site-language-float:hover { background: rgba(255,255,255,.78); }
-    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } .site-language-float { top: auto; bottom: 12px; right: 12px; transform: none; } :dir(rtl) .site-language-float { left: 12px; right: auto; } }
+    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } }
     nav.apple-nav { width: 100%; box-sizing: border-box; }
     nav.apple-nav > div:first-child { width: 100%; max-width: none !important; box-sizing: border-box; }
     nav.apple-nav .mobile-nav-controls { display: none; }
@@ -426,8 +500,6 @@
                 </div>
 
                 <!-- Lang Toggle -->
-                <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2.5 py-1 rounded-full border border-black/10 hover:bg-black/5 transition text-on-surface-variant" title="تبديل اللغة">EN</button>
-
                 <!-- Cart Button -->
                 <button onclick="scrollToCart()" class="relative p-2 rounded-full text-on-surface hover:bg-black/5 transition">
                     <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
@@ -448,7 +520,6 @@
             <button onclick="ProCable.showOrderTrackingModal()" class="p-2 text-primary rounded-full hover:bg-black/5 transition" title="تتبع الطلب">
                 <span class="material-symbols-outlined text-xl">track_changes</span>
             </button>
-            <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2 py-1 rounded-full border border-black/10 text-on-surface-variant">EN</button>
             <button onclick="scrollToCart()" class="relative p-2 text-on-surface">
                 <span class="material-symbols-outlined text-xl">shopping_bag</span>
                 <span id="mobileCartBadge" class="absolute -top-0.5 -right-0.5 bg-primary text-white text-[0.6rem] font-bold min-w-[16px] min-h-[16px] rounded-full flex items-center justify-center border-2 border-surface hidden">٠</span>
@@ -580,7 +651,6 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') { toggleNavSearch(false); document.getElementById('mobileNavSearch')?.classList.remove('is-open'); } });
     document.addEventListener('click', event => { if (!document.getElementById('navQuickSearch')?.contains(event.target)) toggleNavSearch(false); if (!event.target.closest('#mobileNavSearch, [onclick="toggleMobileNavSearch()"]')) document.getElementById('mobileNavSearch')?.classList.remove('is-open'); });
 </script>
-<script>(function(){const nav=document.querySelector('nav.apple-nav');if(!nav)return;const btn=nav.querySelector('.lang-toggle-btn');if(!btn)return;nav.querySelectorAll('.lang-toggle-btn').forEach(x=>x.remove());btn.className='site-language-float lang-toggle-btn';btn.title='تبديل اللغة';const move=()=>{const footer=document.querySelector('footer');if(footer)footer.appendChild(btn)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move()})();</script>
 
 <!-- ================= MAIN STORE CONTAINER ================= -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
@@ -686,7 +756,7 @@
     </div>
 
     <!-- Products Grid (#29, #32) -->
-    <div id="storeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+    <div id="storeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" tabindex="0" aria-label="المنتجات: استخدم الأسهم أو اسحب للتنقل">
                 <div class="apple-card apple-reveal apple-reveal-delay-1 bg-surface-container-lowest rounded-[24px] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
                     <div>
                         <div class="flex justify-between items-center mb-3">
@@ -726,6 +796,14 @@
                     </div>
                 </div>
             </div>
+    <div id="storeCarouselControls" class="store-carousel-controls" dir="rtl" aria-label="التنقل بين منتجات المتجر" hidden>
+        <button type="button" onclick="moveStoreCarousel(-1)" aria-label="المنتج السابق"><span class="material-symbols-outlined">chevron_right</span></button>
+        <div class="store-carousel-current" aria-live="polite">
+            <strong id="storeCarouselName"></strong>
+            <span id="storeCarouselPosition"></span>
+        </div>
+        <button type="button" onclick="moveStoreCarousel(1)" aria-label="المنتج التالي"><span class="material-symbols-outlined">chevron_left</span></button>
+    </div>
 
     <!-- Need Custom Cable Banner -->
     <div class="bg-gradient-to-r from-primary-fixed/60 via-white to-surface-container-high rounded-3xl p-8 border border-outline-variant flex flex-col md:flex-row justify-between items-center gap-6 mb-16 shadow-sm apple-reveal">
@@ -862,18 +940,19 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="bg-surface-container-lowest border-t border-outline-variant py-8 mt-auto">
-    <div class="max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant space-y-3 sm:space-y-0">
-        <div class="flex items-center justify-center sm:justify-start gap-2">
+    <div class="footer-layout max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant">
+        <div class="footer-brand flex items-center justify-center sm:justify-start gap-2">
             <img src="logo.png" alt="Attractive" class="site-logo-img h-6 object-contain">
             <p class="footer-copyright">© 2026 <span class="site-brand-name font-bold">Attractive</span>. <span class="footer-copyright-text">جميع الحقوق محفوظة لـ Attractive Audio Studio.</span></p>
         </div>
-        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-5 gap-y-2">
                     <a href="store.html" class="hover:text-primary transition font-medium">المتجر</a>
                     <a href="builder.html" class="hover:text-primary transition font-medium">التفصيل الخاص</a>
                     <button onclick="ProCable.showAboutModal()" class="hover:text-primary transition font-medium text-inherit">عن الشركة</button>
                     <button onclick="ProCable.showPolicyModal('privacy')" class="hover:text-primary transition font-medium text-inherit">سياسة الخصوصية</button>
                     <button onclick="ProCable.showPolicyModal('return')" class="hover:text-primary transition font-medium text-inherit">الاستبدال والضمان</button>
                 </div>
+        <button onclick="ProCable.toggleLang()" class="lang-toggle-btn footer-language-toggle inline-flex min-h-[34px] shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-4 font-bold text-primary transition hover:bg-primary hover:text-white" title="تبديل اللغة">EN</button>
     </div>
 </footer>
 
@@ -1010,6 +1089,10 @@
     let activeBrand = 'all';
     let searchQuery = '';
     let sortMode = 'default';
+    let storeCarouselIndex = 0;
+    let storeCarouselPointerX = null;
+    let storeCarouselWheelDelta = 0;
+    let storeCarouselSwiped = false;
     let appliedDiscountVal = 0;
     let appliedCouponCode = ''; // sent to the server, which re-validates it
 
@@ -1108,6 +1191,133 @@
         renderStore();
     }
 
+    function updateStoreCarousel() {
+        const stage = document.getElementById('storeGrid');
+        if (!stage) return;
+        const cards = Array.from(stage.querySelectorAll(':scope > .apple-card'));
+        const controls = document.getElementById('storeCarouselControls');
+        if (!cards.length) {
+            stage.style.height = 'auto';
+            if (controls) controls.hidden = true;
+            return;
+        }
+
+        stage.classList.add('store-product-carousel');
+        storeCarouselIndex = (storeCarouselIndex + cards.length) % cards.length;
+        const stageWidth = stage.clientWidth || window.innerWidth;
+        const isMobile = window.matchMedia('(max-width: 680px)').matches;
+        const sideOffset = isMobile ? Math.max(220, stageWidth * .68) : Math.min(420, Math.max(230, stageWidth * .31));
+
+        cards.forEach((card, index) => {
+            let position = index - storeCarouselIndex;
+            if (position > cards.length / 2) position -= cards.length;
+            if (position < -cards.length / 2) position += cards.length;
+            if (document.documentElement.dir !== 'ltr') position *= -1;
+            const distance = Math.abs(position);
+            const scale = distance === 0 ? 1 : distance === 1 ? (isMobile ? .7 : .78) : .6;
+            card.classList.add('revealed');
+            card.classList.toggle('is-store-active', distance === 0);
+            card.style.setProperty('--store-card-x', `${position * sideOffset}px`);
+            card.style.setProperty('--store-card-scale', String(scale));
+            card.style.setProperty('--store-card-rotate', `${position * (isMobile ? -3 : -7)}deg`);
+            card.style.setProperty('--store-card-opacity', distance === 0 ? '1' : distance === 1 ? (isMobile ? '.5' : '.68') : (isMobile ? '0' : '.22'));
+            card.style.setProperty('--store-card-blur', distance === 0 ? '0px' : distance === 1 ? (isMobile ? '.5px' : '1px') : '3px');
+            card.style.setProperty('--store-card-z', String(20 - distance));
+            card.style.visibility = distance > (isMobile ? 1 : 2) ? 'hidden' : 'visible';
+            card.setAttribute('aria-hidden', distance === 0 ? 'false' : 'true');
+            card.tabIndex = distance === 0 ? 0 : -1;
+        });
+
+        const active = cards[storeCarouselIndex];
+        const name = active.querySelector('h3')?.textContent?.trim() || '';
+        const price = active.querySelector('.stat-number')?.textContent?.trim() || '';
+        const nameLabel = document.getElementById('storeCarouselName');
+        const positionLabel = document.getElementById('storeCarouselPosition');
+        if (nameLabel) nameLabel.textContent = name;
+        if (positionLabel) positionLabel.textContent = `${storeCarouselIndex + 1} / ${cards.length}${price ? ` · ${price}` : ''}`;
+        if (controls) controls.hidden = cards.length < 2;
+
+        // The cards are absolutely positioned, so size the carousel to its active card.
+        stage.style.height = `${active.offsetHeight + 42}px`;
+    }
+
+    function moveStoreCarousel(step) {
+        const count = document.querySelectorAll('#storeGrid > .apple-card').length;
+        if (count < 2) return;
+        storeCarouselIndex = (storeCarouselIndex + step + count) % count;
+        updateStoreCarousel();
+    }
+
+    function initStoreCarouselControls() {
+        const stage = document.getElementById('storeGrid');
+        if (!stage || stage.dataset.carouselReady) return;
+        stage.dataset.carouselReady = '1';
+
+        stage.addEventListener('click', event => {
+            if (storeCarouselSwiped) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                storeCarouselSwiped = false;
+                return;
+            }
+            const card = event.target.closest('.apple-card');
+            if (!card) return;
+            const cards = Array.from(stage.querySelectorAll(':scope > .apple-card'));
+            const index = cards.indexOf(card);
+            if (index >= 0 && index !== storeCarouselIndex) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                storeCarouselIndex = index;
+                updateStoreCarousel();
+            }
+        }, true);
+
+        stage.addEventListener('pointerdown', event => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            storeCarouselPointerX = event.clientX;
+        });
+        stage.addEventListener('pointermove', event => {
+            if (storeCarouselPointerX === null) return;
+            const delta = event.clientX - storeCarouselPointerX;
+            if (Math.abs(delta) < 5) return;
+            stage.classList.add('is-dragging');
+            stage.querySelectorAll(':scope > .apple-card').forEach(card => card.style.setProperty('--store-drag', `${delta}px`));
+        });
+        window.addEventListener('pointerup', event => {
+            if (storeCarouselPointerX === null) return;
+            const delta = event.clientX - storeCarouselPointerX;
+            storeCarouselPointerX = null;
+            stage.classList.remove('is-dragging');
+            stage.querySelectorAll(':scope > .apple-card').forEach(card => card.style.setProperty('--store-drag', '0px'));
+            if (Math.abs(delta) > 42) {
+                storeCarouselSwiped = true;
+                moveStoreCarousel((delta < 0 ? 1 : -1) * (document.documentElement.dir === 'rtl' ? -1 : 1));
+                window.setTimeout(() => { storeCarouselSwiped = false; }, 500);
+            }
+        });
+        stage.addEventListener('pointercancel', () => {
+            storeCarouselPointerX = null;
+            stage.classList.remove('is-dragging');
+            stage.querySelectorAll(':scope > .apple-card').forEach(card => card.style.setProperty('--store-drag', '0px'));
+        });
+        stage.addEventListener('wheel', event => {
+            if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+            event.preventDefault();
+            storeCarouselWheelDelta += event.deltaX;
+            if (Math.abs(storeCarouselWheelDelta) < 50) return;
+            const direction = storeCarouselWheelDelta > 0 ? 1 : -1;
+            storeCarouselWheelDelta = 0;
+            moveStoreCarousel(direction * (document.documentElement.dir === 'rtl' ? -1 : 1));
+        }, { passive: false });
+        stage.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+            event.preventDefault();
+            const direction = event.key === 'ArrowRight' ? 1 : -1;
+            moveStoreCarousel(direction * (document.documentElement.dir === 'rtl' ? -1 : 1));
+        });
+        window.addEventListener('resize', updateStoreCarousel, { passive: true });
+    }
+
     function renderStore() {
         const grid = document.getElementById('storeGrid');
         let products = ProCable.getProducts().filter(p => p.hidden !== true);
@@ -1194,6 +1404,8 @@
                     <button onclick="setCategory('all'); document.getElementById('searchInput').value=''; searchQuery='';" class="mt-3 text-xs text-primary font-bold hover:underline">${isAr ? 'عرض كافة المنتجات' : 'View all products'}</button>
                 </div>
             `;
+            storeCarouselIndex = 0;
+            updateStoreCarousel();
             return;
         }
 
@@ -1309,6 +1521,9 @@
         });
 
         grid.innerHTML = html;
+        storeCarouselIndex = 0;
+        initStoreCarouselControls();
+        updateStoreCarousel();
         if (typeof initStoreScrollObserver === 'function') {
             initStoreScrollObserver();
         }

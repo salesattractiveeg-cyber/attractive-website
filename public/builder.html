@@ -325,7 +325,6 @@
         html[dir="ltr"] nav.apple-nav .glass-nav-content > div:last-child { direction: rtl; }
         nav.apple-nav #desktopAuthArea { order: 1; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"] { order: 2; }
-        nav.apple-nav .lang-toggle-btn { order: 3; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="scrollToCart"], nav.apple-nav .glass-nav-content > div:last-child > a[href*="#cartSection"] { order: 4; }
     }
     nav.apple-nav #desktopNavLinks > li > a:hover, nav.apple-nav #desktopNavLinks > li > a.text-primary { color: #ff4964 !important; }
@@ -336,11 +335,7 @@
     nav.apple-nav > div:first-child > div > button { color: rgba(29,29,31,.88) !important; border-color: rgba(30,30,40,.1) !important; background: rgba(255,255,255,.28) !important; }
     nav.apple-nav > div:first-child > div > button:hover { background: rgba(255,255,255,.55) !important; }
     nav.apple-nav > div:first-child > div > div > button { color: #1d1d1f !important; background: rgba(255,255,255,.32) !important; border-color: rgba(30,30,40,.1) !important; }
-    footer { position: relative; }
-    .site-language-float { position: absolute !important; left: auto; right: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; direction: inherit; padding: 7px 12px; border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.52); color: #24242a; box-shadow: 0 5px 16px rgba(20,20,30,.1); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); font-size: 12px; font-weight: 700; }
-    :dir(rtl) .site-language-float { left: 20px; right: auto; }
-    .site-language-float:hover { background: rgba(255,255,255,.78); }
-    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } .site-language-float { top: auto; bottom: 12px; right: 12px; transform: none; } :dir(rtl) .site-language-float { left: 12px; right: auto; } }
+    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } }
     nav.apple-nav { width: 100%; box-sizing: border-box; }
     nav.apple-nav > div:first-child { width: 100%; max-width: none !important; box-sizing: border-box; }
     nav.apple-nav .mobile-nav-controls { display: none; }
@@ -463,8 +458,6 @@
                 </div>
 
                 <!-- Lang Toggle -->
-                <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2.5 py-1 rounded-full border border-black/10 hover:bg-black/5 transition text-on-surface-variant" title="تبديل اللغة">EN</button>
-
                 <!-- Cart Button -->
                 <button onclick="scrollToCart()" class="relative p-2 rounded-full text-on-surface hover:bg-black/5 transition">
                     <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
@@ -485,7 +478,6 @@
             <button onclick="ProCable.showOrderTrackingModal()" class="p-2 text-primary rounded-full hover:bg-black/5 transition" title="تتبع الطلب">
                 <span class="material-symbols-outlined text-xl">track_changes</span>
             </button>
-            <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2 py-1 rounded-full border border-black/10 text-on-surface-variant">EN</button>
             <button onclick="scrollToCart()" class="relative p-2 text-on-surface">
                 <span class="material-symbols-outlined text-xl">shopping_bag</span>
                 <span id="mobileCartBadge" class="absolute -top-0.5 -right-0.5 bg-primary text-white text-[0.6rem] font-bold min-w-[16px] min-h-[16px] rounded-full flex items-center justify-center border-2 border-surface hidden">٠</span>
@@ -617,7 +609,6 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') { toggleNavSearch(false); document.getElementById('mobileNavSearch')?.classList.remove('is-open'); } });
     document.addEventListener('click', event => { if (!document.getElementById('navQuickSearch')?.contains(event.target)) toggleNavSearch(false); if (!event.target.closest('#mobileNavSearch, [onclick="toggleMobileNavSearch()"]')) document.getElementById('mobileNavSearch')?.classList.remove('is-open'); });
 </script>
-<script>(function(){const nav=document.querySelector('nav.apple-nav');if(!nav)return;const btn=nav.querySelector('.lang-toggle-btn');if(!btn)return;nav.querySelectorAll('.lang-toggle-btn').forEach(x=>x.remove());btn.className='site-language-float lang-toggle-btn';btn.title='تبديل اللغة';const move=()=>{const footer=document.querySelector('footer');if(footer)footer.appendChild(btn)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move()})();</script>
 
 <!-- ================= MAIN BUILDER CONTAINER ================= -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
@@ -992,18 +983,19 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="bg-surface-container-lowest border-t border-outline-variant py-8 mt-auto">
-    <div class="max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant space-y-3 sm:space-y-0">
-        <div class="flex items-center justify-center sm:justify-start gap-2">
+    <div class="footer-layout max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant">
+        <div class="footer-brand flex items-center justify-center sm:justify-start gap-2">
             <img src="logo.png" alt="Attractive" class="site-logo-img h-6 object-contain">
             <p class="footer-copyright">© 2026 <span class="site-brand-name font-bold">Attractive</span>. <span class="footer-copyright-text">جميع الحقوق محفوظة لـ Attractive Audio Studio.</span></p>
         </div>
-        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-5 gap-y-2">
                     <a href="store.html" class="hover:text-primary transition font-medium">المتجر</a>
                     <a href="builder.html" class="hover:text-primary transition font-medium">التفصيل الخاص</a>
                     <button onclick="ProCable.showAboutModal()" class="hover:text-primary transition font-medium text-inherit">عن الشركة</button>
                     <button onclick="ProCable.showPolicyModal('privacy')" class="hover:text-primary transition font-medium text-inherit">سياسة الخصوصية</button>
                     <button onclick="ProCable.showPolicyModal('return')" class="hover:text-primary transition font-medium text-inherit">الاستبدال والضمان</button>
                 </div>
+        <button onclick="ProCable.toggleLang()" class="lang-toggle-btn footer-language-toggle inline-flex min-h-[34px] shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-4 font-bold text-primary transition hover:bg-primary hover:text-white" title="تبديل اللغة">EN</button>
     </div>
 </footer>
 

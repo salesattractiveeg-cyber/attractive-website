@@ -230,7 +230,6 @@
         html[dir="ltr"] nav.apple-nav .glass-nav-content > div:last-child { direction: rtl; }
         nav.apple-nav #desktopAuthArea { order: 1; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"] { order: 2; }
-        nav.apple-nav .lang-toggle-btn { order: 3; }
         nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="scrollToCart"], nav.apple-nav .glass-nav-content > div:last-child > a[href*="#cartSection"] { order: 4; }
     }
     nav.apple-nav #desktopNavLinks > li > a:hover,
@@ -246,11 +245,7 @@
     nav.apple-nav > div:first-child > div > div > button { color: #1d1d1f !important; background: rgba(255,255,255,.32) !important; border-color: rgba(30,30,40,.1) !important; }
     nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"] .material-symbols-outlined { color: inherit !important; transition: color .25s ease; }
     nav.apple-nav .glass-nav-content > div:last-child > button[onclick*="showOrderTrackingModal"]:hover .material-symbols-outlined { color: #c8102e !important; }
-    footer { position: relative; }
-    .site-language-float { position: absolute !important; left: auto; right: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; direction: inherit; padding: 7px 12px; border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.52); color: #24242a; box-shadow: 0 5px 16px rgba(20,20,30,.1); backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); font-size: 12px; font-weight: 700; }
-    :dir(rtl) .site-language-float { left: 20px; right: auto; }
-    .site-language-float:hover { background: rgba(255,255,255,.78); }
-    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } .site-language-float { top: auto; bottom: 12px; right: 12px; transform: none; } :dir(rtl) .site-language-float { left: 12px; right: auto; } }
+    @media (max-width: 900px) { nav.apple-nav { padding: 8px clamp(8px, 2vw, 18px); } nav.apple-nav > div:first-child { width: 100%; max-width: none !important; height: 58px; padding-inline: 14px; border-radius: 19px; } }
     nav.apple-nav { width: 100%; box-sizing: border-box; }
     nav.apple-nav > div:first-child { width: 100%; max-width: none !important; box-sizing: border-box; }
     nav.apple-nav .mobile-nav-controls { display: none; }
@@ -296,7 +291,7 @@
     .commercial-brand-card:hover{transform:translateY(-3px);border-color:rgba(200,16,46,.24);box-shadow:0 12px 28px rgba(25,25,35,.09)}
     .commercial-brand-card img{max-width:100%;width:100%;height:100%;object-fit:contain}
     .commercial-brand-card span{font-size:15px;font-weight:800;text-align:center;color:#333}
-    @media(max-width:680px){.glass-products-stage{height:420px}.glass-product-card{width:min(82vw,350px);min-width:0;min-height:370px;padding:18px!important;border-radius:22px!important}.glass-product-card .glass-product-visual{height:158px;min-height:158px!important}.glass-product-card h3{font-size:14px}.glass-product-card p{font-size:11px}.glass-carousel-controls{margin-top:-8px}}
+    @media(max-width:680px){.glass-products-stage{height:420px;perspective:1100px;touch-action:pan-y pinch-zoom}.glass-product-card{width:min(82vw,350px);min-width:0;min-height:370px;padding:18px!important;border-radius:22px!important;transition:transform .56s cubic-bezier(.2,.75,.25,1),opacity .42s ease,filter .42s ease,visibility .42s;will-change:transform,opacity}.glass-product-card .glass-product-visual{height:158px;min-height:158px!important}.glass-product-card h3{font-size:14px}.glass-product-card p{font-size:11px}.glass-carousel-controls{margin-top:-8px;backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}}
     @media(max-width:480px){.commercial-brands-section{padding:30px 14px}.commercial-brands-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.commercial-brand-card{height:66px;padding:10px 14px;border-radius:13px}}
     @media(prefers-reduced-motion:reduce){.glass-product-card,.glass-carousel-control{transition-duration:.01ms!important}}
 </style>
@@ -394,8 +389,6 @@
                 </div>
 
                 <!-- Lang Toggle -->
-                <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2.5 py-1 rounded-full border border-black/10 hover:bg-black/5 transition text-on-surface-variant" title="تبديل اللغة">EN</button>
-
                 <!-- Cart -->
                 <a href="store.html#cartSection" class="relative p-2 rounded-full text-on-surface hover:bg-black/5 transition">
                     <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
@@ -416,7 +409,6 @@
             <button onclick="ProCable.showOrderTrackingModal()" class="p-2 text-primary rounded-full hover:bg-black/5 transition" title="تتبع الطلب">
                 <span class="material-symbols-outlined text-xl">track_changes</span>
             </button>
-            <button onclick="ProCable.toggleLang()" class="lang-toggle-btn text-xs font-semibold px-2 py-1 rounded-full border border-black/10 text-on-surface-variant">EN</button>
             <a href="store.html#cartSection" class="relative p-2 text-on-surface">
                 <span class="material-symbols-outlined text-xl">shopping_bag</span>
                 <span id="mobileCartBadge" class="absolute -top-0.5 -right-0.5 bg-primary text-white text-[0.6rem] font-bold min-w-[16px] min-h-[16px] rounded-full flex items-center justify-center border-2 border-surface hidden">٠</span>
@@ -543,7 +535,6 @@
     document.addEventListener('keydown', event => { if (event.key === 'Escape') { toggleNavSearch(false); document.getElementById('mobileNavSearch')?.classList.remove('is-open'); } });
     document.addEventListener('click', event => { if (!document.getElementById('navQuickSearch')?.contains(event.target)) toggleNavSearch(false); if (!event.target.closest('#mobileNavSearch, [onclick="toggleMobileNavSearch()"]')) document.getElementById('mobileNavSearch')?.classList.remove('is-open'); });
 </script>
-<script>(function(){const nav=document.querySelector('nav.apple-nav');if(!nav)return;const btn=nav.querySelector('.lang-toggle-btn');if(!btn)return;nav.querySelectorAll('.lang-toggle-btn').forEach(x=>x.remove());btn.className='site-language-float lang-toggle-btn';btn.title='تبديل اللغة';const move=()=>{const footer=document.querySelector('footer');if(footer)footer.appendChild(btn)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',move,{once:true});else move()})();</script>
 
 <!-- ================= MAIN CONTENT ================= -->
 <main class="max-w-6xl mx-auto px-4 sm:px-6 flex-1 w-full">
@@ -890,18 +881,19 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="bg-white border-t border-black/[0.06] py-10 mt-auto">
-    <div class="max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant space-y-4 sm:space-y-0">
-        <div class="flex items-center justify-center sm:justify-start gap-2">
+    <div class="footer-layout max-w-6xl mx-auto px-5 text-center sm:flex sm:justify-between sm:items-center text-xs text-on-surface-variant">
+        <div class="footer-brand flex items-center justify-center sm:justify-start gap-2">
             <img src="logo.png" alt="Attractive" class="site-logo-img h-6 object-contain">
             <p class="footer-copyright">© 2026 <span class="site-brand-name font-bold">Attractive</span>. <span class="footer-copyright-text">جميع الحقوق محفوظة لـ Attractive Audio Studio.</span></p>
         </div>
-        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs text-[#6E6E73]">
+        <div class="footer-nav-links flex flex-wrap justify-center items-center gap-x-5 gap-y-2 text-xs text-[#6E6E73]">
                     <a href="store.html" class="hover:text-primary transition font-medium">المتجر</a>
                     <a href="builder.html" class="hover:text-primary transition font-medium">التفصيل الخاص</a>
                     <button onclick="ProCable.showAboutModal()" class="hover:text-primary transition font-medium text-inherit">عن الشركة</button>
-                    <a href="privacy-policy.html" class="hover:text-primary transition font-medium">سياسة الخصوصية</a>
+                    <button onclick="ProCable.showPolicyModal('privacy')" class="hover:text-primary transition font-medium text-inherit">سياسة الخصوصية</button>
                     <button onclick="ProCable.showPolicyModal('return')" class="hover:text-primary transition font-medium text-inherit">الاستبدال والضمان</button>
                 </div>
+        <button onclick="ProCable.toggleLang()" class="lang-toggle-btn footer-language-toggle inline-flex min-h-[34px] shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/5 px-4 font-bold text-primary transition hover:bg-primary hover:text-white" title="تبديل اللغة">EN</button>
     </div>
 </footer>
 
@@ -928,7 +920,10 @@
         if (!cards.length) return;
         featuredCarouselIndex = (featuredCarouselIndex + cards.length) % cards.length;
         const stageWidth = stage.clientWidth || window.innerWidth;
-        const sideOffset = Math.min(248, Math.max(108, stageWidth * 0.235));
+        const isMobile = window.matchMedia('(max-width: 680px)').matches;
+        const sideOffset = isMobile
+            ? Math.max(220, stageWidth * 0.68)
+            : Math.min(248, Math.max(108, stageWidth * 0.235));
         const isRtl = document.documentElement.dir !== 'ltr';
 
         cards.forEach((card, index) => {
@@ -937,17 +932,17 @@
             if (position < -cards.length / 2) position += cards.length;
             if (isRtl) position *= -1;
             const distance = Math.abs(position);
-            const scale = distance === 0 ? 1 : distance === 1 ? .79 : distance === 2 ? .63 : .5;
+            const scale = distance === 0 ? 1 : distance === 1 ? (isMobile ? .7 : .79) : distance === 2 ? .63 : .5;
             card.style.setProperty('--card-x', `${position * sideOffset}px`);
             card.style.setProperty('--card-scale', scale);
-            card.style.setProperty('--card-rotate', `${position * -7}deg`);
-            card.style.setProperty('--card-opacity', distance === 0 ? 1 : distance === 1 ? .72 : distance === 2 ? .3 : 0);
-            card.style.setProperty('--card-blur', distance === 0 ? '0px' : distance === 1 ? '1.2px' : '3px');
+            card.style.setProperty('--card-rotate', `${position * (isMobile ? -3 : -7)}deg`);
+            card.style.setProperty('--card-opacity', distance === 0 ? 1 : distance === 1 ? (isMobile ? .48 : .72) : distance === 2 ? (isMobile ? 0 : .3) : 0);
+            card.style.setProperty('--card-blur', distance === 0 ? '0px' : distance === 1 ? (isMobile ? '.5px' : '1.2px') : '3px');
             card.style.setProperty('--card-z', String(20 - distance));
             card.classList.toggle('is-active', distance === 0);
             card.setAttribute('aria-hidden', distance > 2 ? 'true' : 'false');
             card.tabIndex = distance === 0 ? 0 : -1;
-            card.style.visibility = distance > 2 ? 'hidden' : 'visible';
+            card.style.visibility = distance > (isMobile ? 1 : 2) ? 'hidden' : 'visible';
             const preview = card.querySelector('video');
             if (preview) {
                 if (distance === 0) preview.play().catch(() => {});
