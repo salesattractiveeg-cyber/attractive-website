@@ -4385,7 +4385,6 @@ const ProCable = {
                 .auth-social-button:hover{background:#eeeef1;transform:translateY(-1px)}
                 .auth-google-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px} .auth-google-mark svg{display:block;width:20px;height:20px}
                 .auth-password-strength{margin-top:8px}.auth-password-strength-track{height:6px;overflow:hidden;border-radius:999px;background:#e8e8ed;direction:ltr}.auth-password-strength-fill{height:100%;width:0;border-radius:inherit;transition:width .25s ease,background-color .25s ease}
-                .auth-facebook-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px;color:#1877f2} .auth-facebook-mark svg{display:block;width:20px;height:20px}
                 #googleBtnHost iframe{max-width:100%}
                 @media(max-width:680px){.auth-motion-card{width:min(470px,96vw);height:min(900px,94vh);min-height:0;border-width:6px;border-radius:24px}.auth-visual-panel{inset:0 0 auto 0;width:100%;height:142px;padding:16px 20px;border-radius:17px 17px 14px 14px;transition:height .65s ease-in-out,background-position .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-visual-panel{transform:none;height:142px}.auth-visual-brand img{width:104px}.auth-visual-brand{font-size:10px}.auth-visual-copy{position:absolute;inset:0 0 0 auto;min-height:0;width:58%;gap:6px;padding:8px 12px}.auth-visual-copy h2{font-size:19px}.auth-visual-copy p{font-size:10px;line-height:1.4}.auth-visual-copy button{padding:6px 15px;font-size:10px}.auth-visual-orbit{opacity:.5}.auth-form-pane{inset:142px 0 0;width:100%;height:auto;padding:22px 20px 18px;transition:opacity .35s ease,transform .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-form-pane{transform:none}.auth-form-pane>div:first-of-type{padding-inline-end:25px}.auth-close{top:8px;right:8px;width:30px;height:30px}}
                 @media(prefers-reduced-motion:reduce){.auth-form-pane,.auth-visual-panel{transition-duration:.01ms!important}}
@@ -4421,7 +4420,6 @@ const ProCable = {
                 <div id="googleSignInBox" class="mb-5">
                     <div id="googleBtnHost" class="hidden justify-center min-h-[44px]"></div>
                     <button id="googleUnavailableButton" type="button" onclick="ProCable.startGoogleLogin()" class="auth-social-button"><span class="auth-google-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.8l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.6 27.7a12 12 0 0 1 0-7.4V15H5.8a20 20 0 0 0 0 18l6.8-5.3Z"/><path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6.1 29.5 4 24 4A20 20 0 0 0 5.8 15l6.8 5.3c1.6-4.8 6.1-8.2 11.4-8.2Z"/></svg></span><span>${isAr ? 'المتابعة باستخدام Google' : 'Continue with Google'}</span></button>
-                    <button id="facebookSignInButton" type="button" onclick="ProCable.startFacebookLogin()" class="auth-social-button"><span class="auth-facebook-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11 10.13 11.93v-8.43H7.08v-3.5h3.05V9.4c0-3.03 1.79-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.28h3.34l-.53 3.5h-2.81V24C19.61 23.07 24 18.09 24 12.07Z"/></svg></span><span>${isAr ? 'المتابعة باستخدام Facebook' : 'Continue with Facebook'}</span></button>
                     <div class="flex items-center gap-3 mt-4 text-[11px] text-on-surface-variant"><span class="flex-1 h-px bg-outline-variant"></span><span>${isAr ? 'أو بالبريد الإلكتروني' : 'or with e-mail'}</span><span class="flex-1 h-px bg-outline-variant"></span></div>
                 </div>
 
@@ -4545,7 +4543,6 @@ const ProCable = {
         this.switchAuthTab(tab);
         this.initPasswordStrength();
         this.initGoogleButton();
-        this.initFacebookButton();
     },
 
     // --- Sign in with Google (Google Identity Services). The server verifies the token; only GOOGLE_CLIENT_ID is needed. ---
@@ -4592,71 +4589,6 @@ const ProCable = {
             await this._loadGsi();
             if (window.google?.accounts?.id) window.google.accounts.id.prompt();
         } catch (e) { this.showToast(isAr ? 'تعذر تحميل تسجيل Google، حاول مرة أخرى.' : 'Could not load Google sign-in. Please try again.', 'error'); }
-    },
-    _loadFacebookSdk(appId) {
-        return new Promise((resolve, reject) => {
-            if (window.FB) {
-                try { window.FB.init({ appId, cookie: true, xfbml: false, version: 'v26.0' }); resolve(); } catch (e) { reject(e); }
-                return;
-            }
-            if (this._facebookSdkPromise) return this._facebookSdkPromise.then(resolve, reject);
-            this._facebookSdkPromise = new Promise((sdkResolve, sdkReject) => {
-                window.fbAsyncInit = () => {
-                    try { window.FB.init({ appId, cookie: true, xfbml: false, version: 'v26.0' }); sdkResolve(); } catch (e) { sdkReject(e); }
-                };
-                const script = document.createElement('script');
-                script.src = 'https://connect.facebook.net/en_US/sdk.js'; script.async = true; script.defer = true; script.crossOrigin = 'anonymous';
-                script.onerror = () => sdkReject(new Error('facebook_sdk'));
-                document.head.appendChild(script);
-            });
-            this._facebookSdkPromise.then(resolve, reject);
-        });
-    },
-    async initFacebookButton() {
-        const button = document.getElementById('facebookSignInButton');
-        if (!button) return;
-        try {
-            if (this._facebookAppId === undefined) {
-                const r = await fetch('/api/config');
-                const j = await r.json();
-                this._facebookAppId = (j && j.facebookAppId) || '';
-            }
-            if (!this._facebookAppId) return;
-        } catch (e) { /* social sign-in is optional; password sign-in remains available */ }
-    },
-    async startFacebookLogin() {
-        const isAr = this.getLang() === 'ar';
-        try {
-            if (this._facebookAppId === undefined) await this.initFacebookButton();
-            if (!this._facebookAppId) throw new Error('facebook_not_configured');
-            await this._loadFacebookSdk(this._facebookAppId);
-            window.FB.login((response) => {
-                if (response && response.authResponse && response.authResponse.accessToken) {
-                    ProCable.handleFacebookAccessToken(response.authResponse.accessToken);
-                } else {
-                    ProCable.showToast(isAr ? 'تم إلغاء تسجيل الدخول عبر Facebook.' : 'Facebook sign-in was cancelled.', 'info');
-                }
-            }, { scope: 'email,public_profile', return_scopes: true });
-        } catch (e) {
-            this.showToast(isAr ? 'تسجيل Facebook غير مفعّل بعد. أضف إعدادات تطبيق Meta أولاً.' : 'Facebook sign-in is not configured yet. Add the Meta app settings first.', 'error');
-        }
-    },
-    async handleFacebookAccessToken(accessToken) {
-        const err = document.getElementById('authErrorMsg');
-        const errTxt = document.getElementById('authErrorMsgText') || err;
-        let r;
-        try { r = await this._publicApi({ action: 'facebook', accessToken }); }
-        catch (e) { r = { data: { code: 'network' } }; }
-        if (r.data && r.data.success) {
-            this._adoptServerAccount(r.data.account, r.data.token);
-            try { await this.pullMyOrders(); } catch (e) { /* ignore */ }
-            if (err) err.classList.add('hidden');
-            this.showToast(this.getLang() === 'ar' ? `أهلاً بك ${r.data.account.name || ''}! ✨` : `Welcome ${r.data.account.name || ''}! ✨`, 'success');
-            setTimeout(() => { this.hideAuthModal(); window.location.reload(); }, 500);
-        } else if (err && errTxt) {
-            errTxt.innerText = this._authError(r.data && r.data.code);
-            err.classList.remove('hidden');
-        }
     },
     async handleGoogleCredential(resp) {
         const err = document.getElementById('authErrorMsg');
