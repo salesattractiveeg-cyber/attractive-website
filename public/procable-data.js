@@ -4649,6 +4649,8 @@ const ProCable = {
                 @keyframes authMobileFormEnter{from{opacity:.45;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
                 .auth-form-enter{animation:authMobileFormEnter .42s cubic-bezier(.16,1,.3,1) both}
                 .auth-copy-enter{animation:authMobileFormEnter .38s cubic-bezier(.16,1,.3,1) both}
+                @keyframes authModalEnter{from{opacity:0;transform:translateY(20px) scale(.965)}to{opacity:1;transform:translateY(0) scale(1)}}
+                .auth-motion-card.auth-opening{animation:authModalEnter .48s cubic-bezier(.16,1,.3,1) both}
                 #googleBtnHost iframe{max-width:100%}
                 @media(max-width:680px){.auth-motion-card{width:min(470px,96vw);height:min(900px,94vh);min-height:0;border-width:6px;border-radius:24px}.auth-visual-panel{inset:0 0 auto 0;width:100%;height:142px;padding:16px 20px;border-radius:17px 17px 14px 14px;transition:height .65s ease-in-out,background-position .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-visual-panel{transform:none;height:142px}.auth-visual-brand img{width:104px}.auth-visual-brand{font-size:10px}.auth-visual-copy{position:absolute;inset:0 0 0 auto;min-height:0;width:58%;gap:6px;padding:8px 12px}.auth-visual-copy h2{font-size:19px}.auth-visual-copy p{font-size:10px;line-height:1.4}.auth-visual-copy button{padding:6px 15px;font-size:10px}.auth-visual-orbit{opacity:.5}.auth-form-pane{inset:142px 0 0;width:100%;height:auto;padding:22px 20px 18px;transition:opacity .35s ease,transform .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-form-pane{transform:none}.auth-form-pane>div:first-of-type{padding-inline-end:25px}.auth-close{top:8px;right:8px;width:30px;height:30px}}
                 @media(max-width:680px){#userAuthModal{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;padding:12px;overflow:hidden;overscroll-behavior:none}.auth-motion-card{width:min(470px,100%);height:min(900px,calc(100vh - 24px));height:min(900px,calc(100dvh - 24px))}.auth-form-pane{overscroll-behavior:contain;touch-action:pan-y}}
@@ -4805,6 +4807,18 @@ const ProCable = {
         modal.classList.add('flex', 'active');
         modal.style.display = 'flex';
         window.__syncModalScrollLock?.();
+        const authCard = modal.querySelector('.auth-motion-card');
+        if (authCard) {
+            authCard.classList.remove('auth-opening');
+            void authCard.offsetWidth;
+            authCard.classList.add('auth-opening');
+            const clearOpening = (event) => {
+                if (event.target !== authCard || event.animationName !== 'authModalEnter') return;
+                authCard.classList.remove('auth-opening');
+                authCard.removeEventListener('animationend', clearOpening);
+            };
+            authCard.addEventListener('animationend', clearOpening);
+        }
 
         this.switchAuthTab(tab);
         this.initPasswordStrength();
