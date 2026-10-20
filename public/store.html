@@ -1692,11 +1692,11 @@
                 <div class="p-3.5 bg-primary/5 rounded-2xl border border-primary/20 mb-5 flex items-center justify-between">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                            <span class="material-symbols-outlined text-lg">${prod.datasheetType === 'pdf' ? 'picture_as_pdf' : 'description'}</span>
+                            <span class="material-symbols-outlined text-lg">${prod.datasheetType === 'pdf' ? 'picture_as_pdf' : (prod.datasheetType === 'link' ? 'open_in_new' : 'description')}</span>
                         </div>
                         <div>
                             <span class="text-xs font-bold text-on-surface block">${isAr ? 'الداتا شيت والمواصفات الهندسية' : 'Technical Datasheet'}</span>
-                            <span class="text-[10px] text-gray-500">${prod.datasheetType === 'pdf' ? 'ملف PDF معتمد' : 'مخطط فني عالي الدقة'}</span>
+                            <span class="text-[10px] text-gray-500">${prod.datasheetType === 'pdf' ? 'ملف PDF' : (prod.datasheetType === 'link' ? 'رابط فني خارجي' : 'مخطط فني عالي الدقة')}</span>
                         </div>
                     </div>
                     <button onclick="openProductDatasheet(${safeProductId})" class="px-3 py-1.5 bg-primary text-white rounded-full text-xs font-bold hover:bg-primary-dark transition flex items-center gap-1 shadow-xs">
@@ -1796,13 +1796,14 @@
 
         const prodName = isAr ? prod.nameAr : (prod.nameEn || prod.nameAr);
         if (titleEl) titleEl.innerText = `${isAr ? 'داتا شيت:' : 'Datasheet:'} ${prodName}`;
-        if (subtitleEl) subtitleEl.innerText = isAr ? 'المواصفات التقنية الرسمية والمخطط الهندسي للكابل' : 'Official technical specifications and engineering diagram';
+        if (subtitleEl) subtitleEl.innerText = isAr ? 'المواصفات الفنية والمراجع الخاصة بالمنتج' : 'Product technical specifications and references';
 
         if (linkEl) {
             linkEl.href = datasheetUrl;
         }
 
         const isPdf = prod.datasheetType === 'pdf' || datasheetUrl.startsWith('data:application/pdf') || datasheetUrl.toLowerCase().endsWith('.pdf');
+        const isExternalInfo = prod.datasheetType === 'link' && !isPdf;
 
         if (isPdf) {
             contentEl.innerHTML = `
@@ -1826,6 +1827,13 @@
                     </div>
                 </div>
             `;
+        } else if (isExternalInfo) {
+            contentEl.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center space-y-4">
+                    <div class="w-20 h-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center"><span class="material-symbols-outlined text-5xl">open_in_new</span></div>
+                    <div class="space-y-1"><h4 class="font-black text-base text-on-surface">${ProCable.sanitize(prodName)}</h4><p class="text-xs text-on-surface-variant max-w-sm">${isAr ? 'صفحة مرجعية خارجية للموديل' : 'External reference for this model'}</p></div>
+                    <a href="${ProCable.sanitize(datasheetUrl)}" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold shadow flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">open_in_new</span><span>${isAr ? 'فتح المصدر الفني' : 'Open technical reference'}</span></a>
+                </div>`;
         } else {
             contentEl.innerHTML = `
                 <div class="w-full h-full flex items-center justify-center p-2">

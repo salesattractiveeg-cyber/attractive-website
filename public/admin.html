@@ -2443,6 +2443,7 @@
                             <select id="prodDatasheetTypeInput" class="bg-white border border-outline-variant px-2 py-1 rounded-lg text-[11px] font-bold">
                                 <option value="pdf">نوع: PDF 📄</option>
                                 <option value="image">نوع: صورة 🖼️</option>
+                                <option value="link">نوع: صفحة شركة 🔗</option>
                             </select>
                         </div>
                         <input id="prodDatasheetUrlInput" type="text" oninput="updateModalDatasheetPreview(this.value)" placeholder="أو الصق رابط PDF مباشر أو صورة..." class="w-full p-2 bg-white border border-outline-variant rounded-lg outline-none focus:ring-1 focus:ring-primary text-[11px] dir-ltr"/>
@@ -3099,7 +3100,7 @@
 
             const hasDatasheet = !!(p.datasheet && p.datasheet.trim());
             const datasheetBadge = hasDatasheet
-                ? `<button onclick="previewAdminDatasheet(${p.id})" class="bg-purple-100 text-purple-800 hover:bg-purple-200 font-bold px-2 py-0.5 rounded-full text-[0.65rem] inline-flex items-center gap-1 transition" title="معاينة الداتا شيت"><span class="material-symbols-outlined text-xs">${p.datasheetType === 'pdf' ? 'picture_as_pdf' : 'description'}</span><span>${p.datasheetType === 'pdf' ? 'PDF' : 'صورة'}</span></button>`
+                ? `<button onclick="previewAdminDatasheet(${p.id})" class="bg-purple-100 text-purple-800 hover:bg-purple-200 font-bold px-2 py-0.5 rounded-full text-[0.65rem] inline-flex items-center gap-1 transition" title="معاينة الملف أو المصدر الفني"><span class="material-symbols-outlined text-xs">${p.datasheetType === 'pdf' ? 'picture_as_pdf' : (p.datasheetType === 'link' ? 'open_in_new' : 'description')}</span><span>${p.datasheetType === 'pdf' ? 'PDF' : (p.datasheetType === 'link' ? 'رابط' : 'صورة')}</span></button>`
                 : `<span class="text-gray-400 text-[0.65rem]">لا يوجد</span>`;
 
             let badgeTxt = p.badge ? `<span class="bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded text-[10px]">${ProCable.sanitize(p.badge)}</span>` : '-';
@@ -3626,6 +3627,8 @@
             if (detectedType === 'image') {
                 const safeUrl = ProCable._safeMediaUrl(trimmed);
                 box.innerHTML = safeUrl ? `<img src="${ProCable.sanitize(safeUrl)}" class="w-full h-full object-cover rounded-lg"/>` : '';
+            } else if (detectedType === 'link') {
+                box.innerHTML = `<div class="text-primary flex flex-col items-center justify-center"><span class="material-symbols-outlined text-2xl">open_in_new</span><span class="text-[9px] font-bold">رابط شركة</span></div>`;
             } else {
                 box.innerHTML = `
                     <div class="text-primary flex flex-col items-center justify-center">

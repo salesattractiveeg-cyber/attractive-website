@@ -50,6 +50,7 @@ function validateProducts(data) {
 
 function publicData(d, includeCoupons = false) {
     const out = d && typeof d === 'object' ? JSON.parse(JSON.stringify(d)) : {};
+    delete out._catalogMigrations;
     if (out.settings && typeof out.settings === 'object') {
         delete out.settings.adminPassHash;
         // Integrations are configured through server environment variables, never public store data.
