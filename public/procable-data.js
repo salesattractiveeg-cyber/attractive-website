@@ -4305,6 +4305,13 @@ const ProCable = {
             if (welcomeTitle) welcomeTitle.textContent = mode === 'signup' ? (isAr ? 'أهلاً بعودتك' : 'Welcome back') : (isAr ? 'ابدأ رحلتك معنا' : 'Hello there');
             if (welcomeText) welcomeText.textContent = mode === 'signup' ? (isAr ? 'سجّل دخولك لمتابعة طلباتك والاستفادة من مزايا Attractive.' : 'Sign in to track your orders and enjoy Attractive member perks.') : (isAr ? 'أنشئ حسابك وتعرّف على حلول Attractive الموثوقة.' : 'Create an account and discover trusted Attractive solutions.');
             if (welcomeAction) welcomeAction.textContent = mode === 'signup' ? (isAr ? 'تسجيل الدخول' : 'SIGN IN') : (isAr ? 'إنشاء حساب' : 'SIGN UP');
+            const visualCopy = authCard.querySelector('.auth-visual-copy');
+            if (visualCopy) {
+                visualCopy.classList.remove('auth-copy-enter');
+                void visualCopy.offsetWidth;
+                visualCopy.classList.add('auth-copy-enter');
+                visualCopy.addEventListener('animationend', () => visualCopy.classList.remove('auth-copy-enter'), { once: true });
+            }
         }
         const err = document.getElementById('authErrorMsg');
         if (err) err.classList.add('hidden');
@@ -4333,6 +4340,13 @@ const ProCable = {
                 if (s1) s1.classList.remove('hidden');
                 if (s2) s2.classList.add('hidden');
             }
+        }
+        const activeForm = tab === 'signup' ? formSignUp : tab === 'reset' ? formReset : formSignIn;
+        if (activeForm) {
+            activeForm.classList.remove('auth-form-enter');
+            void activeForm.offsetWidth;
+            activeForm.classList.add('auth-form-enter');
+            activeForm.addEventListener('animationend', () => activeForm.classList.remove('auth-form-enter'), { once: true });
         }
     },
     initPasswordStrength() {
@@ -4632,8 +4646,12 @@ const ProCable = {
                 .auth-social-button:hover{background:#eeeef1;transform:translateY(-1px)}
                 .auth-google-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px} .auth-google-mark svg{display:block;width:20px;height:20px}
                 .auth-password-strength{margin-top:8px}.auth-password-strength-track{height:6px;overflow:hidden;border-radius:999px;background:#e8e8ed;direction:ltr}.auth-password-strength-fill{height:100%;width:0;border-radius:inherit;transition:width .25s ease,background-color .25s ease}
+                @keyframes authMobileFormEnter{from{opacity:.45;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+                .auth-form-enter{animation:authMobileFormEnter .42s cubic-bezier(.16,1,.3,1) both}
+                .auth-copy-enter{animation:authMobileFormEnter .38s cubic-bezier(.16,1,.3,1) both}
                 #googleBtnHost iframe{max-width:100%}
                 @media(max-width:680px){.auth-motion-card{width:min(470px,96vw);height:min(900px,94vh);min-height:0;border-width:6px;border-radius:24px}.auth-visual-panel{inset:0 0 auto 0;width:100%;height:142px;padding:16px 20px;border-radius:17px 17px 14px 14px;transition:height .65s ease-in-out,background-position .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-visual-panel{transform:none;height:142px}.auth-visual-brand img{width:104px}.auth-visual-brand{font-size:10px}.auth-visual-copy{position:absolute;inset:0 0 0 auto;min-height:0;width:58%;gap:6px;padding:8px 12px}.auth-visual-copy h2{font-size:19px}.auth-visual-copy p{font-size:10px;line-height:1.4}.auth-visual-copy button{padding:6px 15px;font-size:10px}.auth-visual-orbit{opacity:.5}.auth-form-pane{inset:142px 0 0;width:100%;height:auto;padding:22px 20px 18px;transition:opacity .35s ease,transform .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-form-pane{transform:none}.auth-form-pane>div:first-of-type{padding-inline-end:25px}.auth-close{top:8px;right:8px;width:30px;height:30px}}
+                @media(max-width:680px){#userAuthModal{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;padding:12px;overflow:hidden;overscroll-behavior:none}.auth-motion-card{width:min(470px,100%);height:min(900px,calc(100vh - 24px));height:min(900px,calc(100dvh - 24px))}.auth-form-pane{overscroll-behavior:contain;touch-action:pan-y}}
                 @media(prefers-reduced-motion:reduce){.auth-form-pane,.auth-visual-panel{transition-duration:.01ms!important}}
             `;
             document.head.appendChild(style);
@@ -4786,6 +4804,7 @@ const ProCable = {
         modal.classList.remove('hidden');
         modal.classList.add('flex', 'active');
         modal.style.display = 'flex';
+        window.__syncModalScrollLock?.();
 
         this.switchAuthTab(tab);
         this.initPasswordStrength();
@@ -4864,6 +4883,7 @@ const ProCable = {
             modal.classList.remove('flex', 'active');
             modal.classList.add('hidden');
             modal.style.display = 'none';
+            window.__syncModalScrollLock?.();
         }
     },
 
@@ -5003,22 +5023,50 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
     if (typeof document === 'undefined') return;
     const css = document.createElement('style');
-    css.textContent = '.modal-overlay{overscroll-behavior:contain}.modal-overlay .modal-content{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}';
+    css.textContent = 'html.modal-scroll-locked,body.modal-scroll-locked{overscroll-behavior:none}.modal-overlay{overscroll-behavior:contain;touch-action:pan-y}.modal-overlay .modal-content{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}';
     document.head.appendChild(css);
-    let locked = false, savedY = 0;
+    let locked = false, savedY = 0, savedBodyStyles = null, savedHtmlOverflow = '';
     const isOpen = el => !el.classList.contains('hidden') && el.style.display !== 'none' && (el.classList.contains('active') || el.classList.contains('flex'));
     function sync() {
         const open = Array.prototype.some.call(document.querySelectorAll('.modal-overlay, #orderTrackingModal'), isOpen);
         const b = document.body;
         if (open && !locked) {
             locked = true; savedY = window.scrollY || 0;
+            savedBodyStyles = { position: b.style.position, top: b.style.top, left: b.style.left, right: b.style.right, width: b.style.width, overflow: b.style.overflow };
+            savedHtmlOverflow = document.documentElement.style.overflow;
+            document.documentElement.classList.add('modal-scroll-locked');
+            b.classList.add('modal-scroll-locked');
+            document.documentElement.style.overflow = 'hidden';
             b.style.position = 'fixed'; b.style.top = '-' + savedY + 'px'; b.style.left = '0'; b.style.right = '0'; b.style.width = '100%';
+            b.style.overflow = 'hidden';
         } else if (!open && locked) {
             locked = false;
-            b.style.position = ''; b.style.top = ''; b.style.left = ''; b.style.right = ''; b.style.width = '';
+            document.documentElement.classList.remove('modal-scroll-locked');
+            b.classList.remove('modal-scroll-locked');
+            document.documentElement.style.overflow = savedHtmlOverflow;
+            b.style.position = savedBodyStyles.position; b.style.top = savedBodyStyles.top; b.style.left = savedBodyStyles.left; b.style.right = savedBodyStyles.right; b.style.width = savedBodyStyles.width; b.style.overflow = savedBodyStyles.overflow;
+            savedBodyStyles = null;
             window.scrollTo(0, savedY);
         }
     }
+    let lastTouchY = 0;
+    document.addEventListener('touchstart', event => { if (event.touches.length) lastTouchY = event.touches[0].clientY; }, { passive: true, capture: true });
+    document.addEventListener('touchmove', event => {
+        if (!locked || !event.touches.length) return;
+        const target = event.target instanceof Element ? event.target : event.target.parentElement;
+        const scroller = target && target.closest('.auth-form-pane, .modal-content');
+        const currentY = event.touches[0].clientY;
+        const movingDown = currentY > lastTouchY;
+        lastTouchY = currentY;
+        if (!scroller) { if (event.cancelable) event.preventDefault(); return; }
+        const canScroll = scroller.scrollHeight > scroller.clientHeight + 1;
+        const atTop = scroller.scrollTop <= 0;
+        const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
+        if (!canScroll || (movingDown && atTop) || (!movingDown && atBottom)) {
+            if (event.cancelable) event.preventDefault();
+        }
+    }, { passive: false, capture: true });
+    window.__syncModalScrollLock = sync;
     function start() {
         new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class', 'style'], childList: true });
         sync();
