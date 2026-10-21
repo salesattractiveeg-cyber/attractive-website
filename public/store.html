@@ -88,9 +88,9 @@
             border-color: rgba(200, 16, 46, 0.28) !important; 
         }
 
-        /* Give each store product card a consistent square footprint. */
+        /* Keep desktop cards compact and make the product image itself square. */
         #storeGrid > .apple-card {
-            aspect-ratio: 1 / 1;
+            position: relative;
             min-height: 0;
             padding: 14px !important;
             overflow: hidden;
@@ -107,6 +107,7 @@
             flex: 0 0 auto;
             min-height: 0;
             padding: 8px;
+            margin-top: 34px;
             margin-bottom: 8px;
         }
         #storeGrid .store-card-visual > img,
@@ -121,9 +122,43 @@
         #storeGrid > .apple-card p { -webkit-line-clamp: 1; margin-bottom: 6px; }
         #storeGrid > .apple-card [class*="mb-3"] { margin-bottom: 6px; }
         #storeGrid > .apple-card > div:last-child { flex: 0 0 auto; padding-top: 8px; }
+        #storeGrid .store-card-meta {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            margin: 0;
+            direction: ltr;
+            justify-content: flex-start;
+        }
+        #storeGrid .store-card-meta > div:first-child { display: none; }
+        #storeGrid .store-card-meta > div:last-child { text-align: left; }
         @media (max-width: 639px) {
-            #storeGrid > .apple-card { padding: 16px !important; }
-            #storeGrid .store-card-visual { height: 112px; }
+            #storeGrid { gap: 10px !important; }
+            #storeGrid > .apple-card {
+                min-height: 0;
+                padding: 10px !important;
+                border-radius: 16px !important;
+            }
+            #storeGrid .store-card-visual {
+                height: auto;
+                min-height: 0;
+                aspect-ratio: 1 / 1;
+                padding: 8px;
+                margin-top: 32px;
+                margin-bottom: 8px;
+                border-radius: 12px;
+            }
+            #storeGrid .store-card-meta { margin-bottom: 7px; gap: 5px; }
+            #storeGrid .store-card-meta .text-xs { font-size: 9px; line-height: 1.2; padding: 5px 7px; }
+            #storeGrid .store-card-meta .text-lg { font-size: 13px; line-height: 1.15; }
+            #storeGrid > .apple-card h3 { font-size: 12px; line-height: 1.4; margin-bottom: 4px; }
+            #storeGrid > .apple-card p { font-size: 10px; line-height: 1.45; -webkit-line-clamp: 2; margin-bottom: 7px; }
+            #storeGrid .store-card-datasheet { display: none; }
+            #storeGrid .store-card-actions { border-top: 0; padding-top: 4px; }
+            #storeGrid .store-card-add-button { min-height: 34px; padding: 7px 10px; font-size: 10px; }
+            #storeGrid .store-card-add-button .material-symbols-outlined { font-size: 15px; }
+            #storeGrid .store-card-details-button { display: none; }
         }
 
         /* === Product Visual Hover Subtle Zoom === */
@@ -794,7 +829,7 @@
     </div>
 
     <!-- Products Grid (#29, #32) -->
-    <div id="storeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16" aria-label="المنتجات">
+    <div id="storeGrid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16" aria-label="المنتجات">
                 <div class="apple-card apple-reveal apple-reveal-delay-1 bg-surface-container-lowest rounded-[24px] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
                     <div>
                         <div class="flex justify-between items-center mb-3">
@@ -1512,7 +1547,14 @@
             html += `
                 <div class="apple-card apple-reveal apple-reveal-delay-${(idx % 6) + 1} bg-surface-container-lowest rounded-[24px] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
                     <div>
-                        <div class="flex justify-between items-center mb-3">
+                        <!-- Product Visual -->
+                        <div class="relative bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center cursor-pointer min-h-[130px] border border-black/[0.03] overflow-hidden group store-card-visual" onclick="showProductDetails(${safeProductId})">
+                            ${visual}
+                            ${mediaBadges ? `<div class="absolute bottom-2 ltr:left-2 rtl:right-2 flex items-center gap-1.5 z-10">${mediaBadges}</div>` : ''}
+                        </div>
+
+                        <h3 class="font-bold text-base text-on-surface mb-1.5 hover:text-primary cursor-pointer transition tracking-tight" onclick="showProductDetails(${safeProductId})">${ProCable.sanitize(prodName)}</h3>
+                        <div class="store-card-meta flex justify-between items-center mb-3">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">${ProCable.sanitize(p.tag || 'Audio')}</span>
                                 ${productBrand ? `<span class="text-[10px] bg-white border border-outline-variant text-on-surface font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">${productBrand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(productBrand.logo))}" alt="" class="h-4 w-4 object-contain">` : ''}${ProCable.sanitize(isAr ? (productBrand.nameAr || productBrand.nameEn) : (productBrand.nameEn || productBrand.nameAr))}</span>` : ''}
@@ -1523,19 +1565,11 @@
                                 ${hasDiscount ? `<span class="text-xs text-on-surface-variant line-through block stat-number">${ProCable.formatNum(p.originalPrice)} ${currency}</span>` : ''}
                             </div>
                         </div>
-
-                        <!-- Product Visual -->
-                        <div class="relative bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center cursor-pointer min-h-[130px] border border-black/[0.03] overflow-hidden group store-card-visual" onclick="showProductDetails(${safeProductId})">
-                            ${visual}
-                            ${mediaBadges ? `<div class="absolute bottom-2 ltr:left-2 rtl:right-2 flex items-center gap-1.5 z-10">${mediaBadges}</div>` : ''}
-                        </div>
-
-                        <h3 class="font-bold text-base text-on-surface mb-1.5 hover:text-primary cursor-pointer transition tracking-tight" onclick="showProductDetails(${safeProductId})">${ProCable.sanitize(prodName)}</h3>
                         <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-2 mb-3">${ProCable.sanitize(prodDesc)}</p>
 
                         <!-- Datasheet badge / button if available -->
                         ${p.datasheet ? `
-                            <div class="mb-3">
+                            <div class="mb-3 store-card-datasheet">
                                 <button onclick="openProductDatasheet(${safeProductId})" class="w-full text-[11px] font-bold text-primary bg-primary/5 hover:bg-primary hover:text-white border border-primary/20 py-1.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-2xs">
                                     <span class="material-symbols-outlined text-sm">${p.datasheetType === 'pdf' ? 'picture_as_pdf' : 'description'}</span>
                                     <span>${isAr ? 'عرض الداتا شيت والمواصفات الفنية 📄' : 'View Datasheet & Specs 📄'}</span>
@@ -1544,16 +1578,16 @@
                         ` : ''}
                     </div>
 
-                    <div class="pt-3 border-t border-black/[0.06] flex items-center gap-2">
+                    <div class="pt-3 border-t border-black/[0.06] flex items-center gap-2 store-card-actions">
                         ${isOutOfStock ? `
                             <span class="flex-1 py-2.5 text-center text-xs font-bold text-gray-500 bg-gray-100 rounded-full">${isAr ? 'نفد من المخزون' : 'Out of Stock'}</span>
                         ` : `
-                            <button onclick="addStoreProductToCart(${safeProductId})" class="flex-1 bg-primary text-white py-2.5 px-4 rounded-full text-xs font-bold apple-btn-primary hover:bg-primary-dark transition flex items-center justify-center gap-1.5 shadow-sm">
+                            <button onclick="addStoreProductToCart(${safeProductId})" class="store-card-add-button flex-1 bg-primary text-white py-2.5 px-4 rounded-full text-xs font-bold apple-btn-primary hover:bg-primary-dark transition flex items-center justify-center gap-1.5 shadow-sm">
                                 <span class="material-symbols-outlined text-base">shopping_bag</span>
                                 <span>${isAr ? 'أضف للسلة' : 'Add to Cart'}</span>
                             </button>
                         `}
-                        <button onclick="showProductDetails(${safeProductId})" title="${isAr ? 'تفاصيل المنتج' : 'Details'}" class="p-2.5 border border-black/10 rounded-full text-on-surface hover:bg-black/5 apple-btn-secondary transition flex items-center justify-center">
+                        <button onclick="showProductDetails(${safeProductId})" title="${isAr ? 'تفاصيل المنتج' : 'Details'}" class="store-card-details-button p-2.5 border border-black/10 rounded-full text-on-surface hover:bg-black/5 apple-btn-secondary transition flex items-center justify-center">
                             <span class="material-symbols-outlined text-base">visibility</span>
                         </button>
                     </div>
@@ -1874,7 +1908,7 @@
             contentEl.innerHTML = `
                 <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center space-y-4">
                     <div class="w-20 h-20 rounded-3xl bg-primary/10 text-primary flex items-center justify-center"><span class="material-symbols-outlined text-5xl">open_in_new</span></div>
-                    <div class="space-y-1"><h4 class="font-black text-base text-on-surface">${ProCable.sanitize(prodName)}</h4><p class="text-xs text-on-surface-variant max-w-sm">${isAr ? 'صفحة مرجعية خارجية للموديل' : 'External reference for this model'}</p></div>
+                    <div class="space-y-1"><h4 class="font-black text-base text-on-surface">${ProCable.sanitize(prodName)}</h4><p class="text-xs text-on-surface-variant max-w-sm">${isAr ? 'ملف أو صفحة مرجعية خارجية للموديل' : 'External reference for this model'}</p></div>
                     <a href="${ProCable.sanitize(datasheetUrl)}" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold shadow flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">open_in_new</span><span>${isAr ? 'فتح المصدر الفني' : 'Open technical reference'}</span></a>
                 </div>`;
         } else {

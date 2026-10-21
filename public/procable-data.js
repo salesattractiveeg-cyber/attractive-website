@@ -24,31 +24,11 @@ const PRO_SVGS = {
 // --- 2. Categories Default List (Light Current Systems) ---
 const DEFAULT_CATEGORIES = [
     { id: 'all', nameAr: 'الكل', nameEn: 'All', icon: 'apps', hidden: false },
-    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false, brands: [
-        { id: 'hikvision', name: 'Hikvision', nameAr: 'هيك فيجن', logo: 'brands/hikvision.svg', enabled: true },
-        { id: 'unv', name: 'UNV', nameAr: 'UNV', logo: 'brands/unv.png', enabled: true },
-        { id: 'dahua', name: 'Dahua', nameAr: 'داهوا', logo: 'brands/dahua.svg', enabled: true },
-        { id: 'hanwha', name: 'Hanwha Vision', nameAr: 'هانوا', logo: 'brands/hanwha-vision.svg', enabled: true },
-        { id: 'wisenet', name: 'Wisenet', nameAr: 'Wisenet', logo: 'brands/wisenet.png', enabled: true }
-    ] },
-    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false, brands: [
-        { id: 'honeywell', name: 'Honeywell', nameAr: 'هانيويل', logo: 'brands/honeywell.svg', enabled: true },
-        { id: 'bosch', name: 'Bosch', nameAr: 'بوش', logo: 'brands/bosch.svg', enabled: true },
-        { id: 'eaton', name: 'Eaton', nameAr: 'إيتون', logo: 'brands/eaton.svg', enabled: true },
-        { id: 'apollo', name: 'Apollo', nameAr: 'أبولو', logo: 'brands/apollo.png', enabled: true },
-        { id: 'simplex', name: 'Simplex', nameAr: 'سيمبلكس', logo: 'brands/simplex.jpg', enabled: true }
-    ] },
-    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false, brands: [
-        { id: 'dsppa', name: 'DSPPA', nameAr: 'DSPPA', logo: 'brands/dsppa.png', enabled: true },
-        { id: 'honeywell', name: 'Honeywell', nameAr: 'هانيويل', logo: 'brands/honeywell.svg', enabled: true }
-    ] },
-    { id: 'nurse-call', nameAr: 'الاستدعاء والإنتركم', nameEn: 'Nurse Call & Intercom', icon: 'call', hidden: false, brands: [] },
-    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false, brands: [
-        { id: 'dlink', name: 'D-Link', nameAr: 'دي لينك', logo: 'brands/d-link.svg', enabled: true },
-        { id: 'panduit', name: 'Panduit', nameAr: 'بانداويت', logo: 'brands/panduit.svg', enabled: true },
-        { id: 'legrand', name: 'Legrand', nameAr: 'ليجراند', logo: 'brands/legrand.svg', enabled: true },
-        { id: 'hst', name: 'HST', nameAr: 'HST', logo: 'brands/hst.png', enabled: true }
-    ] }
+    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false },
+    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false },
+    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false },
+    { id: 'nurse-call', nameAr: 'الاستدعاء والإنتركم', nameEn: 'Nurse Call & Intercom', icon: 'call', hidden: false },
+    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false }
 ];
 
 // --- 3. Default Products with Sorting, Discounts & Badges ---
@@ -1096,9 +1076,8 @@ const ProCable = {
             image: '', 
             images: [], 
             video: '',
-            icon: 'cable',
-            brands: (DEFAULT_CATEGORIES.find(defaultCategory => defaultCategory.id === c.id)?.brands || []).map(brand => ({ ...brand }))
-        }, c, { brands: Array.isArray(c.brands) ? c.brands : (DEFAULT_CATEGORIES.find(defaultCategory => defaultCategory.id === c.id)?.brands || []).map(brand => ({ ...brand })) }));
+            icon: 'cable'
+        }, c));
     },
     saveCategories(list) {
         localStorage.setItem('attractive_categories', JSON.stringify(list));
@@ -1186,7 +1165,20 @@ const ProCable = {
                 localStorage.setItem('procable_products', JSON.stringify(DEFAULT_PRODUCTS));
                 list = DEFAULT_PRODUCTS;
             } else {
-                try { list = JSON.parse(stored); } catch(e) { list = DEFAULT_PRODUCTS; }
+                try {
+                    list = JSON.parse(stored);
+                    // Seed only new S03436 items for existing local browsers. Preserve
+                    // all products and edits already managed by the site owner.
+                    if (Array.isArray(list)) {
+                        const known = new Set(list.map(p => String(p.id)));
+                        const quoteAdditions = DEFAULT_PRODUCTS.filter(p => p.quoteRef === 'S03436' && !known.has(String(p.id)));
+                        if (quoteAdditions.length) {
+                            list = [...list, ...quoteAdditions];
+                            localStorage.setItem('attractive_products', JSON.stringify(list));
+                            localStorage.setItem('procable_products', JSON.stringify(list));
+                        }
+                    } else list = DEFAULT_PRODUCTS;
+                } catch(e) { list = DEFAULT_PRODUCTS; }
             }
         } else {
             localStorage.setItem('attractive_products', JSON.stringify(DEFAULT_PRODUCTS));
@@ -2330,19 +2322,6 @@ const ProCable = {
             const id = JSON.parse(localStorage.getItem('attractive_logged_in_user') || 'null');
             if (!token || !id) return;
             const r = await this._publicApi({ action: 'me', id, token });
-            // Blob/CDN reads can briefly lag immediately after login. Retry transient
-            // server failures; only clear the local session after an authoritative 401.
-            if (r.status === 401 || r.status >= 500) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const retry = await this._publicApi({ action: 'me', id, token });
-                if (retry.status === 401 || retry.status >= 500) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    const lastRetry = await this._publicApi({ action: 'me', id, token });
-                    Object.assign(r, lastRetry);
-                } else {
-                    Object.assign(r, retry);
-                }
-            }
             if (r.status === 401) {
                 localStorage.removeItem('attractive_logged_in_user');
                 localStorage.removeItem('attractive_session_token');
@@ -3890,7 +3869,7 @@ const ProCable = {
                     <a href="store.html" class="hover:text-primary transition font-medium">${isAr ? 'المتجر' : 'Store'}</a>
                     <a href="builder.html" class="hover:text-primary transition font-medium">${isAr ? 'التفصيل الخاص' : 'Custom Build'}</a>
                     <button onclick="ProCable.showAboutModal()" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'عن الشركة' : 'About Us'}</button>
-                    <a href="privacy-policy.html" class="hover:text-primary transition font-medium">${isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</a>
+                    <button onclick="ProCable.showPolicyModal('privacy')" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</button>
                     <button onclick="ProCable.showPolicyModal('return')" class="hover:text-primary transition font-medium text-inherit">${isAr ? 'الاستبدال والضمان' : 'Warranty & Returns'}</button>
                 `;
             }
@@ -4626,8 +4605,8 @@ const ProCable = {
             const style = document.createElement('style');
             style.id = 'authMotionStyles';
             style.textContent = `
-                .auth-motion-card{--auth-ease:cubic-bezier(.16,1,.3,1);position:relative;isolation:isolate;width:min(920px,96vw);height:min(650px,90vh);min-height:540px;overflow:hidden;border:8px solid #fff;border-radius:30px;background:#fff;box-shadow:0 28px 90px rgba(20,16,20,.24)}
-                .auth-form-pane{position:absolute;inset:0 auto 0 0;width:50%;height:100%;overflow-y:auto;padding:30px 34px 24px;transition:transform .65s ease-in-out;z-index:1;scrollbar-width:thin}
+                .auth-motion-card{--auth-ease:cubic-bezier(.16,1,.3,1);position:relative;isolation:isolate;width:min(920px,96vw);height:min(650px,90vh);min-height:540px;overflow:hidden;border:8px solid #fff;border-radius:30px;background:#fff;box-shadow:0 28px 90px rgba(20,16,20,.24);will-change:transform,opacity}
+                .auth-form-pane{position:absolute;inset:0 auto 0 0;width:50%;height:100%;overflow-y:auto;padding:30px 34px 24px;transition:transform .65s ease-in-out;z-index:1;scrollbar-width:thin;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
                 .auth-motion-card.auth-mode-signup .auth-form-pane{transform:translateX(100%)}
                 .auth-visual-panel{position:absolute;z-index:2;inset:0 0 0 50%;width:50%;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:30px;color:#fff;border-radius:22px;background:radial-gradient(ellipse at 75% 15%,rgba(200,16,46,.7),transparent 42%),radial-gradient(ellipse at 12% 88%,rgba(115,8,34,.65),transparent 45%),linear-gradient(145deg,#26262b 0%,#151519 55%,#09090b 100%);transition:transform .65s ease-in-out}
                 .auth-motion-card.auth-mode-signup .auth-visual-panel{transform:translateX(-100%)}
@@ -4642,18 +4621,17 @@ const ProCable = {
                 .auth-orbit-one{width:390px;height:390px;right:-150px;top:16%}.auth-orbit-two{width:280px;height:280px;left:-120px;bottom:-10%;border-color:rgba(200,16,46,.28)}
                 .auth-close{position:absolute;z-index:5;top:12px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.88);color:#555;cursor:pointer}
                 .auth-social-button{width:100%;min-height:44px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #d9d9df;border-radius:10px;background:#f7f7f8;color:#25252a;font-family:inherit;font-size:12px;font-weight:700;transition:background .2s,transform .2s;cursor:pointer}
-                .auth-social-button.hidden{display:none!important}
                 .auth-social-button:hover{background:#eeeef1;transform:translateY(-1px)}
                 .auth-google-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px} .auth-google-mark svg{display:block;width:20px;height:20px}
                 .auth-password-strength{margin-top:8px}.auth-password-strength-track{height:6px;overflow:hidden;border-radius:999px;background:#e8e8ed;direction:ltr}.auth-password-strength-fill{height:100%;width:0;border-radius:inherit;transition:width .25s ease,background-color .25s ease}
+                .auth-facebook-mark{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;flex:0 0 20px;color:#1877f2} .auth-facebook-mark svg{display:block;width:20px;height:20px}
+                #googleBtnHost iframe{max-width:100%}
                 @keyframes authMobileFormEnter{from{opacity:.45;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
                 .auth-form-enter{animation:authMobileFormEnter .42s cubic-bezier(.16,1,.3,1) both}
                 .auth-copy-enter{animation:authMobileFormEnter .38s cubic-bezier(.16,1,.3,1) both}
                 @keyframes authModalEnter{from{opacity:0;transform:translateY(20px) scale(.965)}to{opacity:1;transform:translateY(0) scale(1)}}
                 .auth-motion-card.auth-opening{animation:authModalEnter .48s cubic-bezier(.16,1,.3,1) both}
-                #googleBtnHost iframe{max-width:100%}
-                @media(max-width:680px){.auth-motion-card{width:min(470px,96vw);height:min(900px,94vh);min-height:0;border-width:6px;border-radius:24px}.auth-visual-panel{inset:0 0 auto 0;width:100%;height:142px;padding:16px 20px;border-radius:17px 17px 14px 14px;transition:height .65s ease-in-out,background-position .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-visual-panel{transform:none;height:142px}.auth-visual-brand img{width:104px}.auth-visual-brand{font-size:10px}.auth-visual-copy{position:absolute;inset:0 0 0 auto;min-height:0;width:58%;gap:6px;padding:8px 12px}.auth-visual-copy h2{font-size:19px}.auth-visual-copy p{font-size:10px;line-height:1.4}.auth-visual-copy button{padding:6px 15px;font-size:10px}.auth-visual-orbit{opacity:.5}.auth-form-pane{inset:142px 0 0;width:100%;height:auto;padding:22px 20px 18px;transition:opacity .35s ease,transform .65s ease-in-out}.auth-motion-card.auth-mode-signup .auth-form-pane{transform:none}.auth-form-pane>div:first-of-type{padding-inline-end:25px}.auth-close{top:8px;right:8px;width:30px;height:30px}}
-                @media(max-width:680px){#userAuthModal{position:fixed;inset:0;width:100%;height:100vh;height:100dvh;padding:12px;overflow:hidden;overscroll-behavior:none}.auth-motion-card{width:min(470px,100%);height:min(900px,calc(100vh - 24px));height:min(900px,calc(100dvh - 24px))}.auth-form-pane{overscroll-behavior:contain;touch-action:pan-y}}
+                @media(max-width:680px){#userAuthModal{padding:12px;overflow:hidden;overscroll-behavior:none}.auth-motion-card{width:min(470px,100%);height:min(900px,calc(100vh - 24px));height:min(900px,calc(100dvh - 24px));min-height:0;border-width:6px;border-radius:24px}.auth-visual-panel{inset:0 0 auto 0;width:100%;height:142px;padding:16px 20px;border-radius:17px 17px 14px 14px;transition:height .65s ease-in-out,background-position .65s ease-in-out}.auth-visual-brand img{width:104px}.auth-visual-brand{font-size:10px}.auth-visual-copy{position:absolute;inset:0 0 0 auto;min-height:0;width:58%;gap:6px;padding:8px 12px}.auth-visual-copy h2{font-size:19px}.auth-visual-copy p{font-size:10px;line-height:1.4}.auth-visual-copy button{padding:6px 15px;font-size:10px}.auth-visual-orbit{opacity:.5}.auth-form-pane{inset:142px 0 0;width:100%;height:auto;padding:22px 20px 18px;transition:opacity .35s ease,transform .65s ease-in-out;overscroll-behavior:contain;touch-action:pan-y}.auth-form-pane>div:first-of-type{padding-inline-end:25px}.auth-close{top:8px;right:8px;width:30px;height:30px}}
                 @media(prefers-reduced-motion:reduce){.auth-form-pane,.auth-visual-panel{transition-duration:.01ms!important}}
             `;
             document.head.appendChild(style);
@@ -4870,6 +4848,71 @@ const ProCable = {
             if (window.google?.accounts?.id) window.google.accounts.id.prompt();
         } catch (e) { this.showToast(isAr ? 'تعذر تحميل تسجيل Google، حاول مرة أخرى.' : 'Could not load Google sign-in. Please try again.', 'error'); }
     },
+    _loadFacebookSdk(appId) {
+        return new Promise((resolve, reject) => {
+            if (window.FB) {
+                try { window.FB.init({ appId, cookie: true, xfbml: false, version: 'v26.0' }); resolve(); } catch (e) { reject(e); }
+                return;
+            }
+            if (this._facebookSdkPromise) return this._facebookSdkPromise.then(resolve, reject);
+            this._facebookSdkPromise = new Promise((sdkResolve, sdkReject) => {
+                window.fbAsyncInit = () => {
+                    try { window.FB.init({ appId, cookie: true, xfbml: false, version: 'v26.0' }); sdkResolve(); } catch (e) { sdkReject(e); }
+                };
+                const script = document.createElement('script');
+                script.src = 'https://connect.facebook.net/en_US/sdk.js'; script.async = true; script.defer = true; script.crossOrigin = 'anonymous';
+                script.onerror = () => sdkReject(new Error('facebook_sdk'));
+                document.head.appendChild(script);
+            });
+            this._facebookSdkPromise.then(resolve, reject);
+        });
+    },
+    async initFacebookButton() {
+        const button = document.getElementById('facebookSignInButton');
+        if (!button) return;
+        try {
+            if (this._facebookAppId === undefined) {
+                const r = await fetch('/api/config');
+                const j = await r.json();
+                this._facebookAppId = (j && j.facebookAppId) || '';
+            }
+            if (!this._facebookAppId) return;
+        } catch (e) { /* social sign-in is optional; password sign-in remains available */ }
+    },
+    async startFacebookLogin() {
+        const isAr = this.getLang() === 'ar';
+        try {
+            if (this._facebookAppId === undefined) await this.initFacebookButton();
+            if (!this._facebookAppId) throw new Error('facebook_not_configured');
+            await this._loadFacebookSdk(this._facebookAppId);
+            window.FB.login((response) => {
+                if (response && response.authResponse && response.authResponse.accessToken) {
+                    ProCable.handleFacebookAccessToken(response.authResponse.accessToken);
+                } else {
+                    ProCable.showToast(isAr ? 'تم إلغاء تسجيل الدخول عبر Facebook.' : 'Facebook sign-in was cancelled.', 'info');
+                }
+            }, { scope: 'email,public_profile', return_scopes: true });
+        } catch (e) {
+            this.showToast(isAr ? 'تسجيل Facebook غير مفعّل بعد. أضف إعدادات تطبيق Meta أولاً.' : 'Facebook sign-in is not configured yet. Add the Meta app settings first.', 'error');
+        }
+    },
+    async handleFacebookAccessToken(accessToken) {
+        const err = document.getElementById('authErrorMsg');
+        const errTxt = document.getElementById('authErrorMsgText') || err;
+        let r;
+        try { r = await this._publicApi({ action: 'facebook', accessToken }); }
+        catch (e) { r = { data: { code: 'network' } }; }
+        if (r.data && r.data.success) {
+            this._adoptServerAccount(r.data.account, r.data.token);
+            try { await this.pullMyOrders(); } catch (e) { /* ignore */ }
+            if (err) err.classList.add('hidden');
+            this.showToast(this.getLang() === 'ar' ? `أهلاً بك ${r.data.account.name || ''}! ✨` : `Welcome ${r.data.account.name || ''}! ✨`, 'success');
+            setTimeout(() => { this.hideAuthModal(); window.location.reload(); }, 500);
+        } else if (err && errTxt) {
+            errTxt.innerText = this._authError(r.data && r.data.code);
+            err.classList.remove('hidden');
+        }
+    },
     async handleGoogleCredential(resp) {
         const err = document.getElementById('authErrorMsg');
         const errTxt = document.getElementById('authErrorMsgText') || err;
@@ -5033,6 +5076,26 @@ document.addEventListener('DOMContentLoaded', () => {
     ProCable.refreshSession();
 });
 
+// --- Responsive footer: stack brand, links and language control cleanly on phones ---
+(function () {
+    if (typeof document === 'undefined' || document.getElementById('responsive-footer-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'responsive-footer-styles';
+    style.textContent = `
+        @media (max-width: 639px) {
+            footer { padding-block: 24px !important; }
+            footer .footer-layout { display: grid !important; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 18px; width: 100%; text-align: center; }
+            footer .footer-brand { width: 100%; flex-direction: column; gap: 10px; }
+            footer .site-logo-img { width: auto; height: 32px; }
+            footer .footer-copyright { max-width: 34ch; margin-inline: auto; line-height: 1.75; text-wrap: pretty; }
+            footer .footer-nav-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-items: center; width: 100%; max-width: 380px; gap: 13px 10px; line-height: 1.6; }
+            footer .footer-nav-links > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+            footer .footer-layout > .footer-language-toggle { justify-self: left; min-width: 72px; }
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
 // --- Mobile scroll lock: while any modal is open, the page behind it must not scroll (iOS/Android) ---
 (function () {
     if (typeof document === 'undefined') return;
@@ -5063,6 +5126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo(0, savedY);
         }
     }
+    window.__syncModalScrollLock = sync;
     let lastTouchY = 0;
     document.addEventListener('touchstart', event => { if (event.touches.length) lastTouchY = event.touches[0].clientY; }, { passive: true, capture: true });
     document.addEventListener('touchmove', event => {
@@ -5080,7 +5144,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.cancelable) event.preventDefault();
         }
     }, { passive: false, capture: true });
-    window.__syncModalScrollLock = sync;
     function start() {
         new MutationObserver(sync).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class', 'style'], childList: true });
         sync();
