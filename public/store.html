@@ -88,6 +88,44 @@
             border-color: rgba(200, 16, 46, 0.28) !important; 
         }
 
+        /* Give each store product card a consistent square footprint. */
+        #storeGrid > .apple-card {
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+            padding: 14px !important;
+            overflow: hidden;
+        }
+        #storeGrid > .apple-card > div:first-child {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            min-height: 0;
+            overflow: hidden;
+        }
+        #storeGrid .store-card-visual {
+            height: clamp(84px, 9vw, 118px);
+            flex: 0 0 auto;
+            min-height: 0;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+        #storeGrid .store-card-visual > img,
+        #storeGrid .store-card-visual > video { object-fit: contain; }
+        #storeGrid > .apple-card h3 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            line-height: 1.35;
+        }
+        #storeGrid > .apple-card p { -webkit-line-clamp: 1; margin-bottom: 6px; }
+        #storeGrid > .apple-card [class*="mb-3"] { margin-bottom: 6px; }
+        #storeGrid > .apple-card > div:last-child { flex: 0 0 auto; padding-top: 8px; }
+        @media (max-width: 639px) {
+            #storeGrid > .apple-card { padding: 16px !important; }
+            #storeGrid .store-card-visual { height: 112px; }
+        }
+
         /* === Product Visual Hover Subtle Zoom === */
         .store-card-visual img, .store-card-visual video {
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -756,7 +794,7 @@
     </div>
 
     <!-- Products Grid (#29, #32) -->
-    <div id="storeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" tabindex="0" aria-label="المنتجات: استخدم الأسهم أو اسحب للتنقل">
+    <div id="storeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16" aria-label="المنتجات">
                 <div class="apple-card apple-reveal apple-reveal-delay-1 bg-surface-container-lowest rounded-[24px] p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
                     <div>
                         <div class="flex justify-between items-center mb-3">
@@ -1405,7 +1443,10 @@
                 </div>
             `;
             storeCarouselIndex = 0;
-            updateStoreCarousel();
+            grid.classList.remove('store-product-carousel');
+            grid.style.height = '';
+            const carouselControls = document.getElementById('storeCarouselControls');
+            if (carouselControls) carouselControls.hidden = true;
             return;
         }
 
@@ -1522,8 +1563,10 @@
 
         grid.innerHTML = html;
         storeCarouselIndex = 0;
-        initStoreCarouselControls();
-        updateStoreCarousel();
+        grid.classList.remove('store-product-carousel');
+        grid.style.height = '';
+        const carouselControls = document.getElementById('storeCarouselControls');
+        if (carouselControls) carouselControls.hidden = true;
         if (typeof initStoreScrollObserver === 'function') {
             initStoreScrollObserver();
         }
