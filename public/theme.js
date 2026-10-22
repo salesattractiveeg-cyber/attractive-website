@@ -8,11 +8,15 @@
         const theme = mode === 'dark' ? 'dark' : 'light';
         document.documentElement.dataset.theme = theme;
         try { localStorage.setItem(storageKey, theme); } catch (_) {}
+        const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en');
         document.querySelectorAll('.site-theme-toggle').forEach(button => {
             const dark = theme === 'dark';
             button.setAttribute('aria-pressed', String(dark));
-            button.setAttribute('aria-label', dark ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن');
-            button.setAttribute('title', dark ? 'الوضع الفاتح' : 'الوضع الداكن');
+            const label = dark
+                ? (isEnglish ? 'Switch to light mode' : 'تفعيل الوضع الفاتح')
+                : (isEnglish ? 'Switch to dark mode' : 'تفعيل الوضع الداكن');
+            button.setAttribute('aria-label', label);
+            button.setAttribute('title', label);
             button.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">${dark ? 'light_mode' : 'dark_mode'}</span>`;
         });
     };
