@@ -5,24 +5,33 @@ import { head, put } from '@vercel/blob';
 import DEFAULTS from './_defaults.js';
 
 export const STORE_PATH = 'attractive-store-data.json';
-const QUOTE_MIGRATION_KEY = 'S03436_quote_products_v1';
+const CLEAR_PRODUCTS_MIGRATION_KEY = 'empty_store_catalog_v1';
 
 // -> { data, etag }   (data = {} when nothing was saved yet)
-export async function readStoreRaw() {
+export async function readStoreRaw(attempt = 0) {
     const info = await head(STORE_PATH).catch(() => null);
-    if (!info) return { data: {}, etag: null };
+    if (!info) {
+        const initial = { products: [], _catalogMigrations: { [CLEAR_PRODUCTS_MIGRATION_KEY]: true } };
+        try {
+            const created = await put(STORE_PATH, JSON.stringify(initial), {
+                access: 'public', addRandomSuffix: false, allowOverwrite: false,
+                contentType: 'application/json', cacheControlMaxAge: 60
+            });
+            return { data: initial, etag: created.etag || null };
+        } catch (error) {
+            // A concurrent first write won the create; re-read it before applying the migration.
+            if (attempt < 4 && /already exists|exists|precondition/i.test(String(error && error.message))) return readStoreRaw(attempt + 1);
+            throw error;
+        }
+    }
     const r = await fetch(info.url + (info.url.includes('?') ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) throw new Error('store read failed ' + r.status);
     const data = (await r.json()) || {};
     const migrations = data._catalogMigrations && typeof data._catalogMigrations === 'object' ? data._catalogMigrations : {};
-    const quoteDefaults = DEFAULTS.products.filter(product => product.quoteRef === 'S03436');
-    if (!migrations[QUOTE_MIGRATION_KEY] && quoteDefaults.length) {
-        const products = Array.isArray(data.products) ? data.products : DEFAULTS.products;
-        const existingIds = new Set(products.map(product => String(product.id)));
-        const missingQuoteProducts = quoteDefaults.filter(product => !existingIds.has(String(product.id)));
+    if (!migrations[CLEAR_PRODUCTS_MIGRATION_KEY]) {
         const migrated = Object.assign({}, data, {
-            products: [...products, ...missingQuoteProducts],
-            _catalogMigrations: Object.assign({}, migrations, { [QUOTE_MIGRATION_KEY]: true })
+            products: [],
+            _catalogMigrations: Object.assign({}, migrations, { [CLEAR_PRODUCTS_MIGRATION_KEY]: true })
         });
         try {
             const saved = await put(STORE_PATH, JSON.stringify(migrated), {
@@ -32,9 +41,10 @@ export async function readStoreRaw() {
             });
             return { data: migrated, etag: saved.etag || info.etag };
         } catch (error) {
-            // A concurrent catalog save may win this migration attempt. Return
-            // the merged view for this request; the next read retries safely.
-            return { data: migrated, etag: info.etag };
+            // Never report a deletion as complete unless the Blob write succeeded.
+            // If another save won the ETag race, reload and apply the migration to that version.
+            if (attempt < 4 && (error && error.name === 'BlobPreconditionFailedError' || /precondition/i.test(String(error && error.message)))) return readStoreRaw(attempt + 1);
+            throw error;
         }
     }
     return { data, etag: info.etag };

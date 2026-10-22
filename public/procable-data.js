@@ -1169,17 +1169,7 @@ const ProCable = {
             } else {
                 try {
                     list = JSON.parse(stored);
-                    // Seed only new S03436 items for existing local browsers. Preserve
-                    // all products and edits already managed by the site owner.
-                    if (Array.isArray(list)) {
-                        const known = new Set(list.map(p => String(p.id)));
-                        const quoteAdditions = DEFAULT_PRODUCTS.filter(p => p.quoteRef === 'S03436' && !known.has(String(p.id)));
-                        if (quoteAdditions.length) {
-                            list = [...list, ...quoteAdditions];
-                            localStorage.setItem('attractive_products', JSON.stringify(list));
-                            localStorage.setItem('procable_products', JSON.stringify(list));
-                        }
-                    } else list = DEFAULT_PRODUCTS;
+                    if (!Array.isArray(list)) list = DEFAULT_PRODUCTS;
                 } catch(e) { list = DEFAULT_PRODUCTS; }
             }
         } else {
