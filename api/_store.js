@@ -6,12 +6,13 @@ import DEFAULTS from './_defaults.js';
 
 export const STORE_PATH = 'attractive-store-data.json';
 const CLEAR_PRODUCTS_MIGRATION_KEY = 'empty_store_catalog_v1';
+const DEFAULT_BRANDS_MIGRATION_KEY = 'restore_default_brand_filters_v1';
 
 // -> { data, etag }   (data = {} when nothing was saved yet)
 export async function readStoreRaw(attempt = 0) {
     const info = await head(STORE_PATH).catch(() => null);
     if (!info) {
-        const initial = { products: [], _catalogMigrations: { [CLEAR_PRODUCTS_MIGRATION_KEY]: true } };
+        const initial = { products: [], categories: DEFAULTS.categories, _catalogMigrations: { [CLEAR_PRODUCTS_MIGRATION_KEY]: true, [DEFAULT_BRANDS_MIGRATION_KEY]: true } };
         try {
             const created = await put(STORE_PATH, JSON.stringify(initial), {
                 access: 'public', addRandomSuffix: false, allowOverwrite: false,
@@ -43,6 +44,24 @@ export async function readStoreRaw(attempt = 0) {
         } catch (error) {
             // Never report a deletion as complete unless the Blob write succeeded.
             // If another save won the ETag race, reload and apply the migration to that version.
+            if (attempt < 4 && (error && error.name === 'BlobPreconditionFailedError' || /precondition/i.test(String(error && error.message)))) return readStoreRaw(attempt + 1);
+            throw error;
+        }
+    }
+    if (!migrations[DEFAULT_BRANDS_MIGRATION_KEY] && !Array.isArray(data.categories)) {
+        const migrated = Object.assign({}, data, {
+            products: Array.isArray(data.products) ? data.products : [],
+            categories: DEFAULTS.categories,
+            _catalogMigrations: Object.assign({}, migrations, { [DEFAULT_BRANDS_MIGRATION_KEY]: true })
+        });
+        try {
+            const saved = await put(STORE_PATH, JSON.stringify(migrated), {
+                access: 'public', addRandomSuffix: false, allowOverwrite: true,
+                contentType: 'application/json', cacheControlMaxAge: 60,
+                ...(info.etag ? { ifMatch: info.etag } : {})
+            });
+            return { data: migrated, etag: saved.etag || info.etag };
+        } catch (error) {
             if (attempt < 4 && (error && error.name === 'BlobPreconditionFailedError' || /precondition/i.test(String(error && error.message)))) return readStoreRaw(attempt + 1);
             throw error;
         }

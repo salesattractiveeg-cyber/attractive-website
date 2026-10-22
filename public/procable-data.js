@@ -24,11 +24,31 @@ const PRO_SVGS = {
 // --- 2. Categories Default List (Light Current Systems) ---
 const DEFAULT_CATEGORIES = [
     { id: 'all', nameAr: 'الكل', nameEn: 'All', icon: 'apps', hidden: false },
-    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false },
-    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false },
-    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false },
+    { id: 'cctv', nameAr: 'كاميرات المراقبة و NVR', nameEn: 'CCTV & Surveillance', icon: 'videocam', hidden: false, brands: [
+        { id: 'hikvision', name: 'Hikvision', nameAr: 'هيك فيجن', logo: '/brands/hikvision.svg' },
+        { id: 'unv', name: 'UNV', nameAr: 'UNV', logo: '/brands/unv.png' },
+        { id: 'dahua', name: 'Dahua', nameAr: 'داهوا', logo: '/brands/dahua.svg' },
+        { id: 'hanwha', name: 'Hanwha Vision', nameAr: 'هانوا', logo: '/brands/hanwha-vision.svg' },
+        { id: 'wisenet', name: 'Wisenet', nameAr: 'Wisenet', logo: '/brands/wisenet.png' },
+        { id: 'zkteco', name: 'ZKTeco', nameAr: 'ZKTeco', logo: '/brands/zkteco.png' }
+    ] },
+    { id: 'fire-alarm', nameAr: 'أنظمة إنذار الحريق', nameEn: 'Fire Alarm Systems', icon: 'local_fire_department', hidden: false, brands: [
+        { id: 'honeywell', name: 'Honeywell', nameAr: 'هونويل', logo: '/brands/honeywell.svg' },
+        { id: 'bosch', name: 'Bosch', nameAr: 'بوش', logo: '/brands/bosch.svg' },
+        { id: 'eaton', name: 'Eaton', nameAr: 'إيتون', logo: '/brands/eaton.svg' },
+        { id: 'simplex', name: 'Simplex', nameAr: 'سيمبلكس', logo: '/brands/simplex.jpg' },
+        { id: 'apollo', name: 'Apollo', nameAr: 'أبولو', logo: '/brands/apollo.png' },
+        { id: 'hst', name: 'HST', nameAr: 'HST', logo: '/brands/hst.png' }
+    ] },
+    { id: 'sound-pa', nameAr: 'أنظمة الصوت والإذاعة', nameEn: 'Sound & PA Systems', icon: 'volume_up', hidden: false, brands: [
+        { id: 'dsppa', name: 'DSPPA', nameAr: 'DSPPA', logo: '/brands/dsppa.png' }
+    ] },
     { id: 'nurse-call', nameAr: 'الاستدعاء والإنتركم', nameEn: 'Nurse Call & Intercom', icon: 'call', hidden: false },
-    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false }
+    { id: 'cables', nameAr: 'كابلات وبنية تحتية', nameEn: 'Cables & Infrastructure', icon: 'cable', hidden: false, brands: [
+        { id: 'dlink', name: 'D-Link', nameAr: 'دي لينك', logo: '/brands/d-link.svg' },
+        { id: 'panduit', name: 'Panduit', nameAr: 'بانديت', logo: '/brands/panduit.svg' },
+        { id: 'legrand', name: 'Legrand', nameAr: 'ليجراند', logo: '/brands/legrand.svg' }
+    ] }
 ];
 
 // --- 3. Default Products with Sorting, Discounts & Badges ---

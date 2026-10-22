@@ -13,7 +13,7 @@ if (cut < 0) throw new Error('const ProCable not found');
 const ctx = vm.createContext({ localStorage: {}, document: {}, window: {}, navigator: {} });
 vm.runInContext(src.slice(0, cut), ctx);
 const out = JSON.parse(vm.runInContext(`JSON.stringify({
-  products: DEFAULT_PRODUCTS, connectors: DEFAULT_CONNECTORS, cables: DEFAULT_CABLES,
+  categories: DEFAULT_CATEGORIES, products: DEFAULT_PRODUCTS, connectors: DEFAULT_CONNECTORS, cables: DEFAULT_CABLES,
   shipping: DEFAULT_SHIPPING, settings: DEFAULT_SETTINGS,
   coupons: [{ code: "ATTRACTIVE10", type: "percent", value: 10, active: true }]
 })`, ctx));
