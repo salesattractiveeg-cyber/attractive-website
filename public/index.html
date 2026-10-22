@@ -632,8 +632,8 @@
         </div>
 
         <div class="md:col-span-5 flex justify-center items-center hero-seq-visual">
-            <div class="relative w-full max-w-[400px] bg-gradient-to-tr from-primary/10 via-white to-surface-container-low rounded-[32px] p-8 border border-black/[0.06] shadow-xl flex flex-col items-center">
-                <div id="homeHeroVisualBox" class="w-full h-48 flex items-center justify-center overflow-hidden rounded-2xl bg-white/70 backdrop-blur-md p-4">
+            <div class="relative w-full max-w-[560px] bg-gradient-to-tr from-primary/10 via-white to-surface-container-low rounded-[32px] p-4 md:p-5 border border-black/[0.06] shadow-xl flex flex-col items-center">
+                <div id="homeHeroVisualBox" class="w-full aspect-video flex items-center justify-center overflow-hidden rounded-2xl bg-white/70 backdrop-blur-md">
                     <svg viewBox="0 0 320 160" class="w-full h-full drop-shadow-md">
                         <rect x="10" y="10" width="300" height="140" rx="16" fill="rgba(200,16,46,0.04)" stroke="rgba(200,16,46,0.12)" stroke-width="1.5" stroke-dasharray="4 4"/>
                         <g transform="translate(110, 20)">
@@ -1313,9 +1313,10 @@
 
         // Hero Live Image & Badge
         const heroVisualBox = document.getElementById('homeHeroVisualBox');
-        if (heroVisualBox && s.heroLiveImage && s.heroLiveImage.trim()) {
-            const heroImageUrl = ProCable._safeMediaUrl(s.heroLiveImage);
-            heroVisualBox.innerHTML = heroImageUrl ? `<img src="${ProCable.sanitize(heroImageUrl)}" class="w-full h-full object-cover rounded-2xl shadow-inner" alt="Attractive Custom Cable"/>` : '';
+        if (heroVisualBox) {
+            const configuredHeroImage = typeof s.heroLiveImage === 'string' ? s.heroLiveImage.trim() : '';
+            const heroImageUrl = ProCable._safeMediaUrl(configuredHeroImage || '/images/smart-security-solutions-hero-banner.png');
+            if (heroImageUrl) heroVisualBox.innerHTML = `<img src="${ProCable.sanitize(heroImageUrl)}" class="w-full h-full object-contain rounded-2xl shadow-inner" alt="Attractive Smart Security Solutions"/>`;
         }
         const liveBadgeText = document.getElementById('homeHeroLiveBadgeText');
         if (liveBadgeText) {
