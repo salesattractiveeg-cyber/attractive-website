@@ -173,7 +173,7 @@
             </button>
             <button onclick="switchAdminTab('media')" id="tabBtn-media" class="admin-tab-btn w-full text-start p-3 rounded-xl text-on-surface hover:bg-surface-container-high flex items-center gap-2.5 transition">
                 <span class="material-symbols-outlined text-lg">photo_library</span>
-                <span>مكتبة الصور والوسائط</span>
+                <span>الصور الحية ومكتبة الصور</span>
             </button>
             <button onclick="switchAdminTab('promo')" id="tabBtn-promo" class="admin-tab-btn w-full text-start p-3 rounded-xl text-on-surface hover:bg-surface-container-high flex items-center gap-2.5 transition">
                 <span class="material-symbols-outlined text-lg">campaign</span>
@@ -1746,8 +1746,62 @@
             <!-- TAB: LIVE IMAGES & MEDIA LIBRARY -->
             <section id="tabView-media" class="hidden space-y-6">
                 <div>
-                    <h2 class="text-xl font-bold text-on-surface">مكتبة الصور العامة</h2>
-                    <p class="text-xs text-on-surface-variant">إدارة وسائط الموقع والصور المستخدمة في أقسامه</p>
+                    <h2 class="text-xl font-bold text-on-surface">الصور الحية ومكتبة الصور العامة</h2>
+                    <p class="text-xs text-on-surface-variant">تحكم بالصورة الحية المعروضة في الواجهة وبالنصوص المصاحبة وإدارة وسائط الموقع</p>
+                </div>
+
+                <!-- Hero Live Visual Card -->
+                <div class="bg-surface p-5 rounded-2xl border border-outline-variant space-y-4">
+                    <div class="flex justify-between items-center border-b border-outline-variant pb-3">
+                        <h3 class="font-bold text-sm text-on-surface flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-base">photo_camera</span>
+                            <span>صورة القسم الحي في الواجهة (Hero Live Visual Card)</span>
+                        </h3>
+                        <button onclick="resetHeroLiveVisual()" class="text-xs text-on-surface-variant hover:text-primary font-bold">استعادة الرسمة الافتراضية</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[11px] font-bold text-gray-500 mb-2">المعاينة الحية:</span>
+                            <div id="heroLivePreviewBox" class="w-full max-w-[260px] h-36 rounded-2xl border border-outline-variant bg-surface-container flex items-center justify-center overflow-hidden shadow-sm">
+                                <!-- Dynamic Preview -->
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 space-y-3">
+                            <div>
+                                <label class="block font-bold text-xs text-on-surface mb-1.5">رفع صورة حية من جهازك:</label>
+                                <label class="bg-white border border-outline-variant hover:border-primary text-on-surface px-4 py-2 rounded-xl text-xs font-bold cursor-pointer inline-flex items-center gap-2 transition shadow-sm">
+                                    <span class="material-symbols-outlined text-sm text-primary">upload_file</span>
+                                    <span>اختر صورة حية للكابل (سيتم ضغطها تلقائياً)</span>
+                                    <input type="file" id="heroLiveFileInput" accept="image/*" class="hidden" onchange="handleHeroLiveImageUpload(this)"/>
+                                </label>
+                            </div>
+
+                            <div>
+                                <label class="block font-bold text-xs text-on-surface mb-1">أو ضع رابط صورة خارجي:</label>
+                                <input id="heroLiveImageUrlInput" type="text" oninput="updateHeroLivePreview(this.value)" placeholder="https://..." class="w-full p-2.5 bg-white border border-outline-variant rounded-xl outline-none focus:ring-1 focus:ring-primary text-xs dir-ltr"/>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                                <div>
+                                    <label class="block font-bold text-xs text-on-surface mb-1">الجملة أسفل الصورة (عربي) *</label>
+                                    <input id="heroLiveBadgeArInput" type="text" placeholder="تفصيل مخصص بالسنتيمتر متاح حسب الطلب مع خيار العربون" class="w-full p-2.5 bg-white border border-outline-variant rounded-xl outline-none focus:ring-1 focus:ring-primary text-xs font-bold"/>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-xs text-on-surface mb-1">الجملة أسفل الصورة (English) *</label>
+                                    <input id="heroLiveBadgeEnInput" type="text" placeholder="Handmade custom cable per cm with deposit option" class="w-full p-2.5 bg-white border border-outline-variant rounded-xl outline-none focus:ring-1 focus:ring-primary text-xs font-bold dir-ltr"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button onclick="saveHeroLiveVisualSettings()" class="bg-primary text-white py-2.5 px-6 rounded-xl font-bold text-xs hover:bg-primary-dark transition shadow flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-base">save</span>
+                            <span>حفظ صورة ونصوص القسم الحي</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Media Library Section -->
@@ -4394,19 +4448,18 @@
     // --- 3.3 Website Content & Copy ---
     function renderContentTab() {
         const s = ProCable.getSettings();
-        const migrateHeroField = (value, oldPrefix, replacement) => String(value || '').startsWith(oldPrefix) ? replacement : (value || '');
-        document.getElementById('txtHeroBadgeAr').value = migrateHeroField(s.heroBadgeAr, 'Attractive — توريد أنظمة ومعدات التيار الخفيف', 'حلول متكاملة للأمن وأنظمة التيار الخفيف');
+        document.getElementById('txtHeroBadgeAr').value = s.heroBadgeAr || '';
         document.getElementById('chkTrustEnabled').checked = s.trustEnabled !== false;
         document.getElementById('txtTrustTitleAr').value = s.trustTitleAr || '';
         document.getElementById('txtTrustTitleEn').value = s.trustTitleEn || '';
         document.getElementById('txtTrustClients').value = (s.trustClients || []).join('\n');
         document.getElementById('txtTrustCerts').value = (s.trustCertificates || []).map(c => c.title + (c.image ? ' | ' + c.image : '')).join('\n');
         document.getElementById('txtPhoneNumbers').value = (s.phoneNumbers || []).join('\n');
-        document.getElementById('txtHeroBadgeEn').value = migrateHeroField(s.heroBadgeEn, 'Attractive — Light Current Systems & Equipment Supply', 'SMART SECURITY SOLUTIONS');
-        document.getElementById('txtHeroHeadingAr').value = migrateHeroField(s.heroHeadingAr, 'توريد أنظمة التيار الخفيف.', "أمانك.<br/><span style='color: var(--primary-color, #C8102E);'>أولويتنا.</span>");
-        document.getElementById('txtHeroHeadingEn').value = migrateHeroField(s.heroHeadingEn, 'Light Current Systems Supply.', "Your Safety.<br/><span style='color: var(--primary-color, #C8102E);'>Our Priority.</span>");
-        document.getElementById('txtHeroDescAr').value = migrateHeroField(s.heroDescAr, 'نوفر أجهزة ومستلزمات أنظمة المراقبة، إنذار الحريق', 'نوفر حلولاً متكاملة لأنظمة التيار الخفيف، تشمل كاميرات المراقبة، إنذار التسلل والحريق، التحكم في الدخول، الشبكات والكابلات الهيكلية؛ لبيئة أكثر أماناً وذكاءً.');
-        document.getElementById('txtHeroDescEn').value = migrateHeroField(s.heroDescEn, 'We supply equipment for surveillance, fire alarm', 'We supply integrated low-current systems, including CCTV, intrusion and fire alarms, access control, networking, and structured cabling for a safer, smarter environment.');
+        document.getElementById('txtHeroBadgeEn').value = s.heroBadgeEn || '';
+        document.getElementById('txtHeroHeadingAr').value = s.heroHeadingAr || '';
+        document.getElementById('txtHeroHeadingEn').value = s.heroHeadingEn || '';
+        document.getElementById('txtHeroDescAr').value = s.heroDescAr || '';
+        document.getElementById('txtHeroDescEn').value = s.heroDescEn || '';
 
         document.getElementById('txtPath1TitleAr').value = s.path1TitleAr || '';
         document.getElementById('txtPath1TitleEn').value = s.path1TitleEn || '';
@@ -7184,8 +7237,62 @@
         ProCable.showToast('تم حفظ الملاحظات وبوليصة التتبع بنجاح!', 'success');
     }
 
+    // =============================================
+    // --- NEW TAB: MEDIA LIBRARY & HERO LIVE IMAGE ---
+    // =============================================
     function renderMediaTab() {
+        const s = ProCable.getSettings();
+        const heroImg = s.heroLiveImage || '';
+        const badgeAr = document.getElementById('heroLiveBadgeArInput');
+        const badgeEn = document.getElementById('heroLiveBadgeEnInput');
+        const urlInput = document.getElementById('heroLiveImageUrlInput');
+        if (badgeAr) badgeAr.value = s.heroLiveBadgeTextAr || '';
+        if (badgeEn) badgeEn.value = s.heroLiveBadgeTextEn || '';
+        if (urlInput) urlInput.value = heroImg;
+        updateHeroLivePreview(heroImg);
         renderMediaLibGrid();
+    }
+
+    function updateHeroLivePreview(url) {
+        const box = document.getElementById('heroLivePreviewBox');
+        if (!box) return;
+        if (url && url.trim()) {
+            const safeUrl = ProCable._safeMediaUrl(url.trim());
+            box.innerHTML = safeUrl ? `<img src="${ProCable.sanitize(safeUrl)}" class="w-full h-full object-cover rounded-xl"/>` : '';
+        } else {
+            box.innerHTML = `
+                <svg viewBox="0 0 320 160" class="w-full h-full opacity-60">
+                    <path d="M 30 110 C 110 160, 210 20, 290 80" fill="none" stroke="#C8102E" stroke-width="10" stroke-linecap="round"/>
+                    <circle cx="30" cy="110" r="12" fill="#C8102E"/>
+                    <circle cx="290" cy="80" r="12" fill="#3D3D3F"/>
+                </svg>
+                <span class="absolute bottom-2 text-[10px] text-gray-400 font-bold">رسمة افتراضية</span>
+            `;
+        }
+    }
+
+    function handleHeroLiveImageUpload(input) {
+        if (!input.files || !input.files[0]) return;
+        ProCable.compressImage(input.files[0], 900, 0.85).then(base64 => {
+            document.getElementById('heroLiveImageUrlInput').value = base64;
+            updateHeroLivePreview(base64);
+            ProCable.showToast('تم رفع وضغط الصورة الحية بنجاح! اضغط حفظ لاعتمادها.', 'success');
+        }).catch(() => ProCable.showToast('فشل رفع الصورة', 'error'));
+    }
+
+    function resetHeroLiveVisual() {
+        document.getElementById('heroLiveImageUrlInput').value = '';
+        updateHeroLivePreview('');
+        ProCable.showToast('تم إعادة الرسمة الافتراضية للواجهة', 'info');
+    }
+
+    function saveHeroLiveVisualSettings() {
+        let s = ProCable.getSettings();
+        s.heroLiveImage = document.getElementById('heroLiveImageUrlInput').value.trim();
+        s.heroLiveBadgeTextAr = document.getElementById('heroLiveBadgeArInput').value.trim();
+        s.heroLiveBadgeTextEn = document.getElementById('heroLiveBadgeEnInput').value.trim();
+        ProCable.saveSettings(s);
+        ProCable.showToast('تم حفظ صورة ونصوص القسم الحي بنجاح وستظهر فوراً في الموقع!', 'success');
     }
 
     function renderMediaLibGrid() {
@@ -7213,6 +7320,8 @@
                     ${previewEl}
                     ${typeBadge}
                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center gap-1.5 p-1.5 z-10">
+                        <button data-id="${ProCable.sanitize(String(m.id))}" onclick="setMediaAsHero(this.dataset.id)" class="bg-primary hover:bg-primary-dark text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 w-full justify-center shadow">
+                            <span class="material-symbols-outlined text-xs">flag</span> تعيين للهيرو</button>
                         <button data-id="${ProCable.sanitize(String(m.id))}" onclick="copyMediaUrl(this.dataset.id)" class="bg-white hover:bg-gray-100 text-black text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 w-full justify-center">
                             <span class="material-symbols-outlined text-xs">content_copy</span> نسخ الرابط</button>
                         <button data-id="${ProCable.sanitize(String(m.id))}" onclick="deleteMediaItem(this.dataset.id)" class="bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1 w-full justify-center">
@@ -7222,6 +7331,19 @@
                 </div>
             `;
         }).join('');
+    }
+
+    function setMediaAsHero(id) {
+        const media = ProCable.getMedia();
+        const item = media.find(m => m.id === id);
+        if (!item) return;
+        const s = ProCable.getSettings();
+        s.heroLiveImage = item.src;
+        ProCable.saveSettings(s);
+        const urlInput = document.getElementById('heroLiveImageUrlInput');
+        if (urlInput) urlInput.value = item.src;
+        updateHeroLivePreview(item.src);
+        ProCable.showToast('تم تعيين الوسائط بنجاح للقسم الحي في الهيرو!', 'success');
     }
 
     function handleMediaLibUpload(input) {

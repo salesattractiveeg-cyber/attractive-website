@@ -83,6 +83,18 @@
         .hero-seq-5 { animation: heroSeqFadeUp 0.9s var(--apple-ease) 580ms both; }
         .hero-seq-visual { animation: heroSeqFadeUp 1.1s var(--apple-ease) 250ms both; }
 
+        /* Full supplied banner as a quiet watermark behind the live hero content. */
+        .hero-watermark { position: relative; isolation: isolate; }
+        .hero-watermark::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: url('/images/smart-security-solutions-hero-banner.png') center / contain no-repeat;
+            opacity: 0.075;
+        }
+
         /* === Apple Nav Scrolled Elevation === */
         nav.apple-nav {
             transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -591,24 +603,79 @@
 <main class="max-w-6xl mx-auto px-4 sm:px-6 flex-1 w-full">
 
     <!-- HERO SECTION -->
-    <section class="py-8 md:py-12 space-y-8 border-b border-black/[0.06]">
-        <img src="/images/smart-security-solutions-hero-banner.png" alt="Attractive Smart Security Solutions hero banner" class="hero-seq-visual block w-full h-auto rounded-[24px] md:rounded-[32px] shadow-xl" width="1670" height="941" fetchpriority="high" decoding="async"/>
-
-        <div class="max-w-4xl mx-auto text-center space-y-5">
-            <div class="hero-seq-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-bold tracking-wide">
+    <section class="hero-watermark py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-10 items-center border-b border-black/[0.06]">
+        <div class="md:col-span-7 text-center md:text-start space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-bold tracking-wide">
                 <span class="material-symbols-outlined text-sm">verified</span>
-                <span id="homeHeroBadge" data-ar="حلول متكاملة للأمن وأنظمة التيار الخفيف" data-en="SMART SECURITY SOLUTIONS">حلول متكاملة للأمن وأنظمة التيار الخفيف</span>
+                <span id="homeHeroBadge">Attractive — توريد أنظمة ومعدات التيار الخفيف</span>
             </div>
-            <h1 id="homeHeroHeading" class="hero-seq-2 text-3xl sm:text-5xl font-black leading-[1.15] tracking-tight text-on-surface font-headline" data-ar="أمانك.<br/><span style='color: var(--primary-color, #C8102E);'>أولويتنا.</span>" data-en="Your Safety.<br/><span style='color: var(--primary-color, #C8102E);'>Our Priority.</span>">أمانك.<br/><span class="text-primary">أولويتنا.</span></h1>
-            <p id="homeHeroDesc" class="hero-seq-3 text-base sm:text-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed" data-ar="نوفر حلولاً متكاملة لأنظمة التيار الخفيف، تشمل كاميرات المراقبة، إنذار التسلل والحريق، التحكم في الدخول، الشبكات والكابلات الهيكلية؛ لبيئة أكثر أماناً وذكاءً." data-en="We supply integrated low-current systems, including CCTV, intrusion and fire alarms, access control, networking, and structured cabling for a safer, smarter environment.">نوفر حلولاً متكاملة لأنظمة التيار الخفيف، تشمل كاميرات المراقبة، إنذار التسلل والحريق، التحكم في الدخول، الشبكات والكابلات الهيكلية؛ لبيئة أكثر أماناً وذكاءً.</p>
-            <div class="hero-seq-4 flex justify-center pt-1">
-                <a href="store.html" class="inline-flex items-center justify-center gap-2 bg-primary text-white py-3.5 px-8 rounded-full font-bold text-sm hover:bg-primary-dark apple-btn-primary transition shadow-md">
-                    <span data-ar="استكشف حلولنا" data-en="Explore Our Solutions">استكشف حلولنا</span>
+
+            <h1 id="homeHeroHeading" class="hero-seq-2 text-3xl sm:text-5xl md:text-6xl font-black leading-[1.15] tracking-tight text-on-surface font-headline">توريد أنظمة التيار الخفيف.<br><span style="color: var(--primary-color, #C8102E);">تجهيزات موثوقة لكل مشروع.</span></h1>
+
+            <p id="homeHeroDesc" class="hero-seq-3 text-base sm:text-lg text-on-surface-variant max-w-xl leading-relaxed">نوفر أجهزة ومستلزمات أنظمة المراقبة، إنذار الحريق، الصوت والإذاعة، الشبكات، الإنتركم والاستدعاء الطبي، وكابلات البنية التحتية. ويساعدك فريقنا في اختيار المواصفات وتجهيز الكميات المناسبة، مع خدمات التركيب والتشغيل عند الطلب.</p>
+
+            <!-- Action Buttons (Apple Style Pills) -->
+            <div class="hero-seq-4 flex flex-col sm:flex-row items-center gap-3.5 justify-center md:justify-start pt-2">
+                <a href="store.html" class="w-full sm:w-auto bg-primary text-white py-3.5 px-8 rounded-full font-bold text-sm hover:bg-primary-dark apple-btn-primary transition shadow-md flex items-center justify-center gap-2">
+                    <span data-ar="تصفح كتالوج الأنظمة والأجهزة" data-en="Browse Systems Catalog">تصفح كتالوج الأنظمة والأجهزة</span>
                     <span class="material-symbols-outlined text-base">storefront</span>
                 </a>
+                <a href="builder.html" class="w-full sm:w-auto bg-white text-on-surface border border-black/15 py-3.5 px-8 rounded-full font-bold text-sm hover:bg-black/5 apple-btn-secondary transition flex items-center justify-center gap-2">
+                    <span data-ar="استوديو تفصيل كابلات الصوت" data-en="Pro Audio Cable Studio">استوديو تفصيل كابلات الصوت</span>
+                    <span class="material-symbols-outlined text-base">tune</span>
+                </a>
+            </div>
+
+            <!-- Trust Badges (Apple Stat Row) -->
+            <div class="hero-seq-5 grid grid-cols-3 gap-6 pt-6 border-t border-black/[0.06] max-w-lg mx-auto md:mx-0 text-center">
+                <div>
+                    <span id="homeBadge1Val" class="block font-black text-2xl md:text-3xl text-primary stat-number">100%</span>
+                    <span id="homeBadge1Text" class="text-xs text-on-surface-variant font-medium">أجهزة معتمدة ومختبرة</span>
+                </div>
+                <div>
+                    <span id="homeBadge2Val" class="block font-black text-2xl md:text-3xl text-primary stat-number">24/7</span>
+                    <span id="homeBadge2Text" class="text-xs text-on-surface-variant font-medium">استقرار وأمان دائم</span>
+                </div>
+                <div>
+                    <span id="homeBadge3Val" class="block font-black text-2xl md:text-3xl text-primary stat-number">2 سنة</span>
+                    <span id="homeBadge3Text" class="text-xs text-on-surface-variant font-medium">ضمان صيانة واستبدال</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="md:col-span-5 flex justify-center items-center hero-seq-visual">
+            <div class="relative w-full max-w-[560px] bg-gradient-to-tr from-primary/10 via-white to-surface-container-low rounded-[32px] p-4 md:p-5 border border-black/[0.06] shadow-xl flex flex-col items-center">
+                <div id="homeHeroVisualBox" class="w-full aspect-video flex items-center justify-center overflow-hidden rounded-2xl bg-white/70 backdrop-blur-md">
+                    <svg viewBox="0 0 320 160" class="w-full h-full drop-shadow-md">
+                        <rect x="10" y="10" width="300" height="140" rx="16" fill="rgba(200,16,46,0.04)" stroke="rgba(200,16,46,0.12)" stroke-width="1.5" stroke-dasharray="4 4"/>
+                        <g transform="translate(110, 20)">
+                            <path d="M50 8 L85 24 C85 65 50 88 50 88 C50 88 15 65 15 24 Z" fill="none" stroke="#1D1D1F" stroke-width="3" stroke-linejoin="round"/>
+                            <path d="M50 14 L79 28 C79 62 50 81 50 81 C50 81 21 62 21 28 Z" fill="rgba(200,16,46,0.08)"/>
+                            <rect x="34" y="38" width="32" height="20" rx="4" fill="#1D1D1F"/>
+                            <polygon points="66,42 78,35 78,57 66,54" fill="var(--primary-color, #C8102E)"/>
+                            <circle cx="45" cy="48" r="4.5" fill="#FFFFFF"/>
+                            <circle cx="45" cy="48" r="2" fill="var(--primary-color, #C8102E)"/>
+                            <line x1="30" y1="36" x2="48" y2="36" stroke="#6E6E73" stroke-width="2.5" stroke-linecap="round"/>
+                        </g>
+                        <circle cx="45" cy="80" r="14" fill="#1D1D1F"/>
+                        <text x="45" y="84" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="bold">IP</text>
+                        <path d="M 60 80 Q 85 80 115 70" fill="none" stroke="#6E6E73" stroke-width="1.5" stroke-dasharray="3 3"/>
+                        <circle cx="275" cy="80" r="14" fill="var(--primary-color, #C8102E)"/>
+                        <text x="275" y="84" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="bold">PA</text>
+                        <path d="M 260 80 Q 235 80 205 70" fill="none" stroke="#6E6E73" stroke-width="1.5" stroke-dasharray="3 3"/>
+                        <circle cx="160" cy="130" r="12" fill="#3D3D3F"/>
+                        <text x="160" y="134" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="bold">FIRE</text>
+                        <path d="M 160 110 L 160 118" fill="none" stroke="#6E6E73" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="mt-4 bg-white/90 backdrop-blur-md py-2.5 px-4 rounded-full shadow-sm border border-black/[0.06] text-xs font-semibold text-on-surface flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-success live-dot"></span>
+                    <span id="homeHeroLiveBadgeText" data-ar="توريد وشحن أنظمة ومعدات التيار الخفيف لجميع المحافظات" data-en="Light Current systems &amp; equipment supplied nationwide">توريد وشحن أنظمة ومعدات التيار الخفيف لجميع المحافظات</span>
+                </div>
             </div>
         </div>
     </section>
+
     <!-- SECTION 2: HOW IT WORKS (APPLE BENTO BOXES) -->
     <section class="py-20 border-b border-black/[0.06] apple-reveal">
         <div class="text-center max-w-xl mx-auto mb-14">
@@ -1174,7 +1241,7 @@
         const isAr = ProCable.getLang() === 'ar';
         renderCommercialBrands(s, isAr);
 
-        // Hero copy stays aligned with the banner when the old default copy is still saved.
+        // Hero
         const legacyHeroCopy = {
             heroBadgeAr: ['Attractive — توريد أنظمة ومعدات التيار الخفيف', 'حلول متكاملة للأمن وأنظمة التيار الخفيف'],
             heroBadgeEn: ['Attractive — Light Current Systems & Equipment Supply', 'SMART SECURITY SOLUTIONS'],
@@ -1203,6 +1270,7 @@
 
         const descEl = document.getElementById('homeHeroDesc');
         if (descEl) descEl.innerText = heroValue(isAr ? 'heroDescAr' : 'heroDescEn') || heroValue(isAr ? 'heroDescEn' : 'heroDescAr');
+
         // Two Paths
         const p1Title = document.getElementById('homePath1Title');
         if (p1Title) p1Title.innerText = isAr ? (s.path1TitleAr || s.path1TitleEn) : (s.path1TitleEn || s.path1TitleAr);
@@ -1267,6 +1335,19 @@
 
         const hoursEl = document.getElementById('homeHoursDisplay');
         if (hoursEl) hoursEl.innerText = isAr ? (s.workingHoursAr || s.workingHoursEn) : (s.workingHoursEn || s.workingHoursAr);
+
+        // Hero Live Image & Badge
+        const heroVisualBox = document.getElementById('homeHeroVisualBox');
+        if (heroVisualBox) {
+            const configuredHeroImage = typeof s.heroLiveImage === 'string' ? s.heroLiveImage.trim() : '';
+            const heroImageUrl = ProCable._safeMediaUrl(configuredHeroImage || '/images/smart-security-solutions-hero-banner.png');
+            if (heroImageUrl) heroVisualBox.innerHTML = `<img src="${ProCable.sanitize(heroImageUrl)}" class="w-full h-full object-contain rounded-2xl shadow-inner" alt="Attractive Smart Security Solutions"/>`;
+        }
+        const liveBadgeText = document.getElementById('homeHeroLiveBadgeText');
+        if (liveBadgeText) {
+            const badgeTxt = isAr ? (s.heroLiveBadgeTextAr || s.heroLiveBadgeTextEn) : (s.heroLiveBadgeTextEn || s.heroLiveBadgeTextAr);
+            if (badgeTxt) liveBadgeText.innerText = badgeTxt;
+        }
 
         // Cable Repair Service Section
         const repTitle = document.getElementById('homeRepairTitle');
