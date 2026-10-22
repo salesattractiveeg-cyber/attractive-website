@@ -726,9 +726,7 @@
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">IP Camera</span>
                                 <span class="bg-green-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">&#10003; معتمد</span>
                             </div>
-                            <div class="text-end">
-                                <span class="font-black text-primary text-base stat-number">&#x662;&#x66a;&#x660;&#x660; &#x62c;.&#x645;</span>
-                            </div>
+                            
                         </div>
                         <div class="bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center min-h-[100px] border border-black/[0.03]">
                             <div class="h-20 flex items-center justify-center"><svg viewBox="0 0 100 100" class="h-full w-auto" aria-hidden="true"><rect x="20" y="35" width="50" height="35" rx="5" fill="#1D1D1F"/><circle cx="45" cy="52" r="10" fill="#3D3D3F"/><circle cx="45" cy="52" r="5" fill="var(--primary-color,#C8102E)"/><rect x="70" y="48" width="15" height="8" rx="2" fill="#3D3D3F"/><rect x="30" y="28" width="4" height="8" rx="1" fill="#6E6E73"/></svg></div>
@@ -749,9 +747,7 @@
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">Fire Alarm</span>
                                 <span class="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full">EN54</span>
                             </div>
-                            <div class="text-end">
-                                <span class="font-black text-primary text-base stat-number">&#x661;&#x660;&#x66a;&#x660;&#x660; &#x62c;.&#x645;</span>
-                            </div>
+                            
                         </div>
                         <div class="bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center min-h-[100px] border border-black/[0.03]">
                             <div class="h-20 flex items-center justify-center"><svg viewBox="0 0 100 100" class="h-full w-auto" aria-hidden="true"><rect x="15" y="30" width="70" height="45" rx="5" fill="#1D1D1F"/><rect x="20" y="35" width="60" height="35" rx="3" fill="#2D2D2F"/><circle cx="35" cy="50" r="6" fill="var(--primary-color,#C8102E)"/><circle cx="50" cy="50" r="6" fill="#6E6E73"/><circle cx="65" cy="50" r="6" fill="#34C759"/><rect x="42" y="24" width="16" height="7" rx="2" fill="#3D3D3F"/></svg></div>
@@ -772,10 +768,7 @@
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">PA System</span>
                                 <span class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded-full">خصم</span>
                             </div>
-                            <div class="text-end">
-                                <span class="font-black text-primary text-base stat-number">&#x668;&#x660;&#x660;&#x660; &#x62c;.&#x645;</span>
-                                <span class="text-xs text-on-surface-variant line-through block stat-number">&#x669;&#x660;&#x660;&#x660; &#x62c;.&#x645;</span>
-                            </div>
+                            
                         </div>
                         <div class="bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center min-h-[100px] border border-black/[0.03]">
                             <div class="h-20 flex items-center justify-center"><svg viewBox="0 0 100 100" class="h-full w-auto" aria-hidden="true"><rect x="15" y="32" width="55" height="36" rx="5" fill="#1D1D1F"/><rect x="20" y="37" width="45" height="26" rx="3" fill="#2D2D2F"/><circle cx="42" cy="50" r="9" fill="#3D3D3F"/><circle cx="42" cy="50" r="4" fill="#6E6E73"/><rect x="70" y="40" width="16" height="20" rx="3" fill="#3D3D3F"/><rect x="72" y="43" width="3" height="14" rx="1" fill="#6E6E73"/></svg></div>
@@ -793,7 +786,7 @@
         <div id="featuredCarouselControls" class="glass-carousel-controls" dir="rtl" aria-label="التنقل بين المنتجات">
             <button type="button" id="featuredPrev" class="glass-carousel-control" aria-label="المنتج السابق" title="المنتج السابق"><span class="material-symbols-outlined">chevron_right</span></button>
             <button type="button" id="featuredAutoplay" class="glass-carousel-control" aria-label="تشغيل العرض التلقائي" title="تشغيل العرض التلقائي"><span class="material-symbols-outlined">play_arrow</span></button>
-            <div class="glass-carousel-current"><strong id="featuredCurrentName"></strong><span id="featuredCurrentPrice"></span></div>
+            <div class="glass-carousel-current"><strong id="featuredCurrentName"></strong></div>
             <button type="button" id="featuredNext" class="glass-carousel-control" aria-label="المنتج التالي" title="المنتج التالي"><span class="material-symbols-outlined">chevron_left</span></button>
         </div>
 
@@ -1004,11 +997,8 @@
 
         const active = cards[featuredCarouselIndex];
         const name = active?.querySelector('[data-featured-name]')?.textContent || '';
-        const price = active?.querySelector('[data-featured-price]')?.textContent || '';
         const nameLabel = document.getElementById('featuredCurrentName');
-        const priceLabel = document.getElementById('featuredCurrentPrice');
         if (nameLabel) nameLabel.textContent = name;
-        if (priceLabel) priceLabel.textContent = price;
         const controls = document.getElementById('featuredCarouselControls');
         if (controls) controls.hidden = cards.length < 2;
     }
@@ -1151,7 +1141,6 @@
                 ? `<span class="bg-primary text-white text-[10px] font-black px-2 py-0.5 rounded-full">${isAr ? 'خصم' : 'Sale'}</span>` 
                 : '';
 
-            const currency = isAr ? 'ج.م' : 'EGP';
             const prodName = isAr ? p.nameAr : (p.nameEn || p.nameAr);
             const prodDesc = isAr ? p.descAr : (p.descEn || p.descAr);
 
@@ -1164,16 +1153,11 @@
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">${ProCable.sanitize(p.tag || 'Audio')}</span>
                                 ${discountBadge}
                             </div>
-                            <div class="text-end">
-                                <span class="font-black text-primary text-base stat-number">${ProCable.formatNum(p.price)} ${currency}</span>
-                                ${hasDiscount ? `<span class="text-xs text-on-surface-variant line-through block stat-number">${ProCable.formatNum(p.originalPrice)} ${currency}</span>` : ''}
-                            </div>
                         </div>
                         <div class="glass-product-visual bg-surface-container-low rounded-2xl p-4 mb-4 flex items-center justify-center min-h-[100px] border border-black/[0.03]">
                             ${visual}
                         </div>
                         <h3 data-featured-name class="font-bold text-sm text-on-surface mb-1.5 tracking-tight">${ProCable.sanitize(prodName)}</h3>
-                        <span data-featured-price class="sr-only">${ProCable.formatNum(p.price)} ${currency}</span>
                         <p class="text-xs text-on-surface-variant line-clamp-2 mb-4 leading-relaxed">${ProCable.sanitize(prodDesc)}</p>
                     </div>
                     <a href="store.html?product=${productLinkId}" class="w-full bg-surface hover:bg-primary hover:text-white text-on-surface py-2.5 rounded-full font-semibold text-xs text-center apple-btn-secondary transition flex items-center justify-center gap-1.5 border border-black/10">
