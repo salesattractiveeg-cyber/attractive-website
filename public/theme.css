@@ -1,14 +1,14 @@
 /* Attractive light/dark palette shared across the public site and admin. */
 :root {
     color-scheme: light;
-    --site-bg: #f2efed;
-    --site-surface: #fbf9f8;
-    --site-soft: #eee9e6;
-    --site-elevated: #e7e0dc;
+    --site-bg: #e9e3e0;
+    --site-surface: #f8f4f2;
+    --site-soft: #efe9e6;
+    --site-elevated: #e5dcd8;
     --site-text: #272328;
     --site-muted: #71696a;
-    --site-border: #e1d9d6;
-    --site-field: #f5f0ed;
+    --site-border: #d9cfca;
+    --site-field: #f3ece8;
     --site-shadow: 0 18px 50px rgba(67, 38, 41, .09);
 }
 html[data-theme="dark"] {
@@ -25,6 +25,8 @@ html[data-theme="dark"] {
 }
 html, body { background-color: var(--site-bg); color: var(--site-text); }
 body { transition: background-color .22s ease, color .22s ease; }
+html:not([data-theme="dark"]),
+html:not([data-theme="dark"]) body { background-color: var(--site-bg) !important; color: var(--site-text) !important; }
 html:not([data-theme="dark"]) [class~="bg-surface"],
 html:not([data-theme="dark"]) [class~="bg-surface-container-low"] { background-color: var(--site-bg) !important; }
 html:not([data-theme="dark"]) [class~="bg-white"],
@@ -37,6 +39,9 @@ html:not([data-theme="dark"]) [class~="bg-surface-container-lowest"] { backgroun
 html:not([data-theme="dark"]) [class~="bg-surface-container"],
 html:not([data-theme="dark"]) [class~="bg-surface-container-high"] { background-color: var(--site-soft) !important; }
 html:not([data-theme="dark"]) [class~="bg-surface-container-highest"] { background-color: var(--site-elevated) !important; }
+html:not([data-theme="dark"]) [class~="bg-gray-50"],
+html:not([data-theme="dark"]) [class~="bg-gray-100"],
+html:not([data-theme="dark"]) [class~="bg-gray-200"] { background-color: var(--site-soft) !important; }
 html:not([data-theme="dark"]) [class~="border-outline-variant"],
 html:not([data-theme="dark"]) [class~="border-black/5"],
 html:not([data-theme="dark"]) [class~="border-black/10"],
@@ -100,6 +105,12 @@ html[data-theme="dark"] nav.apple-nav > div:first-child,
 html[data-theme="dark"] #adminApp > header,
 html[data-theme="dark"] #adminApp aside,
 html[data-theme="dark"] #adminApp > div > main { background-color: color-mix(in srgb, var(--site-surface) 92%, transparent) !important; border-color: var(--site-border) !important; }
+html[data-theme="dark"] nav.apple-nav #desktopNavLinks > li > a:not(.text-primary),
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child button:not(.bg-primary),
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child a:not(.bg-primary),
+html[data-theme="dark"] nav.apple-nav .mobile-nav-controls button:not(.text-primary),
+html[data-theme="dark"] nav.apple-nav .mobile-nav-controls a:not(.bg-primary),
+html[data-theme="dark"] nav.apple-nav #desktopAuthArea button { color: var(--site-text) !important; }
 html[data-theme="dark"] #authGate { background: radial-gradient(ellipse at 50% 0%, #252a33 0%, var(--site-bg) 72%) !important; }
 html[data-theme="dark"] #authGate > div { background-color: var(--site-surface) !important; border-color: var(--site-border) !important; }
 html[data-theme="dark"] .modal-content,
