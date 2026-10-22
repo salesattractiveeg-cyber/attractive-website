@@ -5074,6 +5074,10 @@ ProCable.api = {
 
 window.ProCable = ProCable;
 
+// Translate the already-parsed page before DOMContentLoaded to avoid a flash
+// of Arabic markup while the English page is initializing.
+ProCable.applyLanguageToDOM();
+
 // Auto init on load
 document.addEventListener('DOMContentLoaded', () => {
     ProCable.applyThemeColor();
