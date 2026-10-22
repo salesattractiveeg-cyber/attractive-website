@@ -1537,6 +1537,22 @@
 
             <!-- TAB 7: STORE SETTINGS, CONTACTS & SECURITY (#33, #35) -->
             <section id="tabView-settings" class="hidden space-y-8">
+                <div class="rounded-2xl border border-primary/20 bg-primary/5 p-5 sm:p-6">
+                    <h2 class="text-xl font-bold text-on-surface mb-1">التحكم في ظهور الأسعار للعملاء</h2>
+                    <p class="text-xs text-on-surface-variant mb-4">فعّل كل خيار لإظهار المبالغ في المكان المحدد. تظل الأسعار محفوظة وتُستخدم في حساب الطلبات حتى عند إخفائها.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <label class="flex items-center gap-2 rounded-xl bg-white p-3 border border-outline-variant"><input id="priceShowStore" type="checkbox" class="rounded text-primary"><span>إظهار أسعار المنتجات في المتجر</span></label>
+                        <label class="flex items-center gap-2 rounded-xl bg-white p-3 border border-outline-variant"><input id="priceShowCart" type="checkbox" class="rounded text-primary"><span>إظهار أسعار السلة وملخص الطلب</span></label>
+                        <label class="flex items-center gap-2 rounded-xl bg-white p-3 border border-outline-variant"><input id="priceShowCable" type="checkbox" class="rounded text-primary"><span>إظهار أسعار تفصيل الكابل والموصلات</span></label>
+                        <label class="flex items-center gap-2 rounded-xl bg-white p-3 border border-outline-variant"><input id="priceShowShipping" type="checkbox" class="rounded text-primary"><span>إظهار أسعار الشحن</span></label>
+                        <label class="flex items-center gap-2 rounded-xl bg-white p-3 border border-outline-variant"><input id="priceShowWhatsApp" type="checkbox" class="rounded text-primary"><span>إرسال الأسعار في رسالة واتساب</span></label>
+                    </div>
+                    <div class="mt-4 flex items-center gap-3">
+                        <button type="button" onclick="savePriceVisibilitySettings()" class="bg-primary text-white py-2.5 px-5 rounded-xl font-bold text-xs hover:bg-primary-dark transition">حفظ إعدادات ظهور الأسعار</button>
+                        <span id="priceVisibilitySavedMsg" class="hidden text-xs text-green-700 font-bold" aria-live="polite">✓ تم حفظ الإعدادات</span>
+                    </div>
+                    <p class="text-[11px] text-on-surface-variant mt-3">تعديل قيمة كل منتج من تبويب المنتجات، وأسعار الموصلات والكابلات من تبويب التفصيل، ورسوم المحافظات من تبويب الشحن.</p>
+                </div>
                 <!-- WhatsApp & Multiple Contact Numbers (#35) -->
                 <div>
                     <h2 class="text-xl font-bold text-on-surface mb-1">أرقام الواتساب والتواصل المتعددة</h2>
@@ -6250,6 +6266,12 @@
     // --- 9. Store Settings & Contacts (#33, #35) ---
     function renderSettingsTab() {
         const settings = ProCable.getSettings();
+        const visibility = Object.assign({ store: false, cart: false, cable: false, shipping: false, whatsapp: false }, settings.priceVisibility || {});
+        document.getElementById('priceShowStore').checked = visibility.store === true;
+        document.getElementById('priceShowCart').checked = visibility.cart === true;
+        document.getElementById('priceShowCable').checked = visibility.cable === true;
+        document.getElementById('priceShowShipping').checked = visibility.shipping === true;
+        document.getElementById('priceShowWhatsApp').checked = visibility.whatsapp === true;
         document.getElementById('setWhatsApp').value = settings.whatsappNumber;
         document.getElementById('setPhones').value = (settings.phoneNumbers || []).join(', ');
         document.getElementById('setVodafoneCash').value = settings.vodafoneCash || '';
@@ -6257,6 +6279,21 @@
         document.getElementById('setGoogleClientId').value = settings.googleClientId || '';
         loadGoogleSheetsIntegration();
         loadPaymobConfig();
+    }
+
+    function savePriceVisibilitySettings() {
+        const settings = ProCable.getSettings();
+        settings.priceVisibility = {
+            store: document.getElementById('priceShowStore').checked,
+            cart: document.getElementById('priceShowCart').checked,
+            cable: document.getElementById('priceShowCable').checked,
+            shipping: document.getElementById('priceShowShipping').checked,
+            whatsapp: document.getElementById('priceShowWhatsApp').checked
+        };
+        ProCable.saveSettings(settings);
+        const saved = document.getElementById('priceVisibilitySavedMsg');
+        if (saved) { saved.classList.remove('hidden'); setTimeout(() => saved.classList.add('hidden'), 3000); }
+        ProCable.showToast('تم حفظ إعدادات ظهور الأسعار للعملاء', 'success');
     }
 
     async function loadGoogleSheetsIntegration() {

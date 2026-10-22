@@ -700,6 +700,8 @@ const DEFAULT_NAV_ITEMS = [
 ];
 
 const DEFAULT_SETTINGS = {
+    // Customer-facing price visibility; all amounts remain editable in the admin and used internally for order totals.
+    priceVisibility: { store: false, cart: false, cable: false, shipping: false, whatsapp: false },
     // Branding & Identity
     siteName: "Attractive",
     brandTitleAr: "Attractive - توريد أنظمة ومعدات التيار الخفيف",
@@ -3069,12 +3071,25 @@ const ProCable = {
                 if (i.length) itemDesc += ` (${i.length} ${isAr ? 'م' : 'm'})`;
                 if (i.cable) itemDesc += ` [${i.cable}]`;
                 if (i.customLabel) itemDesc += ` [طباعة: ${i.customLabel}]`;
+                const visibility = Object.assign({}, DEFAULT_SETTINGS.priceVisibility, s.priceVisibility || {});
+                const itemAmount = Number(i.totalPrice ?? i.price ?? i.lineTotal);
+                if (visibility.whatsapp && Number.isFinite(itemAmount)) itemDesc += ` — ${this.formatNum(itemAmount)} ${isAr ? 'ج.م' : 'EGP'}`;
                 lines.push(`• ${itemDesc} [x${i.qty || 1}]`);
             });
         }
 
         lines.push("─────────────────────");
-        lines.push(isAr ? '💬 سيتم تأكيد الأسعار وتكلفة الشحن بعد مراجعة الطلب.' : '💬 Prices and shipping will be confirmed after reviewing the order.');
+        const visibility = Object.assign({}, DEFAULT_SETTINGS.priceVisibility, s.priceVisibility || {});
+        if (visibility.whatsapp) {
+            const amount = (value) => Number.isFinite(Number(value)) ? `${this.formatNum(Number(value))} ${isAr ? 'ج.م' : 'EGP'}` : '';
+            if (order.subtotal != null) lines.push(`🧾 *${isAr ? 'إجمالي المنتجات' : 'Items subtotal'}:* ${amount(order.subtotal)}`);
+            if (order.shippingFee != null) lines.push(`🚚 *${isAr ? 'الشحن' : 'Shipping'}:* ${amount(order.shippingFee)}`);
+            if (order.discount != null && Number(order.discount) > 0) lines.push(`🏷️ *${isAr ? 'الخصم' : 'Discount'}:* ${amount(order.discount)}`);
+            if (order.total != null) lines.push(`💰 *${isAr ? 'الإجمالي' : 'Total'}:* ${amount(order.total)}`);
+            if (order.deposit != null && Number(order.deposit) > 0) lines.push(`💳 *${isAr ? 'العربون' : 'Deposit'}:* ${amount(order.deposit)}`);
+        } else {
+            lines.push(isAr ? '💬 سيتم تأكيد الأسعار وتكلفة الشحن بعد مراجعة الطلب.' : '💬 Prices and shipping will be confirmed after reviewing the order.');
+        }
 
         if (s.showPaymentMethod && order.paymentMethod) {
             lines.push(`💼 *${isAr ? 'طريقة الدفع' : 'Payment Method'}:* ${order.paymentMethod}`);

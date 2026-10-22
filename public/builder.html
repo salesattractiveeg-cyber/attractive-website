@@ -747,7 +747,7 @@
                         </div>
                         <p class="text-xs text-on-surface-variant mb-3">أعلى نقاء واستجابة ترددية لاستوديوهات التسجيل الاحترافية</p>
                     </div>
-                    <div class="text-xs text-on-surface-variant">السعر يُحدد بعد مراجعة الطلب</div>
+                    <div class="text-xs text-on-surface-variant cable-price-label">السعر يُحدد بعد مراجعة الطلب</div>
                 </div>
             
                 <div onclick="selectedCable=1; updateCustomizer();" class="p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between border border-outline-variant bg-surface hover:border-primary/50">
@@ -758,7 +758,7 @@
                         </div>
                         <p class="text-xs text-on-surface-variant mb-3">للاستخدام اليومي والمسارح والحفلات والربط الميداني</p>
                     </div>
-                    <div class="text-xs text-on-surface-variant">السعر يُحدد بعد مراجعة الطلب</div>
+                    <div class="text-xs text-on-surface-variant cable-price-label">السعر يُحدد بعد مراجعة الطلب</div>
                 </div>
             </div>
     </div>
@@ -824,8 +824,8 @@
                 </div>
             </div>
 
-            <p class="text-sm text-on-surface-variant" data-ar="يُحدد السعر بعد مراجعة تفاصيل الكابل." data-en="Price will be confirmed after reviewing the cable details.">يُحدد السعر بعد مراجعة تفاصيل الكابل.</p>
-            <div class="hidden flex items-center justify-between pt-2 border-t border-dashed border-outline-variant">
+            <p id="builderPriceNote" class="text-sm text-on-surface-variant" data-ar="يُحدد السعر بعد مراجعة تفاصيل الكابل." data-en="Price will be confirmed after reviewing the cable details.">يُحدد السعر بعد مراجعة تفاصيل الكابل.</p>
+            <div id="builderTotalPriceRow" class="hidden flex items-center justify-between pt-2 border-t border-dashed border-outline-variant">
                 <span class="text-sm text-on-surface-variant" data-ar="السعر الإجمالي:" data-en="Total Price:">السعر الإجمالي:</span>
                 <span id="totalPrice" class="text-3xl font-black text-primary stat-number">٦٣٠ ج.م</span>
             </div>
@@ -928,8 +928,8 @@
                 <div id="cartMemberPerkBadge" class="hidden"></div>
 
                 <!-- Price Breakdown Rows -->
-                <p class="text-sm text-on-surface-variant" data-ar="سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب." data-en="Product and shipping prices will be confirmed after reviewing your order.">سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب.</p>
-                <div class="hidden space-y-3 text-xs sm:text-sm">
+                <p id="cartPriceNote" class="text-sm text-on-surface-variant" data-ar="سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب." data-en="Product and shipping prices will be confirmed after reviewing your order.">سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب.</p>
+                <div id="cartPriceBreakdown" class="hidden space-y-3 text-xs sm:text-sm">
                     <div class="flex justify-between items-center text-on-surface-variant">
                         <span data-ar="إجمالي المنتجات:" data-en="Items Subtotal:">إجمالي المنتجات:</span>
                         <span id="cartItemsSubtotalText" class="font-bold text-on-surface stat-number">0 ج.م</span>
@@ -941,7 +941,7 @@
                 </div>
 
                 <!-- Total Row -->
-                <div class="hidden pt-4 border-t border-black/[0.06] flex justify-between items-baseline">
+                <div id="cartTotalRow" class="hidden pt-4 border-t border-black/[0.06] flex justify-between items-baseline">
                     <div>
                         <span class="text-xs font-bold text-on-surface block" data-ar="الإجمالي (قبل الشحن)" data-en="Subtotal (Before Shipping)">الإجمالي (قبل الشحن)</span>
                         <span class="text-[11px] text-on-surface-variant" data-ar="شامل الفحص وضمان الصناعة" data-en="Includes full warranty">شامل الفحص وضمان الصناعة</span>
@@ -1055,22 +1055,22 @@
 
             <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant space-y-1.5 text-xs">
                 <p class="text-on-surface-variant" data-ar="سيتم تأكيد السعر النهائي وتكلفة الشحن بعد مراجعة الطلب." data-en="The final price and shipping cost will be confirmed after reviewing your order.">سيتم تأكيد السعر النهائي وتكلفة الشحن بعد مراجعة الطلب.</p>
-                <div class="hidden flex justify-between text-on-surface-variant"><span data-ar="إجمالي الكابلات والتوصيلات:" data-en="Cables &amp; Links Subtotal:">إجمالي الكابلات والتوصيلات:</span><span id="checkoutSubtotal" class="font-bold">0 ج.م</span></div>
-                <div class="hidden flex justify-between text-on-surface-variant"><span data-ar="الشحن السريع:" data-en="Shipping:">الشحن السريع:</span><span id="checkoutShipping" class="font-bold">0 ج.م</span></div>
+                <div id="checkoutSubtotalRow" class="hidden flex justify-between text-on-surface-variant"><span data-ar="إجمالي الكابلات والتوصيلات:" data-en="Cables &amp; Links Subtotal:">إجمالي الكابلات والتوصيلات:</span><span id="checkoutSubtotal" class="font-bold">0 ج.م</span></div>
+                <div id="checkoutShippingRow" class="hidden flex justify-between text-on-surface-variant"><span data-ar="الشحن السريع:" data-en="Shipping:">الشحن السريع:</span><span id="checkoutShipping" class="font-bold">0 ج.م</span></div>
                 <div id="couponDiscountRow" class="hidden flex justify-between text-green-700 font-bold">
                     <span data-ar="الخصم المطبق:" data-en="Discount:">الخصم المطبق:</span>
                     <span id="checkoutDiscount">-0 ج.م</span>
                 </div>
-                <div class="hidden flex justify-between text-base font-extrabold text-primary border-t border-outline-variant pt-2 mt-1"><span data-ar="الإجمالي النهائي:" data-en="Total:">الإجمالي النهائي:</span><span id="checkoutFinalTotal">0 ج.م</span></div>
+                <div id="checkoutTotalRow" class="hidden flex justify-between text-base font-extrabold text-primary border-t border-outline-variant pt-2 mt-1"><span data-ar="الإجمالي النهائي:" data-en="Total:">الإجمالي النهائي:</span><span id="checkoutFinalTotal">0 ج.م</span></div>
                 
                 <!-- Deposit Box (#34) -->
                 <div id="depositInfoRow" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-amber-800 text-[11px] mt-2 hidden">
                     <p data-ar="سيتم تأكيد العربون بعد مراجعة تفاصيل الطلب." data-en="The deposit will be confirmed after reviewing your order.">سيتم تأكيد العربون بعد مراجعة تفاصيل الطلب.</p>
-                    <div class="hidden flex justify-between font-bold">
+                    <div id="checkoutDepositAmountRow" class="hidden flex justify-between font-bold">
                         <span data-ar="العربون المطلوب للتجهيز:" data-en="Required Deposit:">العربون المطلوب للتجهيز:</span>
                         <span id="checkoutDepositAmount">0 ج.م</span>
                     </div>
-                    <div class="hidden flex justify-between text-amber-700 mt-0.5">
+                    <div id="checkoutRemainingAmountRow" class="hidden flex justify-between text-amber-700 mt-0.5">
                         <span data-ar="المتبقي عند الاستلام:" data-en="Remaining on Delivery:">المتبقي عند الاستلام:</span>
                         <span id="checkoutRemainingAmount">0 ج.م</span>
                     </div>
@@ -1245,6 +1245,7 @@
             const badge = c.popular ? `<span class="bg-primary text-white text-[0.65rem] font-bold px-2 py-0.5 rounded-full">${isAr ? 'الأعلى طلباً' : 'Popular'}</span>` : '';
             const cName = isAr ? c.nameAr : (c.nameEn || c.nameAr);
             const cDesc = isAr ? c.descAr : (c.descEn || c.descAr);
+            const showCablePrices = ProCable.getSettings().priceVisibility?.cable === true;
 
             cableGrid.innerHTML += `
                 <div onclick="selectedCable=${idx}; updateCustomizer();" class="p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between ${cls}">
@@ -1256,7 +1257,7 @@
                         <p class="text-xs text-on-surface-variant mb-3">${ProCable.sanitize(cDesc)}</p>
                     </div>
                     <div class="font-bold text-sm text-primary">
-                        ${isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review'}
+                        ${showCablePrices ? `${ProCable.formatNum(c.pricePerM || 0)} ${isAr ? 'ج.م/م' : 'EGP/m'}` : (isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review')}
                     </div>
                 </div>
             `;
@@ -1270,6 +1271,7 @@
         const nameA = isAr ? connA.nameAr : (connA.nameEn || connA.nameAr);
         const nameB = isAr ? connB.nameAr : (connB.nameEn || connB.nameAr);
         const nameCable = isAr ? cable.nameAr : (cable.nameEn || cable.nameAr);
+        const showCablePrices = ProCable.getSettings().priceVisibility?.cable === true;
 
         const visualDisplayA = connA.image 
             ? `<img src="${ProCable.sanitize(connA.image)}" class="max-h-24 max-w-full object-contain rounded-xl drop-shadow-md" alt="${ProCable.sanitize(nameA)}"/>` 
@@ -1277,6 +1279,7 @@
         document.getElementById('imgDisplayA').innerHTML = visualDisplayA;
         document.getElementById('titleA').innerText = nameA;
         document.getElementById('priceDisplayA').innerText = `${ProCable.formatNum(connA.price)} ${currency}`;
+        document.getElementById('priceDisplayA').classList.toggle('hidden', !showCablePrices);
 
         const visualDisplayB = connB.image 
             ? `<img src="${ProCable.sanitize(connB.image)}" class="max-h-24 max-w-full object-contain rounded-xl drop-shadow-md" alt="${ProCable.sanitize(nameB)}"/>` 
@@ -1284,6 +1287,7 @@
         document.getElementById('imgDisplayB').innerHTML = visualDisplayB;
         document.getElementById('titleB').innerText = nameB;
         document.getElementById('priceDisplayB').innerText = `${ProCable.formatNum(connB.price)} ${currency}`;
+        document.getElementById('priceDisplayB').classList.toggle('hidden', !showCablePrices);
 
         document.getElementById('sumA').innerText = nameA;
         document.getElementById('sumB').innerText = nameB;
@@ -1293,6 +1297,8 @@
         const singleCost = connA.price + connB.price + (cable.pricePerM * currentLength);
         const total = singleCost * quantity;
         document.getElementById('totalPrice').innerText = `${ProCable.formatNum(total)} ${currency}`;
+        document.getElementById('builderTotalPriceRow').classList.toggle('hidden', !showCablePrices);
+        document.getElementById('builderPriceNote').classList.toggle('hidden', showCablePrices);
 
         // Deposit Info notice
         const s = ProCable.getSettings();
@@ -1366,6 +1372,8 @@
         const isAr = ProCable.getLang() === 'ar';
         const currency = isAr ? 'ج.م' : 'EGP';
         const unit = isAr ? 'م' : 'm';
+        const visibility = Object.assign({ store: false, cart: false, cable: false, shipping: false, whatsapp: false }, ProCable.getSettings().priceVisibility || {});
+        const showCartPrices = visibility.cart === true;
 
         ProCable.updateCartBadges();
 
@@ -1384,6 +1392,9 @@
         emptyMsg.classList.add('hidden');
         if (contentWrapper) contentWrapper.classList.remove('hidden');
         if (summary) summary.classList.remove('hidden');
+        document.getElementById('cartPriceBreakdown')?.classList.toggle('hidden', !showCartPrices);
+        document.getElementById('cartTotalRow')?.classList.toggle('hidden', !showCartPrices);
+        document.getElementById('cartPriceNote')?.classList.toggle('hidden', showCartPrices);
 
         // Check active member perks
         if (memberBadge) {
@@ -1475,9 +1486,7 @@
                     <!-- Bottom Action Bar: Unit Price, Quantity Stepper, Item Total (Zero Overlap) -->
                     <div class="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-4">
                         <!-- Unit Price -->
-                        <div class="text-xs text-on-surface-variant font-medium">
-                            <span>${isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review'}</span>
-                        </div>
+                        ${showCartPrices ? `<div class="text-xs text-on-surface font-bold">${isAr ? 'إجمالي البند:' : 'Item total:'} ${ProCable.formatNum(item.price)} ${currency}</div>` : `<div class="text-xs text-on-surface-variant font-medium">${isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review'}</div>`}
 
                         <!-- Apple Pill Stepper -->
                         <div class="flex items-center bg-surface-container-high rounded-full p-1 border border-black/[0.06]">
@@ -1492,7 +1501,7 @@
         });
 
         list.innerHTML = html;
-        const totalFormatted = `${ProCable.formatNum(grandTotal)} ${currency}`;
+        const totalFormatted = showCartPrices ? `${ProCable.formatNum(grandTotal)} ${currency}` : '';
         if (totalSumEl) totalSumEl.innerText = totalFormatted;
         if (subtotalTextEl) subtotalTextEl.innerText = totalFormatted;
     }
@@ -1546,6 +1555,7 @@
         const select = document.getElementById('custGov');
         const rates = ProCable.getShipping();
         const isAr = ProCable.getLang() === 'ar';
+        const showShippingPrices = ProCable.getSettings().priceVisibility?.shipping === true;
         // Only show enabled governorates
         const activeRates = rates.filter(r => r.enabled !== false);
         select.innerHTML = activeRates.map(r => {
@@ -1553,7 +1563,8 @@
             const deliveryTime = isAr ? (r.deliveryTimeAr || '') : (r.deliveryTimeEn || r.deliveryTimeAr || '');
             const timeLabel = deliveryTime ? ` — ${deliveryTime}` : '';
             const fee = Number.isFinite(Number(r.fee)) ? Math.max(0, Number(r.fee)) : 0;
-            return `<option value="${ProCable.sanitize(String(r.id))}" data-fee="${fee}">${ProCable.sanitize(govName)}${ProCable.sanitize(timeLabel)}</option>`;
+            const feeLabel = showShippingPrices ? ` — ${ProCable.formatNum(fee)} ${isAr ? 'ج.م' : 'EGP'}` : '';
+            return `<option value="${ProCable.sanitize(String(r.id))}" data-fee="${fee}">${ProCable.sanitize(govName)}${ProCable.sanitize(timeLabel)}${feeLabel}</option>`;
         }).join('');
     }
 
@@ -1650,6 +1661,7 @@
         let fee = parseInt(selectedOpt ? selectedOpt.getAttribute('data-fee') : '45') || 45;
         const isAr = ProCable.getLang() === 'ar';
         const currency = isAr ? 'ج.م' : 'EGP';
+        const visibility = Object.assign({ store: false, cart: false, cable: false, shipping: false, whatsapp: false }, ProCable.getSettings().priceVisibility || {});
 
         const cart = ProCable.getCart();
         const subtotal = cart.reduce((sum, i) => sum + i.price, 0);
@@ -1695,6 +1707,12 @@
             ? `0 ${currency} (${freeShipReason})`
             : `${ProCable.formatNum(fee)} ${currency}`;
         document.getElementById('checkoutFinalTotal').innerText = `${ProCable.formatNum(finalTotal)} ${currency}`;
+        document.getElementById('checkoutSubtotalRow')?.classList.toggle('hidden', !visibility.cart);
+        document.getElementById('checkoutTotalRow')?.classList.toggle('hidden', !visibility.cart);
+        document.getElementById('checkoutShippingRow')?.classList.toggle('hidden', !visibility.shipping);
+        document.getElementById('couponDiscountRow')?.classList.toggle('hidden', !visibility.cart || appliedDiscountVal <= 0);
+        document.getElementById('checkoutDepositAmountRow')?.classList.toggle('hidden', !visibility.cart);
+        document.getElementById('checkoutRemainingAmountRow')?.classList.toggle('hidden', !visibility.cart);
 
         // Deposit calculation (#34)
         const s = ProCable.getSettings();
