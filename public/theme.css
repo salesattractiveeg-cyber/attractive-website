@@ -1,0 +1,79 @@
+/* Attractive light/dark palette shared across the public site and admin. */
+:root {
+    color-scheme: light;
+    --site-bg: #f5f5f7;
+    --site-surface: #ffffff;
+    --site-soft: #f0f1f4;
+    --site-elevated: #ffffff;
+    --site-text: #1d1d1f;
+    --site-muted: #6e6e73;
+    --site-border: #e2e3e8;
+    --site-field: #f4f4f6;
+    --site-shadow: 0 18px 50px rgba(20, 24, 34, .12);
+}
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --site-bg: #111318;
+    --site-surface: #191c22;
+    --site-soft: #20242c;
+    --site-elevated: #252a33;
+    --site-text: #f3f4f6;
+    --site-muted: #b0b6c2;
+    --site-border: #353b46;
+    --site-field: #20242c;
+    --site-shadow: 0 20px 56px rgba(0, 0, 0, .38);
+}
+html, body { background-color: var(--site-bg); color: var(--site-text); }
+body { transition: background-color .22s ease, color .22s ease; }
+html[data-theme="dark"] [class~="bg-surface"],
+html[data-theme="dark"] [class~="bg-surface-container-low"] { background-color: var(--site-bg) !important; }
+html[data-theme="dark"] [class~="bg-white"],
+html[data-theme="dark"] [class~="bg-white/90"],
+html[data-theme="dark"] [class~="bg-white/95"],
+html[data-theme="dark"] [class~="bg-surface-container-lowest"] { background-color: var(--site-surface) !important; }
+html[data-theme="dark"] [class~="bg-surface-container"],
+html[data-theme="dark"] [class~="bg-surface-container-high"] { background-color: var(--site-soft) !important; }
+html[data-theme="dark"] [class~="bg-surface-container-highest"] { background-color: var(--site-elevated) !important; }
+html[data-theme="dark"] [class~="bg-gray-50"],
+html[data-theme="dark"] [class~="bg-gray-100"],
+html[data-theme="dark"] [class~="bg-gray-200"],
+html[data-theme="dark"] [class~="bg-gray-300"],
+html[data-theme="dark"] [class~="bg-gray-50/70"] { background-color: var(--site-soft) !important; }
+html[data-theme="dark"] [class~="text-on-surface"],
+html[data-theme="dark"] [class~="text-gray-900"],
+html[data-theme="dark"] [class~="text-gray-800"],
+html[data-theme="dark"] [class~="text-black"] { color: var(--site-text) !important; }
+html[data-theme="dark"] [class~="text-on-surface-variant"],
+html[data-theme="dark"] [class~="text-gray-700"],
+html[data-theme="dark"] [class~="text-gray-600"],
+html[data-theme="dark"] [class~="text-gray-500"],
+html[data-theme="dark"] [class~="text-gray-400"] { color: var(--site-muted) !important; }
+html[data-theme="dark"] [class~="border-outline-variant"],
+html[data-theme="dark"] [class~="border-black/5"],
+html[data-theme="dark"] [class~="border-black/10"],
+html[data-theme="dark"] [class~="border-black/[0.06]"],
+html[data-theme="dark"] [class~="border-black/[0.08]"],
+html[data-theme="dark"] [class~="border-black/[0.1]"] { border-color: var(--site-border) !important; }
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea { background-color: var(--site-field) !important; color: var(--site-text) !important; border-color: var(--site-border) !important; }
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder { color: #9299a6; }
+html[data-theme="dark"] table thead,
+html[data-theme="dark"] table thead tr,
+html[data-theme="dark"] table tbody tr:hover { background-color: var(--site-soft) !important; }
+html[data-theme="dark"] nav.apple-nav > div:first-child,
+html[data-theme="dark"] #adminApp > header,
+html[data-theme="dark"] #adminApp aside,
+html[data-theme="dark"] #adminApp > div > main { background-color: color-mix(in srgb, var(--site-surface) 92%, transparent) !important; border-color: var(--site-border) !important; }
+html[data-theme="dark"] #authGate { background: radial-gradient(ellipse at 50% 0%, #252a33 0%, var(--site-bg) 72%) !important; }
+html[data-theme="dark"] #authGate > div { background-color: var(--site-surface) !important; border-color: var(--site-border) !important; }
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] [role="dialog"] { background-color: var(--site-surface); color: var(--site-text); }
+html[data-theme="dark"] .site-theme-toggle { color: var(--site-text); background: var(--site-soft); border-color: var(--site-border); }
+.site-theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; flex: 0 0 auto; border: 1px solid rgba(30, 30, 40, .12); border-radius: 999px; background: rgba(255,255,255,.72); color: #292b31; transition: background .2s, color .2s, transform .2s; }
+.site-theme-toggle:hover { transform: translateY(-1px); background: #fff; }
+.site-theme-toggle .material-symbols-outlined { font-size: 20px; }
+html[data-theme="dark"] .site-theme-toggle:hover { background: var(--site-elevated); }
+@media (max-width: 480px) { nav.apple-nav .mobile-nav-controls .site-theme-toggle { width: 32px; height: 32px; } }
+@media (prefers-reduced-motion: reduce) { body, .site-theme-toggle { transition: none; } }
