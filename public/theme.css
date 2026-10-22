@@ -25,9 +25,14 @@ html[data-theme="dark"] {
 }
 html, body { background-color: var(--site-bg); color: var(--site-text); }
 body { transition: background-color .22s ease, color .22s ease; }
+html[data-theme="dark"],
+html[data-theme="dark"] body { background-color: var(--site-bg) !important; color: var(--site-text) !important; }
 html[data-theme="dark"] [class~="bg-surface"],
 html[data-theme="dark"] [class~="bg-surface-container-low"] { background-color: var(--site-bg) !important; }
 html[data-theme="dark"] [class~="bg-white"],
+html[data-theme="dark"] [class~="bg-white/50"],
+html[data-theme="dark"] [class~="bg-white/70"],
+html[data-theme="dark"] [class~="bg-white/80"],
 html[data-theme="dark"] [class~="bg-white/90"],
 html[data-theme="dark"] [class~="bg-white/95"],
 html[data-theme="dark"] [class~="bg-surface-container-lowest"] { background-color: var(--site-surface) !important; }
