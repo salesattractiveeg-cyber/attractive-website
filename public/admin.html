@@ -6281,20 +6281,52 @@
         loadPaymobConfig();
     }
 
+    let priceVisibilitySaveQueue = Promise.resolve();
     function savePriceVisibilitySettings() {
-        const settings = ProCable.getSettings();
-        settings.priceVisibility = {
-            store: document.getElementById('priceShowStore').checked,
-            cart: document.getElementById('priceShowCart').checked,
-            cable: document.getElementById('priceShowCable').checked,
-            shipping: document.getElementById('priceShowShipping').checked,
-            whatsapp: document.getElementById('priceShowWhatsApp').checked
-        };
-        ProCable.saveSettings(settings);
+        const saveButton = document.querySelector('button[onclick="savePriceVisibilitySettings()"]');
         const saved = document.getElementById('priceVisibilitySavedMsg');
-        if (saved) { saved.classList.remove('hidden'); setTimeout(() => saved.classList.add('hidden'), 3000); }
-        ProCable.showToast('تم حفظ إعدادات ظهور الأسعار للعملاء', 'success');
+        if (saved) saved.classList.add('hidden');
+        if (saveButton) { saveButton.disabled = true; saveButton.dataset.originalText ||= saveButton.textContent; saveButton.textContent = 'جارٍ الحفظ…'; }
+
+        priceVisibilitySaveQueue = priceVisibilitySaveQueue.then(async () => {
+            // Wait for the initial server pull, otherwise a quick admin change after login
+            // could be rejected before the dashboard has marked its data as synchronized.
+            if (!ProCable._serverSynced && !ProCable._isLocalAdminMode()) {
+                const synced = await ProCable.syncFromServer();
+                if (!synced) throw new Error('تعذر تحميل إعدادات الموقع من السيرفر. حدّث الصفحة وسجّل الدخول مجددًا.');
+            }
+            const settings = ProCable.getSettings();
+            const previous = Object.assign({}, settings.priceVisibility || {});
+            settings.priceVisibility = {
+                store: document.getElementById('priceShowStore').checked,
+                cart: document.getElementById('priceShowCart').checked,
+                cable: document.getElementById('priceShowCable').checked,
+                shipping: document.getElementById('priceShowShipping').checked,
+                whatsapp: document.getElementById('priceShowWhatsApp').checked
+            };
+            const ok = await ProCable.saveSettings(settings);
+            if (!ok) {
+                settings.priceVisibility = previous;
+                localStorage.setItem('attractive_settings', JSON.stringify(settings));
+                localStorage.setItem('procable_settings', JSON.stringify(settings));
+                throw new Error('لم يصل التعديل إلى الموقع. تأكد من اتصال الإنترنت ثم حاول مرة أخرى.');
+            }
+            return true;
+        }).then(() => {
+            if (saved) { saved.textContent = '✓ تم حفظ الإعدادات وتفعيلها'; saved.classList.remove('hidden'); setTimeout(() => saved.classList.add('hidden'), 4000); }
+            ProCable.showToast('تم حفظ إعدادات ظهور الأسعار وتفعيلها', 'success');
+        }).catch((error) => {
+            ProCable.showToast(error.message || 'تعذر حفظ إعدادات ظهور الأسعار', 'error');
+        }).finally(() => {
+            if (saveButton) { saveButton.disabled = false; saveButton.textContent = saveButton.dataset.originalText || 'حفظ إعدادات ظهور الأسعار'; }
+        });
+        return priceVisibilitySaveQueue;
     }
+
+    ['priceShowStore', 'priceShowCart', 'priceShowCable', 'priceShowShipping', 'priceShowWhatsApp'].forEach((id) => {
+        const checkbox = document.getElementById(id);
+        if (checkbox) checkbox.addEventListener('change', savePriceVisibilitySettings);
+    });
 
     async function loadGoogleSheetsIntegration() {
         const input = document.getElementById('googleSheetsWebhookUrl');

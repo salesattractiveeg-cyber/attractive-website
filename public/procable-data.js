@@ -1562,10 +1562,11 @@ const ProCable = {
         delete obj.adminPassHash;
         localStorage.setItem('attractive_settings', JSON.stringify(obj));
         localStorage.setItem('procable_settings', JSON.stringify(obj));
-        this.pushToServer('settings', obj);
+        const savedToServer = this.pushToServer('settings', obj);
         this.applyThemeColor();
         this.applyBranding();
         this.applySiteBackground();
+        return savedToServer;
     },
 
     // Dynamic Theme Color Applicator

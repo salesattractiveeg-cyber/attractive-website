@@ -73,7 +73,9 @@ export default async function handler(req, res) {
                 // Public catalog content is identical for every visitor. Keep it
                 // at the regional edge briefly so a traffic spike does not fan
                 // out into one Blob read per visitor. Browser caching stays off.
-                res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=60, stale-while-revalidate=60');
+                // Settings such as price visibility must take effect promptly after an
+                // admin save; keep public catalog cache short and never serve stale data.
+                res.setHeader('Vercel-CDN-Cache-Control', 'public, s-maxage=5');
                 res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
             }
             res.setHeader('Vary', 'Authorization');
