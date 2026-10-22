@@ -834,8 +834,8 @@ We support customers with product selection and bill of quantities preparation. 
 
     path2TitleAr: "استوديو تفصيل كابلات الصوت الاحترافية",
     path2TitleEn: "Custom Pro Audio Cable Studio",
-    path2DescAr: "صمم كابلك الصوتي بنفسك: اختر الطرف الأول (XLR، TRS، RCA، Speakon)، الطرف الثاني، خامة النحاس النقي OFC، والطول الذي تحتاجه بدقة بالسنتيمتر مع حساب السعر والعربون لحظياً.",
-    path2DescEn: "Design your custom audio cable: select connector A & B, oxygen-free copper grade, and exact length with instant price & deposit calculation.",
+    path2DescAr: "صمم كابلك الصوتي بنفسك: اختر الطرف الأول (XLR، TRS، RCA، Speakon)، الطرف الثاني، خامة النحاس النقي OFC، والطول الذي تحتاجه بدقة بالسنتيمتر، ثم أرسل التفاصيل لمراجعة الطلب.",
+    path2DescEn: "Design your custom audio cable: select both connectors, oxygen-free copper grade, and exact length, then submit the details for order review.",
 
     // Trust Badges
     badge1Val: "100%",
@@ -1762,7 +1762,7 @@ const ProCable = {
         if (c) {
             let discount = c.type === 'percent' ? Math.round(subtotal * (c.value / 100)) : c.value;
             discount = Math.min(discount, subtotal);
-            return { valid: true, discount, coupon: c, message: isAr ? `تم تفعيل كود الخصم! وفرت ${discount} ج.م` : `Applied ${discount} EGP discount` };
+            return { valid: true, discount, coupon: c, message: isAr ? 'تم تفعيل كود الخصم على طلبك' : 'Discount code applied to your order' };
         }
 
         // 2. Check individual user accounts custom coupons
@@ -1776,7 +1776,7 @@ const ProCable = {
                 valid: true,
                 discount,
                 coupon: { code: cleanCode, type: 'percent', value: pct, isUserCoupon: true, userName: userWithCoupon.name },
-                message: isAr ? `تم تفعيل كوبون العضوية الخاص لـ (${userWithCoupon.name})! خصم ${pct}% (-${discount} ج.م)` : `Applied member discount (${pct}%): -${discount} EGP`
+                message: isAr ? `تم تفعيل كوبون العضوية الخاص لـ (${userWithCoupon.name})! خصم ${pct}%` : `Applied member discount (${pct}%)`
             };
         }
 
@@ -2602,7 +2602,8 @@ const ProCable = {
         }
 
         const isAr = this.getLang() === 'ar';
-        const text = isAr ? (s.promoTextAr || s.promoTextEn) : (s.promoTextEn || s.promoTextAr);
+        const rawText = isAr ? (s.promoTextAr || s.promoTextEn) : (s.promoTextEn || s.promoTextAr);
+        const text = String(rawText || '').replace(/(?:بمبلغ\s*)?[\d٠-٩][\d٠-٩,٬.]*\s*(?:ج\.م|جنيه(?:اً)?|EGP|LE)(?:\s*أو أكثر)?/giu, '').replace(/\s+/g, ' ').trim();
         const badge = isAr ? (s.promoBadgeAr || s.promoBadgeEn) : (s.promoBadgeEn || s.promoBadgeAr);
         const linkText = isAr ? (s.promoLinkTextAr || 'تسوق الآن') : (s.promoLinkTextEn || 'Shop Now');
         const link = this.safeLinkUrl(s.promoLink || 'store.html');
@@ -2765,7 +2766,7 @@ const ProCable = {
                     </div>
                     <div class="text-end">
                         <span class="text-xs text-gray-400 block">${isAr ? 'الإجمالي' : 'Total'}</span>
-                        <span class="text-sm font-black text-primary">${this.formatNum(ord.total || 0)} ${isAr ? 'ج.م' : 'EGP'}</span>
+                        <span class="text-sm font-black text-primary">${isAr ? 'يُحدد بعد المراجعة' : 'Confirmed after review'}</span>
                     </div>
                 </div>
 
@@ -2776,7 +2777,7 @@ const ProCable = {
                     <div class="pt-2 border-t border-outline-variant text-xs">
                         <span class="font-bold text-gray-700 block mb-1.5">${isAr ? 'محتويات الطلب:' : 'Order Items:'}</span>
                         <div class="space-y-1">
-                            ${ord.items.map(i => `<div class="flex justify-between text-gray-600 text-[11px]"><span>• ${this.sanitize(i.name)} [x${i.qty}]</span><span class="font-bold">${this.formatNum(i.price)} ${isAr ? 'ج.م' : 'EGP'}</span></div>`).join('')}
+                            ${ord.items.map(i => `<div class="flex justify-between text-gray-600 text-[11px]"><span>• ${this.sanitize(i.name)} [x${i.qty}]</span></div>`).join('')}
                         </div>
                     </div>
                 ` : ''}
@@ -2937,7 +2938,6 @@ const ProCable = {
         const rows = ord.items.map((it, i) => {
             const custom = it.type !== 'ready';
             const locked = custom && e.customCables === 'off';
-            const unit = it.unitPrice || (it.price / Math.max(1, parseInt(it.qty) || 1));
             const ctl = locked
                 ? `<span class="text-[10px] text-gray-400">${isAr ? 'لا يمكن تعديل الكابل المخصص' : 'Custom cable can’t be edited'}</span>`
                 : `<div class="flex items-center gap-1.5">
@@ -2945,7 +2945,7 @@ const ProCable = {
                         ${F.remove ? `<button type="button" onclick="ProCable._editRemove(${i})" id="oeRm${i}" class="ms-1 text-[10px] font-bold text-error">${isAr ? 'حذف' : 'Remove'}</button>` : ''}
                    </div>`;
             return `<div id="oeRow${i}" class="flex items-center justify-between gap-2 bg-surface p-2.5 rounded-xl border border-outline-variant">
-                        <div class="min-w-0"><span class="block text-[11px] font-bold truncate">${esc(it.name || it.title || '#' + (i + 1))}</span><span class="text-[10px] text-gray-400">${this.formatNum(unit)} ${isAr ? 'ج.م' : 'EGP'}</span></div>${ctl}</div>`;
+                        <div class="min-w-0"><span class="block text-[11px] font-bold truncate">${esc(it.name || it.title || '#' + (i + 1))}</span></div>${ctl}</div>`;
         }).join('');
         const addr = F.address ? `<div class="space-y-2"><label class="block text-[11px] font-bold">${isAr ? 'المحافظة' : 'Governorate'}</label><input id="oeGov" class="${inp}" value="${esc(ord.governorate)}"/><label class="block text-[11px] font-bold">${isAr ? 'العنوان بالتفصيل' : 'Address details'}</label><textarea id="oeAddr" rows="2" class="${inp}">${esc(ord.addressDetails)}</textarea></div>` : '';
         const contact = F.contact ? `<div class="grid grid-cols-2 gap-2"><div><label class="block text-[11px] font-bold mb-1">${isAr ? 'اسم المستلم' : 'Name'}</label><input id="oeName" class="${inp}" value="${esc(ord.customerName)}"/></div><div><label class="block text-[11px] font-bold mb-1">${isAr ? 'الموبايل' : 'Phone'}</label><input id="oePhone" type="tel" class="${inp}" value="${esc(ord.customerPhone)}"/></div></div>` : '';
@@ -3069,23 +3069,12 @@ const ProCable = {
                 if (i.length) itemDesc += ` (${i.length} ${isAr ? 'م' : 'm'})`;
                 if (i.cable) itemDesc += ` [${i.cable}]`;
                 if (i.customLabel) itemDesc += ` [طباعة: ${i.customLabel}]`;
-                lines.push(`• ${itemDesc} [x${i.qty || 1}] = ${i.price} ${isAr ? 'ج.م' : 'EGP'}`);
+                lines.push(`• ${itemDesc} [x${i.qty || 1}]`);
             });
         }
 
         lines.push("─────────────────────");
-        if (s.showSubtotal) lines.push(`💰 *${isAr ? 'قيمة المنتجات' : 'Subtotal'}:* ${order.subtotal || order.total} ${isAr ? 'ج.م' : 'EGP'}`);
-        if (s.showShippingFee && (order.shippingFee !== undefined && order.shippingFee !== null)) {
-            const shipText = order.shippingFee === 0 ? (isAr ? 'مجاني 🎁' : 'Free 🎁') : `${order.shippingFee} ${isAr ? 'ج.م' : 'EGP'}`;
-            lines.push(`🚚 *${isAr ? 'الشحن' : 'Shipping'}:* ${shipText}`);
-        }
-        if (order.discount) lines.push(`🏷️ *${isAr ? 'الخصم' : 'Discount'}:* -${order.discount} ${isAr ? 'ج.م' : 'EGP'}`);
-        lines.push(`💵 *${isAr ? 'الإجمالي الكلي' : 'Total Due'}:* ${order.total} ${isAr ? 'ج.م' : 'EGP'}`);
-
-        if (s.showDeposit && order.deposit && order.deposit > 0) {
-            lines.push(`⚡ *${isAr ? 'العربون المطلوب / المدفوع' : 'Deposit Required/Paid'}:* ${order.deposit} ${isAr ? 'ج.م' : 'EGP'}`);
-            lines.push(`💳 *${isAr ? 'المتبقي عند الاستلام' : 'Remaining on Delivery'}:* ${order.remaining || (order.total - order.deposit)} ${isAr ? 'ج.م' : 'EGP'}`);
-        }
+        lines.push(isAr ? '💬 سيتم تأكيد الأسعار وتكلفة الشحن بعد مراجعة الطلب.' : '💬 Prices and shipping will be confirmed after reviewing the order.');
 
         if (s.showPaymentMethod && order.paymentMethod) {
             lines.push(`💼 *${isAr ? 'طريقة الدفع' : 'Payment Method'}:* ${order.paymentMethod}`);
@@ -4104,8 +4093,6 @@ const ProCable = {
         `;
 
         const allProducts = this.getProducts();
-        const currency = isAr ? 'ج.م' : 'EGP';
-
         const panelsHtml = megaItems.map(item => {
             const colsHtml = (item.megaMenuColumns || []).map(col => {
                 const colHead = isAr ? (col.headingAr || col.headingEn || '') : (col.headingEn || col.headingAr || '');
@@ -4117,10 +4104,8 @@ const ProCable = {
                     const label = prod ? (isAr ? prod.nameAr : (prod.nameEn || prod.nameAr)) : (isAr ? (ci.labelAr || ci.labelEn) : (ci.labelEn || ci.labelAr));
                     const url = prod ? `store.html#product-${prod.id}` : (ci.url || '#');
                     const showImg = ci.showImage === true || (prod && ci.showImage !== false);
-                    const showPrice = ci.showPrice === true || (prod && ci.showPrice !== false);
+                    const showPrice = false;
                     const imgUrl = prod ? (prod.images && prod.images[0] ? prod.images[0] : (prod.image || '')) : (ci.image || '');
-                    const priceVal = prod ? prod.price : ci.price;
-
                     if (showImg || showPrice) {
                         return `
                             <a href="${this.sanitize(this.safeLinkUrl(url) || '#')}" class="agy-mm-link group/item flex items-center gap-3 py-2 px-2.5 rounded-xl hover:bg-black/[0.03] transition-all">
@@ -4528,7 +4513,7 @@ const ProCable = {
                                 </span>
                             </div>
                             <div class="font-bold text-xs text-on-surface">${isAr ? 'شحن مجاني' : 'Free Shipping'}</div>
-                            <div class="text-[10px] text-on-surface-variant">${isAr ? 'شحن 0 ج.م لكافة محافظات مصر' : 'Zero shipping fees on all orders'}</div>
+                            <div class="text-[10px] text-on-surface-variant">${isAr ? 'شحن مجاني لكافة محافظات مصر' : 'Free shipping across Egypt'}</div>
                         </div>
 
                         <div class="p-3 rounded-2xl border ${user.discountPercent > 0 ? 'bg-primary/5 border-primary/20' : 'bg-surface border-outline-variant'}">

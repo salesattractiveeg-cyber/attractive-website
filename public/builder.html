@@ -272,7 +272,7 @@
                 <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2 flex-1 justify-center text-center truncate">
                         <span class="bg-white/20 text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse flex-shrink-0">عرض حصري</span>
-                        <span class="truncate">🔥 عرض الافتتاح: شحن مجاني لكافة محافظات مصر عند الطلب بمبلغ 1500 ج.م أو أكثر لفترة محدودة!</span>
+                        <span class="truncate">🔥 عرض الافتتاح: شحن مجاني لكافة محافظات مصر لفترة محدودة!</span>
                         <a href="store.html" class="underline hover:text-white/80 font-black flex items-center gap-0.5 flex-shrink-0"><span>تسوق الآن</span><span class="material-symbols-outlined text-xs">arrow_forward</span></a>
                     </div>
                     <button onclick="ProCable.dismissPromoBanner()" class="text-white/70 hover:text-white text-base leading-none p-1 flex-shrink-0" title="إغلاق">&#10005;</button>
@@ -636,7 +636,7 @@
         <div class="apple-card md:col-span-5 bg-white rounded-[28px] p-6 hover:shadow-md transition shadow-sm">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="text-sm font-bold text-on-surface-variant" data-ar="الطرف الأول (A)" data-en="First Connector (A)">الطرف الأول (A)</h3>
-                <div class="text-xs font-bold text-primary bg-primary-fixed px-3 py-1 rounded-full stat-number" id="priceDisplayA">٩٠ ج.م</div>
+                <div class="hidden text-xs font-bold text-primary bg-primary-fixed px-3 py-1 rounded-full stat-number" id="priceDisplayA">٩٠ ج.م</div>
             </div>
             <div class="h-24 flex items-center justify-center drop-shadow-sm mb-2" id="imgDisplayA"><svg viewBox="0 0 100 100" class="h-full w-auto" aria-hidden="true"><rect x="10" y="38" width="50" height="24" rx="4" fill="#3D3D3F"></rect><rect x="60" y="32" width="25" height="36" rx="3" fill="#1D1D1F"></rect><circle cx="25" cy="45" r="3" fill="#ffffff"></circle><circle cx="25" cy="55" r="3" fill="#ffffff"></circle><circle cx="38" cy="50" r="3" fill="#ffffff"></circle><path d="M85 45 L95 45 M85 50 L95 50 M85 55 L95 55" stroke="var(--primary-color, #C8102E)" stroke-width="2.5"></path></svg></div>
             <div class="text-center font-bold text-base text-on-surface mb-4 tracking-tight" id="titleA">XLR ذكر</div>
@@ -689,7 +689,7 @@
         <div class="apple-card md:col-span-5 bg-white rounded-[28px] p-6 hover:shadow-md transition shadow-sm">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="text-sm font-bold text-on-surface-variant" data-ar="الطرف الثاني (B)" data-en="Second Connector (B)">الطرف الثاني (B)</h3>
-                <div class="text-xs font-bold text-primary bg-primary-fixed px-3 py-1 rounded-full stat-number" id="priceDisplayB">٩٠ ج.م</div>
+                <div class="hidden text-xs font-bold text-primary bg-primary-fixed px-3 py-1 rounded-full stat-number" id="priceDisplayB">٩٠ ج.م</div>
             </div>
             <div class="h-24 flex items-center justify-center drop-shadow-sm mb-2" id="imgDisplayB"><svg viewBox="0 0 100 100" class="h-full w-auto" aria-hidden="true"><rect x="10" y="38" width="50" height="24" rx="4" fill="#3D3D3F"></rect><rect x="60" y="32" width="25" height="36" rx="3" fill="#1D1D1F"></rect><circle cx="75" cy="45" r="2.5" fill="#ffffff" stroke="#6E6E73"></circle><circle cx="75" cy="55" r="2.5" fill="#ffffff" stroke="#6E6E73"></circle><circle cx="68" cy="50" r="2.5" fill="#ffffff" stroke="#6E6E73"></circle></svg></div>
             <div class="text-center font-bold text-base text-on-surface mb-4 tracking-tight" id="titleB">XLR نتاية</div>
@@ -747,9 +747,7 @@
                         </div>
                         <p class="text-xs text-on-surface-variant mb-3">أعلى نقاء واستجابة ترددية لاستوديوهات التسجيل الاحترافية</p>
                     </div>
-                    <div class="font-bold text-sm text-primary">
-                        +٣٠ ج.م <span class="text-xs text-on-surface-variant font-normal">/ متر</span>
-                    </div>
+                    <div class="text-xs text-on-surface-variant">السعر يُحدد بعد مراجعة الطلب</div>
                 </div>
             
                 <div onclick="selectedCable=1; updateCustomizer();" class="p-5 rounded-2xl cursor-pointer transition flex flex-col justify-between border border-outline-variant bg-surface hover:border-primary/50">
@@ -760,9 +758,7 @@
                         </div>
                         <p class="text-xs text-on-surface-variant mb-3">للاستخدام اليومي والمسارح والحفلات والربط الميداني</p>
                     </div>
-                    <div class="font-bold text-sm text-primary">
-                        +٢٠ ج.م <span class="text-xs text-on-surface-variant font-normal">/ متر</span>
-                    </div>
+                    <div class="text-xs text-on-surface-variant">السعر يُحدد بعد مراجعة الطلب</div>
                 </div>
             </div>
     </div>
@@ -828,7 +824,8 @@
                 </div>
             </div>
 
-            <div class="flex items-center justify-between pt-2 border-t border-dashed border-outline-variant">
+            <p class="text-sm text-on-surface-variant" data-ar="يُحدد السعر بعد مراجعة تفاصيل الكابل." data-en="Price will be confirmed after reviewing the cable details.">يُحدد السعر بعد مراجعة تفاصيل الكابل.</p>
+            <div class="hidden flex items-center justify-between pt-2 border-t border-dashed border-outline-variant">
                 <span class="text-sm text-on-surface-variant" data-ar="السعر الإجمالي:" data-en="Total Price:">السعر الإجمالي:</span>
                 <span id="totalPrice" class="text-3xl font-black text-primary stat-number">٦٣٠ ج.م</span>
             </div>
@@ -836,7 +833,7 @@
             <!-- Deposit Alert (#34) -->
             <div id="builderDepositNotice" class="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-amber-800 text-xs flex items-center gap-2">
                 <span class="material-symbols-outlined text-base text-amber-600">info</span>
-                <span id="builderDepositNoticeText" data-ar="هذا الطلب يتطلب عربون مقدم لجدية التصنيع والحجز." data-en="This custom build order requires an upfront deposit to start manufacturing.">العربون المقدر لهذا الكابل: ١٨٩ ج.م (والباقي ٤٤١ ج.م عند الاستلام).</span>
+                <span id="builderDepositNoticeText" data-ar="سيتم تأكيد السعر والعربون بعد مراجعة تفاصيل الكابل." data-en="The price and deposit will be confirmed after reviewing the cable details.">سيتم تأكيد السعر والعربون بعد مراجعة تفاصيل الكابل.</span>
             </div>
 
             <button onclick="addCustomToCart()" class="w-full bg-primary text-white py-3.5 rounded-full font-bold text-sm apple-btn-primary hover:bg-primary-dark transition shadow-md flex items-center justify-center gap-2">
@@ -931,7 +928,8 @@
                 <div id="cartMemberPerkBadge" class="hidden"></div>
 
                 <!-- Price Breakdown Rows -->
-                <div class="space-y-3 text-xs sm:text-sm">
+                <p class="text-sm text-on-surface-variant" data-ar="سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب." data-en="Product and shipping prices will be confirmed after reviewing your order.">سيتم تأكيد أسعار المنتجات والشحن بعد مراجعة الطلب.</p>
+                <div class="hidden space-y-3 text-xs sm:text-sm">
                     <div class="flex justify-between items-center text-on-surface-variant">
                         <span data-ar="إجمالي المنتجات:" data-en="Items Subtotal:">إجمالي المنتجات:</span>
                         <span id="cartItemsSubtotalText" class="font-bold text-on-surface stat-number">0 ج.م</span>
@@ -943,7 +941,7 @@
                 </div>
 
                 <!-- Total Row -->
-                <div class="pt-4 border-t border-black/[0.06] flex justify-between items-baseline">
+                <div class="hidden pt-4 border-t border-black/[0.06] flex justify-between items-baseline">
                     <div>
                         <span class="text-xs font-bold text-on-surface block" data-ar="الإجمالي (قبل الشحن)" data-en="Subtotal (Before Shipping)">الإجمالي (قبل الشحن)</span>
                         <span class="text-[11px] text-on-surface-variant" data-ar="شامل الفحص وضمان الصناعة" data-en="Includes full warranty">شامل الفحص وضمان الصناعة</span>
@@ -1028,7 +1026,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <label class="block text-xs font-bold mb-1 text-on-surface-variant" data-ar="المحافظة *" data-en="Governorate *">المحافظة *</label>
-                    <select id="custGov" onchange="calculateShipping()" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs"><option value="cairo" data-fee="45">القاهرة (٤٥ ج.م) — خلال 24-48 ساعة</option><option value="giza" data-fee="45">الجيزة (٤٥ ج.م) — خلال 24-48 ساعة</option><option value="qalyubia" data-fee="50">القليوبية (٥٠ ج.م) — خلال 24-48 ساعة</option><option value="alex" data-fee="60">الإسكندرية (٦٠ ج.م) — خلال 2-3 أيام</option><option value="beheira" data-fee="65">البحيرة (٦٥ ج.م) — خلال 2-3 أيام</option><option value="kafr-sheikh" data-fee="65">كفر الشيخ (٦٥ ج.م) — خلال 2-3 أيام</option><option value="gharbia" data-fee="65">الغربية (٦٥ ج.م) — خلال 2-3 أيام</option><option value="menofia" data-fee="60">المنوفية (٦٠ ج.م) — خلال 2-3 أيام</option><option value="dakahlia" data-fee="65">الدقهلية (٦٥ ج.م) — خلال 2-3 أيام</option><option value="sharqia" data-fee="60">الشرقية (٦٠ ج.م) — خلال 2-3 أيام</option><option value="damietta" data-fee="65">دمياط (٦٥ ج.م) — خلال 2-3 أيام</option><option value="port-said" data-fee="70">بورسعيد (٧٠ ج.م) — خلال 2-3 أيام</option><option value="ismailia" data-fee="65">الإسماعيلية (٦٥ ج.م) — خلال 2-3 أيام</option><option value="suez" data-fee="70">السويس (٧٠ ج.م) — خلال 2-3 أيام</option><option value="north-sinai" data-fee="85">شمال سيناء (٨٥ ج.م) — خلال 3-5 أيام</option><option value="south-sinai" data-fee="90">جنوب سيناء (٩٠ ج.م) — خلال 3-5 أيام</option><option value="beni-suef" data-fee="70">بني سويف (٧٠ ج.م) — خلال 2-4 أيام</option><option value="faiyum" data-fee="70">الفيوم (٧٠ ج.م) — خلال 2-4 أيام</option><option value="minya" data-fee="75">المنيا (٧٥ ج.م) — خلال 3-5 أيام</option><option value="asyut" data-fee="80">أسيوط (٨٠ ج.م) — خلال 3-5 أيام</option><option value="sohag" data-fee="80">سوهاج (٨٠ ج.م) — خلال 3-5 أيام</option><option value="qena" data-fee="85">قنا (٨٥ ج.م) — خلال 3-5 أيام</option><option value="luxor" data-fee="85">الأقصر (٨٥ ج.م) — خلال 3-5 أيام</option><option value="aswan" data-fee="90">أسوان (٩٠ ج.م) — خلال 4-6 أيام</option><option value="red-sea" data-fee="95">البحر الأحمر (٩٥ ج.م) — خلال 4-6 أيام</option><option value="new-valley" data-fee="100">الوادي الجديد (١٠٠ ج.م) — خلال 5-7 أيام</option><option value="matrouh" data-fee="100">مطروح (١٠٠ ج.م) — خلال 5-7 أيام</option></select>
+                    <select id="custGov" onchange="calculateShipping()" class="w-full p-3 bg-surface border border-outline-variant rounded-xl outline-none focus:ring-2 focus:ring-primary text-xs"><option value="cairo" data-fee="45">القاهرة — خلال 24-48 ساعة</option><option value="giza" data-fee="45">الجيزة — خلال 24-48 ساعة</option><option value="qalyubia" data-fee="50">القليوبية — خلال 24-48 ساعة</option><option value="alex" data-fee="60">الإسكندرية — خلال 2-3 أيام</option><option value="beheira" data-fee="65">البحيرة — خلال 2-3 أيام</option><option value="kafr-sheikh" data-fee="65">كفر الشيخ — خلال 2-3 أيام</option><option value="gharbia" data-fee="65">الغربية — خلال 2-3 أيام</option><option value="menofia" data-fee="60">المنوفية — خلال 2-3 أيام</option><option value="dakahlia" data-fee="65">الدقهلية — خلال 2-3 أيام</option><option value="sharqia" data-fee="60">الشرقية — خلال 2-3 أيام</option><option value="damietta" data-fee="65">دمياط — خلال 2-3 أيام</option><option value="port-said" data-fee="70">بورسعيد — خلال 2-3 أيام</option><option value="ismailia" data-fee="65">الإسماعيلية — خلال 2-3 أيام</option><option value="suez" data-fee="70">السويس — خلال 2-3 أيام</option><option value="north-sinai" data-fee="85">شمال سيناء — خلال 3-5 أيام</option><option value="south-sinai" data-fee="90">جنوب سيناء — خلال 3-5 أيام</option><option value="beni-suef" data-fee="70">بني سويف — خلال 2-4 أيام</option><option value="faiyum" data-fee="70">الفيوم — خلال 2-4 أيام</option><option value="minya" data-fee="75">المنيا — خلال 3-5 أيام</option><option value="asyut" data-fee="80">أسيوط — خلال 3-5 أيام</option><option value="sohag" data-fee="80">سوهاج — خلال 3-5 أيام</option><option value="qena" data-fee="85">قنا — خلال 3-5 أيام</option><option value="luxor" data-fee="85">الأقصر — خلال 3-5 أيام</option><option value="aswan" data-fee="90">أسوان — خلال 4-6 أيام</option><option value="red-sea" data-fee="95">البحر الأحمر — خلال 4-6 أيام</option><option value="new-valley" data-fee="100">الوادي الجديد — خلال 5-7 أيام</option><option value="matrouh" data-fee="100">مطروح — خلال 5-7 أيام</option></select>
                 </div>
                 <div>
                     <label class="block text-xs font-bold mb-1 text-on-surface-variant" data-ar="طريقة الدفع" data-en="Payment Method">طريقة الدفع</label>
@@ -1056,21 +1054,23 @@
             </div>
 
             <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant space-y-1.5 text-xs">
-                <div class="flex justify-between text-on-surface-variant"><span data-ar="إجمالي الكابلات والتوصيلات:" data-en="Cables &amp; Links Subtotal:">إجمالي الكابلات والتوصيلات:</span><span id="checkoutSubtotal" class="font-bold">0 ج.م</span></div>
-                <div class="flex justify-between text-on-surface-variant"><span data-ar="الشحن السريع:" data-en="Shipping:">الشحن السريع:</span><span id="checkoutShipping" class="font-bold">0 ج.م</span></div>
-                <div id="couponDiscountRow" class="flex justify-between text-green-700 font-bold hidden">
+                <p class="text-on-surface-variant" data-ar="سيتم تأكيد السعر النهائي وتكلفة الشحن بعد مراجعة الطلب." data-en="The final price and shipping cost will be confirmed after reviewing your order.">سيتم تأكيد السعر النهائي وتكلفة الشحن بعد مراجعة الطلب.</p>
+                <div class="hidden flex justify-between text-on-surface-variant"><span data-ar="إجمالي الكابلات والتوصيلات:" data-en="Cables &amp; Links Subtotal:">إجمالي الكابلات والتوصيلات:</span><span id="checkoutSubtotal" class="font-bold">0 ج.م</span></div>
+                <div class="hidden flex justify-between text-on-surface-variant"><span data-ar="الشحن السريع:" data-en="Shipping:">الشحن السريع:</span><span id="checkoutShipping" class="font-bold">0 ج.م</span></div>
+                <div id="couponDiscountRow" class="hidden flex justify-between text-green-700 font-bold">
                     <span data-ar="الخصم المطبق:" data-en="Discount:">الخصم المطبق:</span>
                     <span id="checkoutDiscount">-0 ج.م</span>
                 </div>
-                <div class="flex justify-between text-base font-extrabold text-primary border-t border-outline-variant pt-2 mt-1"><span data-ar="الإجمالي النهائي:" data-en="Total:">الإجمالي النهائي:</span><span id="checkoutFinalTotal">0 ج.م</span></div>
+                <div class="hidden flex justify-between text-base font-extrabold text-primary border-t border-outline-variant pt-2 mt-1"><span data-ar="الإجمالي النهائي:" data-en="Total:">الإجمالي النهائي:</span><span id="checkoutFinalTotal">0 ج.م</span></div>
                 
                 <!-- Deposit Box (#34) -->
-                <div id="depositInfoRow" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-amber-800 text-[11px] mt-2">
-                    <div class="flex justify-between font-bold">
+                <div id="depositInfoRow" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-amber-800 text-[11px] mt-2 hidden">
+                    <p data-ar="سيتم تأكيد العربون بعد مراجعة تفاصيل الطلب." data-en="The deposit will be confirmed after reviewing your order.">سيتم تأكيد العربون بعد مراجعة تفاصيل الطلب.</p>
+                    <div class="hidden flex justify-between font-bold">
                         <span data-ar="العربون المطلوب للتجهيز:" data-en="Required Deposit:">العربون المطلوب للتجهيز:</span>
                         <span id="checkoutDepositAmount">0 ج.م</span>
                     </div>
-                    <div class="flex justify-between text-amber-700 mt-0.5">
+                    <div class="hidden flex justify-between text-amber-700 mt-0.5">
                         <span data-ar="المتبقي عند الاستلام:" data-en="Remaining on Delivery:">المتبقي عند الاستلام:</span>
                         <span id="checkoutRemainingAmount">0 ج.م</span>
                     </div>
@@ -1256,7 +1256,7 @@
                         <p class="text-xs text-on-surface-variant mb-3">${ProCable.sanitize(cDesc)}</p>
                     </div>
                     <div class="font-bold text-sm text-primary">
-                        +${ProCable.formatNum(c.pricePerM)} ${currency} <span class="text-xs text-on-surface-variant font-normal">/ ${isAr ? 'متر' : 'meter'}</span>
+                        ${isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review'}
                     </div>
                 </div>
             `;
@@ -1300,8 +1300,8 @@
             const dep = ProCable.calculateDeposit(total);
             document.getElementById('builderDepositNotice').classList.remove('hidden');
             document.getElementById('builderDepositNoticeText').innerText = isAr 
-                ? `العربون المقدر لهذا الكابل: ${ProCable.formatNum(dep)} ج.م (والباقي ${ProCable.formatNum(total - dep)} ج.م عند الاستلام).`
-                : `Estimated deposit: ${ProCable.formatNum(dep)} EGP (Remaining ${ProCable.formatNum(total - dep)} EGP upon delivery).`;
+                ? 'يتم تأكيد قيمة العربون بعد مراجعة تفاصيل الكابل.'
+                : 'The deposit will be confirmed after reviewing the cable details.';
         } else {
             document.getElementById('builderDepositNotice').classList.add('hidden');
         }
@@ -1442,8 +1442,6 @@
                 ? (isAr ? 'كابل تفصيل خاص' : 'Custom Cable')
                 : (isAr ? 'منتج جاهز' : 'Ready Product');
 
-            const unitPrice = item.unitPrice || (item.price / (item.qty || 1));
-            const itemUnitFormatted = ProCable.formatNum(unitPrice);
             const safeItemId = JSON.stringify(item.id);
 
             html += `
@@ -1478,8 +1476,7 @@
                     <div class="pt-3 border-t border-black/[0.06] flex flex-wrap items-center justify-between gap-4">
                         <!-- Unit Price -->
                         <div class="text-xs text-on-surface-variant font-medium">
-                            <span>${isAr ? 'سعر القطعة:' : 'Unit price:'}</span>
-                            <span class="font-bold text-on-surface ms-1 stat-number text-sm">${itemUnitFormatted} ${currency}</span>
+                            <span>${isAr ? 'السعر يُحدد بعد مراجعة الطلب' : 'Price confirmed after order review'}</span>
                         </div>
 
                         <!-- Apple Pill Stepper -->
@@ -1489,11 +1486,6 @@
                             <button onclick="ProCable.updateCartQty(${safeItemId}, 1); renderCartView();" class="w-8 h-8 rounded-full bg-white text-on-surface hover:bg-black/5 flex items-center justify-center font-bold text-sm shadow-2xs active:scale-90 transition" title="${isAr ? 'زيادة' : 'Increase'}">+</button>
                         </div>
 
-                        <!-- Item Total Price -->
-                        <div class="text-end">
-                            <span class="text-[11px] text-gray-400 block">${isAr ? 'إجمالي الصنف:' : 'Total:'}</span>
-                            <span class="font-black text-lg text-primary stat-number">${ProCable.formatNum(item.price)} ${currency}</span>
-                        </div>
                     </div>
                 </div>
             `;
@@ -1554,7 +1546,6 @@
         const select = document.getElementById('custGov');
         const rates = ProCable.getShipping();
         const isAr = ProCable.getLang() === 'ar';
-        const currency = isAr ? 'ج.م' : 'EGP';
         // Only show enabled governorates
         const activeRates = rates.filter(r => r.enabled !== false);
         select.innerHTML = activeRates.map(r => {
@@ -1562,7 +1553,7 @@
             const deliveryTime = isAr ? (r.deliveryTimeAr || '') : (r.deliveryTimeEn || r.deliveryTimeAr || '');
             const timeLabel = deliveryTime ? ` — ${deliveryTime}` : '';
             const fee = Number.isFinite(Number(r.fee)) ? Math.max(0, Number(r.fee)) : 0;
-            return `<option value="${ProCable.sanitize(String(r.id))}" data-fee="${fee}">${ProCable.sanitize(govName)} (${ProCable.formatNum(fee)} ${currency})${ProCable.sanitize(timeLabel)}</option>`;
+            return `<option value="${ProCable.sanitize(String(r.id))}" data-fee="${fee}">${ProCable.sanitize(govName)}${ProCable.sanitize(timeLabel)}</option>`;
         }).join('');
     }
 
@@ -1640,7 +1631,7 @@
             appliedCouponCode = (res.coupon && res.coupon.code) || String(code || '').trim().toUpperCase();
             msgEl.innerText = `✓ ${res.message}`;
             msgEl.classList.add('text-green-600');
-            document.getElementById('couponDiscountRow').classList.remove('hidden');
+            document.getElementById('couponDiscountRow').classList.add('hidden');
             document.getElementById('checkoutDiscount').innerText = `-${ProCable.formatNum(appliedDiscountVal)} ${currency}`;
         } else {
             appliedDiscountVal = 0;
@@ -1683,7 +1674,7 @@
                 if (effective.reason === 'free_all') {
                     freeShipReason = isAr ? 'عرض خاص: شحن مجاني لجميع الطلبات! 🚚' : 'Special Offer: Free Shipping on all orders! 🚚';
                 } else {
-                    freeShipReason = isAr ? `شحن مجاني للطلبات فوق ${ProCable.formatNum(ProCable.getSettings().freeShippingMinOrder)} ج.م 🚚` : `Free shipping on orders over ${ProCable.formatNum(ProCable.getSettings().freeShippingMinOrder)} EGP`;
+                    freeShipReason = isAr ? 'شحن مجاني للطلبات المؤهلة 🚚' : 'Free shipping on eligible orders 🚚';
                 }
             } else {
                 fee = effective.fee;
@@ -1693,7 +1684,7 @@
         // Auto apply user discount percent if no other manual coupon is entered
         if (appliedDiscountVal === 0 && user && user.discountPercent > 0) {
             appliedDiscountVal = Math.round(subtotal * (user.discountPercent / 100));
-            document.getElementById('couponDiscountRow').classList.remove('hidden');
+            document.getElementById('couponDiscountRow').classList.add('hidden');
             document.getElementById('checkoutDiscount').innerText = `-${ProCable.formatNum(appliedDiscountVal)} ${currency} (${user.discountPercent}%)`;
         }
 
