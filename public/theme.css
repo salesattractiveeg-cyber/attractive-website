@@ -111,6 +111,31 @@ html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child a:not(
 html[data-theme="dark"] nav.apple-nav .mobile-nav-controls button:not(.text-primary),
 html[data-theme="dark"] nav.apple-nav .mobile-nav-controls a:not(.bg-primary),
 html[data-theme="dark"] nav.apple-nav #desktopAuthArea button { color: var(--site-text) !important; }
+/* Keep the original dark wordmark readable against the dark glass header. */
+html[data-theme="dark"] nav.apple-nav .site-logo-img,
+html[data-theme="dark"] #adminApp > header .site-logo-img,
+html[data-theme="dark"] footer .site-logo-img {
+  background: #fbf9f8;
+  border: 1px solid rgba(255, 255, 255, .82);
+  border-radius: 10px;
+  padding: 3px 7px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .22);
+}
+html[data-theme="dark"] nav.apple-nav #desktopNavLinks > li > a:not(.text-primary),
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child button:not(.bg-primary),
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child a:not(.bg-primary),
+html[data-theme="dark"] nav.apple-nav .mobile-nav-controls button:not(.text-primary),
+html[data-theme="dark"] nav.apple-nav .mobile-nav-controls a:not(.bg-primary) {
+  color: #f7f5f6 !important;
+  font-weight: 650;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .18);
+}
+html[data-theme="dark"] nav.apple-nav #desktopNavLinks > li > a.text-primary,
+html[data-theme="dark"] nav.apple-nav #desktopNavLinks > li > a:hover,
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child button:hover,
+html[data-theme="dark"] nav.apple-nav .glass-nav-content > div:last-child a:hover {
+  color: #ff647a !important;
+}
 html[data-theme="dark"] #authGate { background: radial-gradient(ellipse at 50% 0%, #252a33 0%, var(--site-bg) 72%) !important; }
 html[data-theme="dark"] #authGate > div { background-color: var(--site-surface) !important; border-color: var(--site-border) !important; }
 html[data-theme="dark"] .modal-content,
