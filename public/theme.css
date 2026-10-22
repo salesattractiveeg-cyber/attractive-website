@@ -26,8 +26,8 @@
 .home-hero-watermark > div { position: relative; z-index: 1; }
 html[data-theme="dark"] .home-hero-watermark::before { opacity: .19; filter: brightness(1.55) saturate(.8); }
 @media (max-width: 767px) {
-  .home-hero-watermark::before { background-size: 100% auto; background-position: center 62%; opacity: .16; }
-  html[data-theme="dark"] .home-hero-watermark::before { opacity: .19; }
+  .home-hero-watermark::before { background-size: 100% auto; background-position: center 38%; opacity: .2; }
+  html[data-theme="dark"] .home-hero-watermark::before { opacity: .23; }
 }
 html[data-theme="dark"] {
     color-scheme: dark;
