@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 440" fill="none">
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".52" stop-color="#e8ebef"/><stop offset="1" stop-color="#cbd1d8"/></linearGradient>
+    <linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4b5563"/><stop offset="1" stop-color="#17212e"/></linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e11d3e"/><stop offset="1" stop-color="#9f1230"/></linearGradient>
+    <filter id="shadow" x="-.2" y="-.2" width="1.4" height="1.6"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".12"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <g filter="url(#shadow)" stroke="#394454" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- dome CCTV camera -->
+    <g transform="translate(140 0)">
+      <path d="M-70 153h140v21H-70z" fill="url(#metal)"/><path d="M-56 174h112c-4 77-24 111-56 111s-52-34-56-111Z" fill="url(#metal)"/>
+      <path d="M-34 197q34-20 68 0M-27 214q27-14 54 0" stroke="#aab2bc" stroke-width="6"/><ellipse cy="248" rx="13" ry="9" fill="url(#dark)"/><circle cy="248" r="4" fill="url(#red)" stroke="none"/>
+      <path d="M-28 154q28-16 56 0" stroke="#fff" stroke-width="7"/>
+    </g>
+    <!-- bullet camera -->
+    <g transform="translate(360 0)">
+      <path d="M-69 174h104q17 0 28 16l19 27-18 25H16l-34 31h-51l17-37h-17z" fill="url(#metal)"/><path d="m35 174 20 16m-15 52 19-25"/><ellipse cx="69" cy="205" rx="13" ry="15" fill="url(#dark)"/><circle cx="70" cy="205" r="5" fill="url(#red)" stroke="none"/><path d="M-26 273v20m-19 0h38"/>
+    </g>
+    <!-- ceiling speaker -->
+    <g transform="translate(580 0)">
+      <path d="M-72 179q0-18 18-18h108q18 0 18 18v9q-5 82-72 82t-72-82z" fill="url(#metal)"/>
+      <ellipse cy="188" rx="55" ry="12" fill="#f8fafc"/><ellipse cy="190" rx="39" ry="8" stroke="#aab2bc" stroke-width="4"/><circle cy="190" r="8" fill="url(#red)" stroke="none"/>
+    </g>
+    <!-- access control reader -->
+    <g transform="translate(800 0)">
+      <rect x="-49" y="145" width="98" height="166" rx="20" fill="url(#dark)"/><rect x="-38" y="157" width="76" height="38" rx="10" fill="url(#metal)"/><path d="M-24 176h48" stroke="#98a3b0" stroke-width="5"/><circle cy="219" r="13" fill="url(#red)"/><circle cy="219" r="5" fill="#fff" stroke="none"/>
+      <g fill="#dce2e8" stroke="none"><circle cx="-20" cy="255" r="4"/><circle cy="255" r="4"/><circle cx="20" cy="255" r="4"/><circle cx="-20" cy="276" r="4"/><circle cy="276" r="4"/><circle cx="20" cy="276" r="4"/></g>
+    </g>
+    <!-- fire alarm detector -->
+    <g transform="translate(1020 0)">
+      <path d="M-62 202q4-43 62-43t62 43v16h-124z" fill="url(#metal)"/><path d="M-55 218h110q-4 39-55 39t-55-39Z" fill="#f8fafc"/><path d="M-33 182q33-17 66 0M-42 195q42-20 84 0" stroke="#aab2bc" stroke-width="5"/><circle cy="218" r="7" fill="url(#red)" stroke="none"/>
+    </g>
+    <!-- network switch -->
+    <g transform="translate(1245 0)">
+      <path d="M-91 190h182v75h-182z" fill="url(#dark)"/><path d="M-91 190h182l-18-22h-146z" fill="#7b8592"/><path d="M-74 214h111v23H-74z" fill="#d8dee5" stroke="none"/>
+      <g fill="#273442" stroke="none"><rect x="-67" y="220" width="10" height="11" rx="2"/><rect x="-51" y="220" width="10" height="11" rx="2"/><rect x="-35" y="220" width="10" height="11" rx="2"/><rect x="-19" y="220" width="10" height="11" rx="2"/><rect x="-3" y="220" width="10" height="11" rx="2"/><rect x="13" y="220" width="10" height="11" rx="2"/></g>
+      <circle cx="68" cy="218" r="5" fill="url(#red)" stroke="none"/><circle cx="68" cy="238" r="5" fill="#66a987" stroke="none"/>
+    </g>
+  </g>
+  <path d="M95 340h1210" stroke="#aab2bc" stroke-width="2" stroke-dasharray="5 12" opacity=".55"/>
+  <g fill="#c8102e" opacity=".8"><circle cx="140" cy="340" r="5"/><circle cx="360" cy="340" r="5"/><circle cx="580" cy="340" r="5"/><circle cx="800" cy="340" r="5"/><circle cx="1020" cy="340" r="5"/><circle cx="1245" cy="340" r="5"/></g>
+</svg>

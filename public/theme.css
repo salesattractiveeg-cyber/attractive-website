@@ -12,7 +12,7 @@
     --site-shadow: 0 18px 50px rgba(67, 38, 41, .09);
 }
 
-/* Subtle engineering watermark for the home hero */
+/* Clean low-current equipment watermark for the home hero */
 .home-hero-watermark { position: relative; isolation: isolate; }
 .home-hero-watermark::before {
   content: "";
@@ -20,14 +20,14 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: url("hero-watermark-dwg.svg") center / min(100%, 1120px) auto no-repeat;
-  opacity: .2;
+  background: url("hero-systems-watermark.svg") center / min(100%, 1120px) auto no-repeat;
+  opacity: .13;
 }
 .home-hero-watermark > div { position: relative; z-index: 1; }
-html[data-theme="dark"] .home-hero-watermark::before { opacity: .24; filter: brightness(1.6) saturate(.8); }
+html[data-theme="dark"] .home-hero-watermark::before { opacity: .19; filter: brightness(1.55) saturate(.8); }
 @media (max-width: 767px) {
-  .home-hero-watermark::before { background-size: 100% auto; background-position: center 72%; opacity: .18; }
-  html[data-theme="dark"] .home-hero-watermark::before { opacity: .2; }
+  .home-hero-watermark::before { background-size: 115% auto; background-position: center 82%; opacity: .1; }
+  html[data-theme="dark"] .home-hero-watermark::before { opacity: .15; }
 }
 html[data-theme="dark"] {
     color-scheme: dark;
