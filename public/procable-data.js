@@ -3104,7 +3104,7 @@ const ProCable = {
 
     // Language Helper & Full Translation Dispatcher
     getLang() {
-        return localStorage.getItem('attractive_lang') || localStorage.getItem('procable_lang') || 'ar';
+        return localStorage.getItem('attractive_lang') || localStorage.getItem('procable_lang') || 'en';
     },
     setLang(lang) {
         localStorage.setItem('attractive_lang', lang);
