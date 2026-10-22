@@ -1232,7 +1232,11 @@
         html += `<button type="button" onclick="setBrand('all')" class="${buttonClass(activeBrand === 'all')}">${isAr ? 'كل البراندات' : 'All brands'}</button>`;
         brands.forEach(brand => {
             const id = String(brand.id || '');
-            const name = isAr ? (brand.nameAr || brand.nameEn || '') : (brand.nameEn || brand.nameAr || '');
+            // Older brand records store their English label in `name` (the admin form
+            // predates the explicit nameEn field). Keep those labels English by default.
+            const name = isAr
+                ? (brand.nameAr || brand.name || brand.nameEn || '')
+                : (brand.nameEn || brand.name || brand.nameAr || '');
             const logo = brand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(brand.logo))}" alt="" class="h-5 w-5 rounded-full bg-white object-contain">` : '';
             html += `<button type="button" onclick="setBrand(this.dataset.brand)" data-brand="${ProCable.sanitize(id)}" class="${buttonClass(String(activeBrand) === id)}">${logo}<span>${ProCable.sanitize(name)}</span></button>`;
         });
@@ -1563,7 +1567,7 @@
                         <div class="store-card-meta flex justify-between items-center mb-3">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="text-xs bg-primary-fixed text-on-primary-fixed font-bold px-3 py-1 rounded-full">${ProCable.sanitize(p.tag || 'Audio')}</span>
-                                ${productBrand ? `<span class="text-[10px] bg-white border border-outline-variant text-on-surface font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">${productBrand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(productBrand.logo))}" alt="" class="h-4 w-4 object-contain">` : ''}${ProCable.sanitize(isAr ? (productBrand.nameAr || productBrand.nameEn) : (productBrand.nameEn || productBrand.nameAr))}</span>` : ''}
+                                ${productBrand ? `<span class="text-[10px] bg-white border border-outline-variant text-on-surface font-bold px-2.5 py-1 rounded-full inline-flex items-center gap-1.5">${productBrand.logo ? `<img src="${ProCable.sanitize(ProCable._safeMediaUrl(productBrand.logo))}" alt="" class="h-4 w-4 object-contain">` : ''}${ProCable.sanitize(isAr ? (productBrand.nameAr || productBrand.name || productBrand.nameEn || '') : (productBrand.nameEn || productBrand.name || productBrand.nameAr || ''))}</span>` : ''}
                                 ${badgeHtml}
                             </div>
                         </div>
