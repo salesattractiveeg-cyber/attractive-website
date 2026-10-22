@@ -26,7 +26,7 @@
 .home-hero-watermark > div { position: relative; z-index: 1; }
 html[data-theme="dark"] .home-hero-watermark::before { opacity: .24; filter: brightness(1.6) saturate(.8); }
 @media (max-width: 767px) {
-  .home-hero-watermark::before { background-size: auto 84%; background-position: center 72%; opacity: .16; }
+  .home-hero-watermark::before { background-size: 100% auto; background-position: center 72%; opacity: .18; }
   html[data-theme="dark"] .home-hero-watermark::before { opacity: .2; }
 }
 html[data-theme="dark"] {
