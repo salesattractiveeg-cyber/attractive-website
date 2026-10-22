@@ -3112,11 +3112,27 @@ const ProCable = {
         document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
         document.documentElement.setAttribute('lang', lang);
         this.applyLanguageToDOM();
+        // Refresh language-aware shared chrome and page-specific content in place.
+        this.renderTopPromoBanner();
+        this.renderRepairNav();
+        this.renderFooterData();
+        this.renderCouponBubble();
+        this.renderSaleNavAndBanners();
+        this.renderNavbars();
+        this.renderAuthAreas();
+        this.updateCartBadges();
+        const titles = {
+            'index.html': ['Attractive - Low-Current Systems & Equipment Supply', 'Attractive - توريد أنظمة ومعدات التيار الخفيف'],
+            'store.html': ['Low-Current Systems Store - Attractive', 'متجر أنظمة التيار الخفيف - Attractive'],
+            'builder.html': ['Professional Audio Cable Builder - Attractive', 'استوديو تفصيل كابلات الصوت الاحترافية - Attractive']
+        };
+        const page = window.location.pathname.split('/').pop() || 'index.html';
+        if (titles[page]) document.title = titles[page][lang === 'ar' ? 1 : 0];
+        window.dispatchEvent(new CustomEvent('attractive:languagechange', { detail: { lang } }));
     },
     toggleLang() {
         const next = this.getLang() === 'ar' ? 'en' : 'ar';
         this.setLang(next);
-        window.location.reload();
     },
     applyLanguageToDOM() {
         const isAr = this.getLang() === 'ar';

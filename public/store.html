@@ -1638,6 +1638,7 @@
     function showProductDetails(id) {
         const prod = ProCable.getProducts().find(p => p.id === id);
         if (!prod) return;
+        window._activeStoreProductId = id;
         const safeProductId = Number.isSafeInteger(Number(prod.id)) && Number(prod.id) > 0 ? Number(prod.id) : 0;
         if (!safeProductId) return;
 
@@ -2463,6 +2464,17 @@
 
         initStoreScrollObserver();
     }
+
+    window.addEventListener('attractive:languagechange', () => {
+        renderCategoryTabs();
+        renderStore();
+        renderCartView();
+        populateShippingSelect();
+        const modal = document.getElementById('prodDetailsModal');
+        if (modal && !modal.classList.contains('hidden') && window._activeStoreProductId) {
+            showProductDetails(window._activeStoreProductId);
+        }
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);

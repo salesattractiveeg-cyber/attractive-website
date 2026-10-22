@@ -1527,6 +1527,12 @@
         observeAppleReveals();
     }
 
+    window.addEventListener('attractive:languagechange', () => {
+        renderHomePageContent();
+        renderFeatured();
+        loadCustomerReviews();
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
         const reviewModal = document.getElementById('customerReviewModal');
         if (reviewModal) document.body.appendChild(reviewModal);

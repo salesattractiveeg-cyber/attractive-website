@@ -1844,6 +1844,12 @@
     }
 
     // Init
+    window.addEventListener('attractive:languagechange', () => {
+        updateLength(currentLength);
+        renderCartView();
+        populateShippingSelect();
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
         updateLength(15);
         renderCartView();
