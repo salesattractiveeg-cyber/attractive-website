@@ -55,6 +55,10 @@ function publicData(d, includeCoupons = false) {
         delete out.settings.adminPassHash;
         // Integrations are configured through server environment variables, never public store data.
         delete out.settings.googleSheetsWebhookUrl;
+        // The homepage uses a bundled static banner; don't send legacy uploaded hero media to visitors.
+        delete out.settings.heroLiveImage;
+        delete out.settings.heroLiveBadgeTextAr;
+        delete out.settings.heroLiveBadgeTextEn;
     }
     if (!includeCoupons) delete out.coupons;
     return out;
