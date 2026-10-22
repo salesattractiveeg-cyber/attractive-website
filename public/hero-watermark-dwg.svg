@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" fill="none">
+  <g stroke="#435268" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- architectural low-current plan -->
+    <path d="M78 108H1122V612H78z" stroke-width="3"/>
+    <path d="M420 108v142m0 76v286M78 350h166m78 0h98m90 0h125m82 0h79m110 0h276M800 108v82m0 82v78m0 85v177M420 426h132m82 0h166m0 0h128"/>
+    <path d="M244 350a78 78 0 0 1 78 78m478-78a82 82 0 0 0 82 82" stroke-dasharray="5 6"/>
+    <!-- cable tray and system routes -->
+    <path d="M116 572h950V150H116v422m304-356h380v356m0-356v-66m-380 66v-66" stroke="#c8102e" stroke-width="3" stroke-dasharray="11 9" opacity=".78"/>
+    <path d="M116 560v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24m18-24v24" opacity=".5"/>
+    <!-- CCTV ceiling dome camera with field of view -->
+    <g transform="translate(151 157)">
+      <path d="M-51-5h102v12H-51zM-39 7h78c-3 37-17 55-39 55S-36 44-39 7z" fill="#f8f4f2" fill-opacity=".6"/>
+      <path d="M-25 22c8-8 42-8 50 0M-17 31c7-6 27-6 34 0M-8 40c4-3 12-3 16 0"/>
+      <circle cy="47" r="5" stroke="#c8102e"/><path d="M0 62v26m-13 0h26m-13-26 100 87m-100-87-100 87" stroke-dasharray="4 6" opacity=".75"/>
+      <text x="-61" y="-17" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">CCTV-01</text>
+    </g>
+    <!-- IP bullet camera and coverage cone -->
+    <g transform="translate(1050 157)">
+      <path d="M-32-29h54l31 18v25H18L-9 28h-23z" fill="#f8f4f2" fill-opacity=".6"/>
+      <path d="m22-29 17 18M22 14l17-11M-7 28v15m-13 0h26"/>
+      <circle cx="42" cy="1" r="7" stroke="#c8102e"/><circle cx="42" cy="1" r="2.5" fill="#c8102e"/>
+      <path d="m49-10 112-72m-112 94 112 72" stroke-dasharray="4 6" opacity=".75"/>
+      <text x="-39" y="-41" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">CCTV-02</text>
+    </g>
+    <!-- ceiling speaker / public address -->
+    <g transform="translate(605 255)">
+      <circle r="34" fill="#f8f4f2" fill-opacity=".52"/><circle r="27"/><circle r="19"/><circle r="4" fill="#c8102e" stroke="none"/>
+      <path d="M-12 0h24m-12-12v24" opacity=".65"/>
+      <path d="M-48-48a68 68 0 0 0 0 96m96-96a68 68 0 0 1 0 96m-116-116a96 96 0 0 0 0 136m136-136a96 96 0 0 1 0 136" stroke="#c8102e" opacity=".72"/>
+      <text x="-39" y="-55" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">PA-SPK-01</text>
+    </g>
+    <!-- access controlled door, reader, and swing arc -->
+    <g transform="translate(278 350)">
+      <path d="M-31-56h62v112h-62zM-31-56 51-8v64"/>
+      <path d="M-30-52a94 94 0 0 1 81 96" stroke-dasharray="5 6"/>
+      <circle cx="21" cy="4" r="3" fill="#c8102e" stroke="none"/>
+      <rect x="55" y="-20" width="21" height="42" rx="5" fill="#f8f4f2" fill-opacity=".7"/>
+      <path d="M62-9h7m-7 9h7m-7 9h7" stroke="#c8102e"/>
+      <text x="-48" y="-69" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">ACS-01</text>
+    </g>
+    <!-- fire alarm detector and wall-mounted sounder beacon -->
+    <g transform="translate(700 445)">
+      <circle r="28" fill="#f8f4f2" fill-opacity=".55"/><circle r="19"/><circle r="10" stroke="#c8102e"/><circle r="3" fill="#c8102e" stroke="none"/>
+      <path d="M-15-15 15 15m0-30-30 30" opacity=".55"/>
+      <rect x="90" y="-23" width="34" height="46" rx="8"/>
+      <path d="M99-11h16v14H99zM103 12h8" stroke="#c8102e"/>
+      <path d="M130-17q17 17 0 34m8-44q27 27 0 54" stroke="#c8102e"/>
+      <text x="-44" y="-39" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">FAS-01</text>
+    </g>
+    <!-- network rack, patch panel, and access equipment -->
+    <g transform="translate(974 465)">
+      <rect x="-53" y="-73" width="106" height="146" rx="8" fill="#f8f4f2" fill-opacity=".7"/>
+      <path d="M-40-57h80v31h-80zm0 47h80v31h-80zm0 47h80v22h-80z"/>
+      <path d="M-30-45h7m9 0h7m9 0h7m9 0h7m9 0h7m-55 47h7m9 0h7m9 0h7m9 0h7m9 0h7m-52 47h7m9 0h7m9 0h7m9 0h7" stroke="#c8102e"/>
+      <circle cx="34" cy="-42" r="3" fill="#c8102e" stroke="none"/><circle cx="34" cy="5" r="3" fill="#c8102e" stroke="none"/>
+      <text x="-39" y="-84" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="13" font-weight="700">LAN / IDF</text>
+    </g>
+    <!-- dimension lines and drafting ticks -->
+    <g stroke-width="1.5" opacity=".7">
+      <path d="M78 78h1044m-1044-6v12m1044-12v12M48 108v504m-6-504h12m-12 504h12"/>
+      <path d="m78 78 12-5m-12 5 12 5m1032-5-12-5m12 5-12 5M48 108l-5 12m5-12 5 12m-5 492-5-12m5 12 5-12"/>
+      <text x="560" y="69" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="11">LOW-CURRENT SYSTEMS LAYOUT</text>
+      <text x="29" y="370" fill="#435268" stroke="none" font-family="Arial,sans-serif" font-size="10" transform="rotate(-90 29 370)">CCTV • PA • ACS • FAS • LAN</text>
+    </g>
+  </g>
+</svg>
